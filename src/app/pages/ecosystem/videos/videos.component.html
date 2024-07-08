@@ -1,0 +1,26 @@
+<section id="videos">
+  <div class="wrapper">
+    <st-filter-container
+        collectionName="Video"
+        [(filterGroups)]="filtersGroups"
+        (filterGroupsChange)="onFiltersGroupsChanged()"
+        [state]="state()"
+        [totalResultCount]="totalItemCount"
+        [filteredResultCount]="filteredItemCount"
+        [visibleResultCount]="visibleResults().length"
+        (toggleButtonsChange)="onViewToggleChanged($event)"
+        (viewMore)="onViewMore()"
+        [newCollectionItemUrl]="environment.github_content_repo_collection_base_url + '/videos/'">
+      <!-- Results -->
+      @if (filteredItemCount > 0) {
+        <div class="results" [ngClass]="{ 'grid' : gridView(), 'list' : !gridView() }">
+          @for (video of visibleResults(); track video.id) {
+            <st-video-widget
+                [layout]="gridView() ? Layout.WIDGET : Layout.ROW"
+                [video]="video"></st-video-widget>
+          }
+        </div>
+      }
+    </st-filter-container>
+  </div>
+</section>

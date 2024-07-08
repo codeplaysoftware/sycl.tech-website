@@ -1,0 +1,4 @@
+@if (contributor(); as contributor) {
+  <div [style.background-image]="'url(' + contributor.avatar + ')'"
+       (click)="onContributorClicked()"></div>
+}

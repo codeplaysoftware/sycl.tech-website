@@ -1,0 +1,17 @@
+<div [ngClass]="{'selected': selected(), 'disable-selection': !allowSelection()}" (click)="onClick()">
+  <div class="indicator">
+    @if (selected()) {
+      <span class="material-symbols-outlined">check</span>
+    } @else {
+      <span class="material-symbols-outlined">close</span>
+    }
+  </div>
+  <div class="content">
+    <div>
+      <h1 [innerHTML]="title()"></h1>
+      @if (subTitle()) {
+        <h2 [innerHTML]="subTitle()"></h2>
+      }
+    </div>
+  </div>
+</div>

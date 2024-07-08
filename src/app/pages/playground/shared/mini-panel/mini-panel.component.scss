@@ -1,0 +1,127 @@
+:host {
+  display: flex;
+  border-radius: var(--border-radius);
+  box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, .15);
+  border: var(--border-default);
+  background-color: var(--color-hint-first);
+  flex-direction: column;
+  overflow: hidden;
+
+  .head {
+    border-bottom: var(--border-default);
+    display: flex;
+    padding: 0 .5rem;
+
+    span, .title {
+      opacity: .4;
+    }
+
+    span {
+      vertical-align: bottom;
+      font-size: 20px;
+      display: block;
+      padding: .7rem .3rem;
+      cursor: default;
+    }
+
+    > div {
+      display: flex;
+
+      &:nth-of-type(1) {
+        flex: 1;
+      }
+    }
+
+    .actionButtons span {
+      cursor: pointer;
+      transition: var(--transition-fast);
+
+      &.active {
+        color: var(--color-orange);
+        opacity: 1;
+        user-select: none;
+        cursor: not-allowed;
+      }
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .body {
+    position: relative;
+    flex: 1;
+  }
+
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+
+    .top, .bottom {
+      display: flex;
+      height: 100%;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .top {
+      flex-basis: 80%;
+
+      > div {
+        padding: 2rem 4rem 0 4rem;
+      }
+    }
+
+    .bottom {
+      flex-basis: 20%;
+      align-items: flex-end;
+      padding-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: 1rem;
+      font-weight: normal;
+      opacity: .4;
+    }
+
+    st-loading {
+      width: 60px;
+      display: inline-block;
+    }
+
+    img {
+      width: 110px;
+      height: auto;
+      vertical-align: middle;
+
+    }
+  }
+
+  .empty {
+    opacity: .15;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+
+    span {
+      font-size: 60px;
+    }
+
+    h1 {
+      font-size: 1.1rem;
+    }
+  }
+}
+
+:host-context(.dark-mode) {
+  .body {
+    background-color: var(--color-dark-grey-200);
+  }
+}

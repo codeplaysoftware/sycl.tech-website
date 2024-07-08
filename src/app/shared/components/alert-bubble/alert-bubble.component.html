@@ -1,0 +1,11 @@
+@if (message(); as message) {
+  <div (click)="onClick()">
+    <span class="material-symbols-outlined">{{ icon() }}</span>
+  </div>
+  <div [innerHTML]="message" (click)="onClick()"></div>
+  @if (closable()) {
+    <div (click)="onClose()">
+      <span class="material-symbols-outlined">cancel</span>
+    </div>
+  }
+}

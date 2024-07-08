@@ -1,0 +1,28 @@
+@if (sample(); as sample) {
+  <div class="input">
+    <st-syntax-code-block
+        [(code)]="snippet"
+        [highlight]="highlight()"
+        [caretColor]="caretColor()"></st-syntax-code-block>
+    <div>
+      @if (sample) {
+        <span class="material-symbols-outlined"
+              title="Open sample in playground"
+              (click)="onOpenInPlayground()">sports_esports</span>
+      }
+      @if (state() === LoadingState.LOADING) {
+        <st-loading></st-loading>
+      } @else {
+        <span class="material-symbols-outlined" (click)="compile()">play_circle</span>
+      }
+    </div>
+  </div>
+
+  @if (compilationResponse(); as compilationResponse) {
+    @if (!compilationResponse.isError()) {
+      <div class="output" [innerHTML]="compilationResponse.result"></div>
+    } @else {
+      <div class="error" [innerHTML]="compilationResponse.error"></div>
+    }
+  }
+}

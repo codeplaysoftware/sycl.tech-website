@@ -1,0 +1,98 @@
+<!-- Section: Intro -->
+<section id="intro">
+  <div class="wrapper panel fancy intro">
+    <div>
+      <header>
+        <h1>Ecosystem</h1>
+        <h2>The SYCL community is flourishing. From projects to research papers, and everything in between, SYCL
+          is a mature standard that will deliver performance and future compatibility.</h2>
+        <st-quick-links [links]="getQuickLinks()"></st-quick-links>
+      </header>
+    </div>
+    <div>
+      <span class="material-symbols-outlined panel-icon">forest</span>
+    </div>
+  </div>
+</section>
+
+<!-- Section: Projects -->
+<section id="projects">
+  <div class="wrapper panel fancy">
+    <div>
+      <header>
+        <h1>Projects</h1>
+        <h2>The SYCL community is flourishing. From projects to research papers, and everything in between, SYCL
+          is a mature standard that will deliver performance and future compatibility.</h2>
+        <a class="button" routerLink="./projects">
+          <span class="material-symbols-outlined">genetics</span>View All Projects
+        </a>
+      </header>
+    </div>
+    <div>
+      @if (project(); as project) {
+        <st-project-widget [project]="project"></st-project-widget>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Section: Research -->
+<section id="research">
+  <div class="wrapper panel fancy">
+    <div>
+      <header>
+        <h1>Research</h1>
+        <h2>SYCL is a heavily research technology that has built up a wealth of valuable information. Browse our
+          community driven collection of research papers.</h2>
+        <a class="button" routerLink="./research">
+          <span class="material-symbols-outlined">biotech</span>View Research Work
+        </a>
+      </header>
+    </div>
+    <div>
+      @if (research(); as research) {
+        <st-research-widget [research]="research"></st-research-widget>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Section: Videos -->
+<section id="videos">
+  <div class="wrapper panel fancy">
+    <div>
+      <header>
+        <h1>Presentations &amp; Videos</h1>
+        <h2>Watch exciting and detailed video based presentations on the SYCL standard. From small internal
+          presentations all the way to giant crowds, watch them all here.</h2>
+        <a class="button" routerLink="./presentations">
+          <span class="material-symbols-outlined">slideshow</span>View Presentations &amp; Videos
+        </a>
+      </header>
+    </div>
+    <div>
+      @if (video(); as video) {
+        <st-video-widget [video]="video"></st-video-widget>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Section: Implementations -->
+<section id="implementations">
+  <div class="wrapper panel fancy">
+    <div>
+      <header>
+        <h1>Implementations</h1>
+        <h2>SYCL is an open specification. Anyone can create an implementation and enable SYCL on their specific
+          hardware. View popular implementations from Intel, OSS and more.</h2>
+        <a class="button" routerLink="./implementations">
+          <span class="material-symbols-outlined">speed</span>View All Implementations
+        </a>
+      </header>
+    </div>
+    <div>
+      <span class="material-symbols-outlined panel-icon">speed</span>
+    </div>
+  </div>
+</section>

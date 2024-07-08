@@ -1,0 +1,32 @@
+<!-- Section: Intro -->
+<section id="intro">
+  <div class="wrapper panel fancy intro">
+    <div>
+      <header>
+        <h1>We &#9829; Our Contributors</h1>
+        <h2>We've like to say a special thanks to all the contributors that help make SYCL.tech a great, up-to-date
+          and safe place for all everyone.</h2>
+      </header>
+    </div>
+    <div>
+      <span class="material-symbols-outlined panel-icon">groups</span>
+    </div>
+  </div>
+</section>
+
+<!-- Section: Contributors -->
+<section id="contributors">
+  <div class="wrapper">
+    <header>
+      <h1>Contributors</h1>
+    </header>
+    <div class="list">
+      @for (contributor of contributors(); track contributor) {
+        <a routerLink="./{{ contributor.username }}">
+          <st-contributor-avatar [contributor]="contributor"></st-contributor-avatar>
+          <h1 [innerHTML]="contributor.name"></h1>
+        </a>
+      }
+    </div>
+  </div>
+</section>

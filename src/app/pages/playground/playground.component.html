@@ -1,0 +1,132 @@
+<div class="playground">
+  <div class="actions">
+    <div>
+      <a class="run" [ngClass]="{'active': isCompiling() }" (click)="onCompile()">
+        @if (isDirty()) {
+          <div class="notice"></div>
+        }
+        @if (isCompiling()) {
+          <st-loading></st-loading>
+        } @else {
+          <span class="material-symbols-outlined run"
+                title="Compile and run your source code">play_circle</span>
+        }
+      </a>
+      <a (click)="onChooseSample()">
+        <span class="material-symbols-outlined"
+              title="Show the sample chooser">category</span></a>
+
+      @if (!isPanelVisible('source') && !this.isAnyPanelMaximized()) {
+        <a (click)="this.sourcePanelViewState.set(PanelViewState.NORMAL)">
+        <span class="material-symbols-outlined"
+              title="Show the Source Code panel">code</span></a>
+      }
+      @if (!isPanelVisible('asm') && !this.isAnyPanelMaximized()) {
+        <a (click)="this.asmPanelViewState.set(PanelViewState.NORMAL)">
+        <span class="material-symbols-outlined"
+              title="Show the Assembly Output panel">code_blocks</span></a>
+      }
+      @if (!isPanelVisible('exec') && !this.isAnyPanelMaximized()) {
+        <a (click)="this.execPanelViewState.set(PanelViewState.NORMAL)">
+        <span class="material-symbols-outlined"
+              title="Show the Execution Output panel">terminal</span></a>
+      }
+    </div>
+    <div>
+      <a (click)="onShowInfoPanel()">
+        <img ngSrc="./assets/images/playground/compiler-explorer-icon.svg" alt="Compiler Explorer Icon" height="16"
+             width="16" /></a>
+    </div>
+  </div>
+  <div class="container">
+    @if (isPanelVisible('source')) {
+      <div class="left">
+        <!-- Panel: Source Code -->
+        @if (isPanelVisible('source')) {
+          <st-mini-panel
+              title="Source Code"
+              icon="code"
+              class="source"
+              [state]="isCodeReady() ? MiniPanelState.SHOWING : MiniPanelState.LOADING"
+              [tag]="'source'"
+              [viewState]="sourcePanelViewState()"
+              (viewStateChange)="onPanelViewStateChanged('source', $event)"
+              [actionButtons]="[{name: 'Run', icon: 'play_circle', active: this.isCompiling(), title: 'Compile and run the source code'}]"
+              (actionButtonClicked)="onMiniPanelActionButtonPressed('source', $event)">
+            @if (isCodeReady()) {
+              <ngx-monaco-editor
+                  class="content"
+                  [options]="{ theme: this.monacoEditorTheme(), language: 'cpp', automaticLayout: true }"
+                  [(ngModel)]="code"></ngx-monaco-editor>
+            }
+          </st-mini-panel>
+        }
+      </div>
+    }
+
+    @if (isPanelVisible('asm') || isPanelVisible('exec') || isPanelVisible('error')) {
+      <div class="right">
+        @if (isPanelVisible('asm')) {
+          <!-- Panel: Assembly -->
+          <st-mini-panel
+              title="Assembly"
+              icon="code_blocks"
+              class="asm"
+              [tag]="'asm'"
+              [viewState]="asmPanelViewState()"
+              (viewStateChange)="onPanelViewStateChanged('asm', $event)"
+              [state]="getPanelState('asm')"
+              (actionButtonClicked)="onMiniPanelActionButtonPressed('asm', $event)">
+            @if (compilationResult$ | async; as compilationResult) {
+              <ngx-monaco-editor
+                  class="content"
+                  [options]="{ theme: this.monacoEditorTheme(), language: 'yaml', automaticLayout: true }"
+                  [(ngModel)]="compilationResult.assembly"></ngx-monaco-editor>
+            }
+          </st-mini-panel>
+        }
+
+        @if (isPanelVisible('exec')) {
+          <!-- Panel: Execution Result -->
+          <st-mini-panel
+              title="Execution Result"
+              icon="terminal"
+              class="exec"
+              [tag]="'exec'"
+              [viewState]="execPanelViewState()"
+              (viewStateChange)="onPanelViewStateChanged('exec', $event)"
+              [state]="getPanelState('exec')"
+              (actionButtonClicked)="onMiniPanelActionButtonPressed('exec', $event)">
+            @if (compilationResult$ | async; as compilationResult) {
+              <div>
+                <st-alert-bubble
+                    icon="info"
+                    (clicked)="onTargetPlatformClicked()"
+                    [closable]="false"
+                    [message]="'Your code was compiled via Compiler Explorer and executed on an '
+                  + compilationResult.platform + '.'"></st-alert-bubble>
+                <pre [innerHTML]="compilationResult.result" class="content"></pre>
+              </div>
+            }
+          </st-mini-panel>
+        }
+
+        @if (isPanelVisible('error')) {
+          <!-- Panel: Error -->
+          <st-mini-panel
+              title="Error Result"
+              icon="error"
+              class="error"
+              [tag]="'error'"
+              [viewState]="errorPanelViewState()"
+              (viewStateChange)="onPanelViewStateChanged('error', $event)"
+              (actionButtonClicked)="onMiniPanelActionButtonPressed('error', $event)">
+            @if (compilationResult$ | async; as compilationResult) {
+              <pre [innerHTML]="compilationResult.error" class="content"></pre>
+            }
+          </st-mini-panel>
+        }
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,58 @@
+@if (calendarItem(); as calendarItem) {
+  <div class="left">
+    <header>
+      <div>
+        <span class="material-symbols-outlined">calendar_month</span>
+      </div>
+      <div>
+        <h1 [innerHTML]="calendarItem.event.title"></h1>
+      </div>
+    </header>
+    <div>
+      <ol class="details">
+        <li title="Start Time">
+          <div><span class="material-symbols-outlined">play_circle</span></div>
+          <div>{{ calendarItem.event.starts | date:'MMM d, y, h:mm a z' }}</div>
+        </li>
+        <li title="End Time">
+          <div><span class="material-symbols-outlined">stop_circle</span></div>
+          <div>{{ calendarItem.event.ends.toDateString() | date:'MMM d, y, h:mm a z' }}</div>
+        </li>
+        @if (calendarItem.event.location) {
+          <li title="Location">
+            <div><span class="material-symbols-outlined">pin_drop</span></div>
+            <div>{{ calendarItem.event.location }}</div>
+          </li>
+        }
+        @if (calendarItem.event.attendees; as attendees) {
+          @if (calendarItem.event.attendees.length > 0) {
+            <li title="SYCL.Tech Attendees">
+              <div><span class="material-symbols-outlined">people</span></div>
+              <div>
+                <st-layered-contributor-avatars
+                    (clicked)="onContributorClicked($event)"
+                    [contributors]="attendees"
+                    [limit]="3"></st-layered-contributor-avatars>
+              </div>
+            </li>
+          }
+        }
+      </ol>
+      <div class="buttons">
+        <a class="button" [href]="environment.github_content_repo_collection_base_url + '/events#note-attendance'"
+           target="_blank"
+           rel="noopener">
+          <span class="material-symbols-outlined">person_add</span>Note Your Attendance</a>
+        <a class="button" [href]="calendarItem.event.url" target="_blank">
+          <span class="material-symbols-outlined">link</span>Visit Event Website
+        </a>
+      </div>
+    </div>
+  </div>
+
+  @if (calendarItem.event.content) {
+    <div class="right">
+      <div class="content" [innerHTML]="calendarItem.event.content"></div>
+    </div>
+  }
+}

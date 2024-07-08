@@ -1,0 +1,183 @@
+<nav>
+  <div class="wrapper">
+    <a href="" class="logo">
+      <img ngSrc="./assets/images/logo.svg" alt="SYCL.tech" width="93" height="42" priority/></a>
+
+    <div class="menu">
+      <a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <div>
+          <span class="material-symbols-outlined">home</span>Home
+          <div class="bar"></div>
+        </div>
+      </a>
+      <a routerLink="getting-started" routerLinkActive="active">
+        <div>
+          <span class="material-symbols-outlined">play_circle</span>Get Started
+          <div class="bar"></div>
+        </div>
+      </a>
+      <a href="/ecosystem" routerLink="ecosystem" routerLinkActive="active">
+        <div>
+          <span class="material-symbols-outlined">forest</span>Ecosystem
+          <div class="bar"></div>
+        </div>
+      </a>
+      <a routerLink="calendar" routerLinkActive="active">
+        <div>
+          <span class="material-symbols-outlined">event</span>Calendar
+          <div class="bar"></div>
+        </div>
+      </a>
+      <a routerLink="news" routerLinkActive="active">
+        <div>
+          <span class="material-symbols-outlined">newspaper</span>Updates
+          <div class="bar"></div>
+        </div>
+      </a>
+      <a routerLink="playground" routerLinkActive="active">
+        <div>
+          <span class="material-symbols-outlined">sports_esports</span>Playground
+          <div class="bar"></div>
+        </div>
+      </a>
+      <div class="toggle-mobile-menu" (click)="onToggleMobileMenu()">
+        <div>
+          <span class="material-symbols-outlined">menu</span>Menu
+          <div class="bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings">
+      <div>
+        <st-search placeholder="" (click)="onShowSearch()"></st-search>
+      </div>
+      <div>
+        <st-switch
+            iconOn="dark_mode"
+            iconOff="light_mode"
+            (clicked)="onDarkModeSwitchClicked()"
+            [(enabled)]="enableDarkModeSwitch"
+            [checked]="darkModeEnabled()"></st-switch>
+      </div>
+      <div>
+        <ol class="socials">
+          <li>
+            <a [href]="environment.socials.github"
+               target="_blank"
+               rel="noopener">
+              <img ngSrc="./assets/images/github.svg" alt="GitHub Icon" height="20" width="20" /></a>
+          </li>
+          <li>
+            <a href="https://www.khronos.org/sycl/"
+               target="_blank"
+               rel="noopener">
+              <span class="material-symbols-outlined">public</span></a>
+          </li>
+          <li>
+            <a [href]="environment.socials.discord"
+               target="_blank"
+               rel="noopener">
+              <img ngSrc="./assets/images/discord.svg" alt="Discord Icon" height="20" width="20" /></a>
+          </li>
+          <li>
+            <a [href]="environment.socials.discourse"
+               target="_blank"
+               rel="noopener">
+              <img ngSrc="./assets/images/discourse.svg" alt="Discourse Icon" height="20" width="20" /></a>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-mobile" [ngClass]="{ 'hidden': !showingMobileMenu() }">
+    <ol>
+      <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a routerLink="" (click)="onMobileMenuLinkClicked()">
+          <div>
+            <span class="material-symbols-outlined">home</span>Home
+            <div class="bar"></div>
+          </div>
+        </a>
+      </li>
+      <li routerLinkActive="active">
+        <a routerLink="getting-started" routerLinkActive="active" (click)="onMobileMenuLinkClicked()">
+          <div>
+            <span class="material-symbols-outlined">play_circle</span>Get Started
+            <div class="bar"></div>
+          </div>
+        </a>
+      </li>
+      <li routerLinkActive="active">
+        <a routerLink="ecosystem" (click)="onMobileMenuLinkClicked()">
+          <div>
+            <span class="material-symbols-outlined">forest</span>Ecosystem
+            <div class="bar"></div>
+          </div>
+        </a>
+      </li>
+      <li routerLinkActive="active">
+        <a routerLink="calendar" (click)="onMobileMenuLinkClicked()">
+          <div>
+            <span class="material-symbols-outlined">event</span>Calendar
+            <div class="bar"></div>
+          </div>
+        </a>
+      </li>
+      <li routerLinkActive="active">
+        <a routerLink="news" (click)="onMobileMenuLinkClicked()">
+          <div>
+            <span class="material-symbols-outlined">genetics</span>Updates
+            <div class="bar"></div>
+          </div>
+        </a>
+      </li>
+      <li routerLinkActive="active">
+        <a routerLink="playground" (click)="onMobileMenuLinkClicked()">
+          <div>
+            <span class="material-symbols-outlined">sports_esports</span>Playground
+            <div class="bar"></div>
+          </div>
+        </a>
+      </li>
+    </ol>
+  </div>
+</nav>
+<main>
+  <router-outlet></router-outlet>
+  <st-cookie-acceptance></st-cookie-acceptance>
+</main>
+<footer>
+  <div class="wrapper">
+    <div>
+      <h1>&copy; Copyright {{ currentYear() }} SYCL.tech</h1>
+      <h2>SYCL is a trademark of the Khronos Group. Intel is a registered trademark of Intel&reg; Corporation.</h2>
+      <div>
+        <a class="button" [href]="environment.github_front_end_url" target="_blank" rel="noopener">
+          <span class="material-symbols-outlined">genetics</span>Edit on GitHub
+        </a>
+      </div>
+    </div>
+    <div>
+      <div>
+        <h1>Network</h1>
+        <ul>
+          <li><a routerLink="/contributors">Contributors</a></li>
+          <li><a href="https://www.khronos.org/sycl/" target="_blank" rel="noopener">Khronos SYCL</a></li>
+          <li><a href="https://uxlfoundation.org/" target="_blank" rel="noopener">UXL Foundation</a></li>
+          <li><a href="https://developer.codeplay.com" target="_blank" rel="noopener">Developer Portal</a></li>
+          <li><a href="https://oneapi.com" target="_blank" rel="noopener">Intel oneAPI</a></li>
+        </ul>
+      </div>
+      <div>
+        <h1>Useful Links</h1>
+        <ul>
+          <li><a routerLink="/cookies">Cookie Policy</a></li>
+          <li><a routerLink="/privacy">Privacy Policy</a></li>
+          <li><a routerLink="/settings">Settings</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>

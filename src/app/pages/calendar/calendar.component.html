@@ -1,0 +1,16 @@
+<section id="calendar">
+  <div class="wrapper">
+    <header>
+      <div>
+        <h1>Calendar</h1>
+      </div>
+      <div>
+        <a class="button" [href]="environment.github_content_repo_collection_base_url + '/events/'" target="_blank"
+           rel="noopener">
+          <span class="material-symbols-outlined">add</span>Add Your Event</a>
+      </div>
+    </header>
+    <st-event-calendar
+        [(currentDate)]="this.currentDate"></st-event-calendar>
+  </div>
+</section>

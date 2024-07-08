@@ -1,0 +1,22 @@
+@if (event(); as event) {
+  @if (layout() === CalendarWidgetLayout.WIDGET) {
+    <div class="widget">
+      <a [href]="event.url" target="_blank" rel="noopener">
+        <div class="header">
+          <st-date-display [date]="event.starts"></st-date-display>
+          <st-layered-contributor-avatars [contributors]="event.attendees"></st-layered-contributor-avatars>
+        </div>
+        <div class="content">
+          <h1 [innerHTML]="event.title"></h1>
+          <h2 [innerHTML]="event.location"></h2>
+        </div>
+      </a>
+      <div class="footer">
+        @if (event.contributor | async; as contributor) {
+          <st-contributor-avatar [contributor]="contributor"></st-contributor-avatar>
+          <span class="shared-by">Shared by {{ contributor.name }}</span>
+        }
+      </div>
+    </div>
+  }
+}

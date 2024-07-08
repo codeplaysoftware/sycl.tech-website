@@ -1,0 +1,31 @@
+:host {
+  display: flex;
+  --avatar-width: 40px;
+  --overlay-pixels: 10px;
+  padding-left: var(--overlay-pixels);
+}
+
+div {
+  width: calc(var(--avatar-width) - var(--overlay-pixels));
+  height: var(--avatar-width);
+  margin-right: .2rem;
+  position: relative;
+
+  st-contributor-avatar,
+  .more {
+    display: block;
+    width: var(--avatar-width);
+    position: absolute;
+    right: 0;
+  }
+
+  .more {
+    background-color: var(--color-orange);
+    color: var(--color-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--avatar-width);
+  }
+}
+

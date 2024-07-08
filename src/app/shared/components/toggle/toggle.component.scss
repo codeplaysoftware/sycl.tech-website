@@ -1,0 +1,38 @@
+:host {
+  display: block;
+}
+
+
+.container {
+  display: flex;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: var(--color-hint-first);
+  transition: var(--transition-fast);
+
+  &:hover {
+    box-shadow: var(--box-shadow-focused);
+  }
+
+  & > div {
+    padding: .5rem;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    opacity: .5;
+    user-select: none;
+
+    &:not(.focused):not(:last-of-type) {
+      border-right: var(--border-default);
+    }
+
+    &.focused {
+      background-color: var(--color-control-active);
+      color: var(--color-white);
+      opacity: 1;
+    }
+
+    span {
+      font-size: 20px;
+    }
+  }
+}

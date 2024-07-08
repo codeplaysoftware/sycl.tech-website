@@ -1,0 +1,99 @@
+:host {
+  display: flex;
+  flex-direction: row;
+  min-height: 600px;
+  max-height: 900px;
+
+  @media screen and (max-width: 800px) {
+    height: 100%;
+    flex-direction: column;
+  }
+
+  .left {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+
+    header {
+      display: block;
+      text-align: center;
+      background-color: var(--color-orange);
+      color: var(--color-white);
+      padding: 3rem;
+
+      span {
+        font-size: 4rem;
+      }
+    }
+
+    > div {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      padding: 1rem 3rem;
+      background-color: var(--popup-bg-color);
+
+      ol.details {
+        list-style: none;
+        border: rgba(0, 0, 0, .1) 1px solid;
+        border-radius: 12px;
+        overflow: hidden;
+        padding: 0;
+
+        li {
+          display: grid;
+          grid-template-columns: 50px 1fr;
+
+          > div {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+          }
+
+          > div:nth-of-type(1) {
+            background-color: var(--color-orange);
+            color: var(--color-white);
+            justify-content: center;
+          }
+
+          &:not(:last-of-type) {
+            border-bottom: rgba(0, 0, 0, .1) 1px solid;
+          }
+        }
+      }
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+
+      a.button {
+        background-color: var(--color-blue);
+        text-align: center;
+        flex-basis: 50%;
+        margin-top: auto;
+      }
+    }
+
+    @media screen and (min-width: 800px) {
+      width: 400px;
+    }
+  }
+
+  .right {
+    background-color: var(--color-hint-second);
+    box-shadow: inset 3px 0 15px 0 rgba(0, 0, 0, .1);
+    font-size: 1rem;
+
+    @media screen and (min-width: 800px) {
+      width: 400px;
+    }
+
+    .content {
+      overflow: scroll;
+      height: 100%;
+      padding: 3rem;
+    }
+  }
+}

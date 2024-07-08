@@ -1,0 +1,44 @@
+@if (layout() === Layout.WIDGET) {
+  <div class="widget">
+    <a [routerLink]="news().permalink">
+      <div class="header">
+        <div [style.background-image]="'url(' + news().thumbnail + ')'">
+          <st-date-display [date]="news().date"></st-date-display>
+        </div>
+      </div>
+      <div class="content">
+        <h1 [innerHTML]="news().title"></h1>
+        <h2 [innerHTML]="news().description | truncate:150"></h2>
+      </div>
+    </a>
+    <div class="footer">
+      @if (news().contributor | async; as contributor) {
+        <st-contributor-avatar [contributor]="contributor"></st-contributor-avatar>
+        <span class="shared-by">Shared by {{ contributor.name }}</span>
+      }
+    </div>
+  </div>
+} @else if (layout() === Layout.ROW || layout() === Layout.MINIMAL) {
+  <div class="row">
+    <a [routerLink]="news().permalink">
+      <div class="left">
+        <div>
+          <h1 [innerHTML]="news().title"></h1>
+          @if (layout() !== Layout.MINIMAL) {
+            <h2 [innerHTML]="news().description | truncate:150"></h2>
+          }
+        </div>
+        <div class="footer">
+          @if (news().contributor | async; as contributor) {
+            <st-contributor-avatar [contributor]="contributor"></st-contributor-avatar>
+            <span class="shared-by">Shared by {{ contributor.name }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="right">
+        <st-date-display [date]="news().date"></st-date-display>
+      </div>
+    </a>
+  </div>
+}

@@ -1,0 +1,46 @@
+<div class="header">
+  <a [href]="getPreviousUrl()" (click)="onPrevious($event)" title="Previous Month">
+    <span class="material-symbols-outlined">arrow_back</span>
+  </a>
+  <div>
+    @if (this.stateSignal() === LoadingState.LOADING) {
+      <st-loading></st-loading>
+    } @else {
+      {{ currentDate().toDateString() | date:'LLLL YYYY' }}
+    }
+  </div>
+  <a [href]="getNextUrl()" (click)="onNext($event)" title="Next Month">
+    <span class="material-symbols-outlined">arrow_forward</span>
+  </a>
+</div>
+
+<div class="calendar">
+  @for (day of dayModels$ | async; track day.date.toDateString()) {
+    <div [ngClass]="{ 'today': isToday(day.date) }">
+      <div class="date">
+        <span [ngClass]="{ 'today': isToday(day.date)} " [innerHTML]="day.day"></span>
+      </div>
+      <ul class="events">
+        @for (event of day.calendarItems; track event.id) {
+          @if (!event.isPadding) {
+            <li (click)="onEventClick(event)"
+                (mouseenter)="onMouseChange(event, true)"
+                (mouseleave)="onMouseChange(event,false)"
+                [ngClass]="getClass(day.date, event)">
+              @if (event.startsOnDate(day.date)) {
+                <div>
+                  <span class="material-symbols-outlined">more_vert</span>
+                  {{ event.event.title | truncate:10 }}
+                </div>
+              } @else {
+                <div class="spacer">-</div>
+              }
+            </li>
+          } @else {
+            <li class="padding">-</li>
+          }
+        }
+      </ul>
+    </div>
+  }
+</div>

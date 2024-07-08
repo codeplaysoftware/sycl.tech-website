@@ -1,0 +1,10 @@
+:host {
+  display: flex;
+
+  & > div:nth-of-type(1) {
+    flex: 1;
+    opacity: .5;
+    display: flex;
+    align-items: center;
+  }
+}

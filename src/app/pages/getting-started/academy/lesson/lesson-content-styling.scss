@@ -1,0 +1,33 @@
+:host {
+  ::ng-deep .content {
+    font-size: 1rem;
+    line-height: 150%;
+
+    code {
+      background-color: var(--color-hint-second);
+      padding: .2rem;
+      border-radius: 2px;
+    }
+
+    pre > code {
+      border-radius: var(--border-radius);
+      background-color: var(--color-blue);
+      color: var(--color-white);
+      padding: 2rem;
+      width: 100%;
+      overflow: auto;
+      white-space: break-spaces;
+      display: block;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    h4 {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+  }
+}

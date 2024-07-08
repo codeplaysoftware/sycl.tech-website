@@ -1,0 +1,192 @@
+/**
+ * Section: Try
+ */
+section#try {
+  .panel {
+    background: var(--color-blue);
+    color: var(--color-white);
+
+    h2 {
+      opacity: .7;
+    }
+
+    st-executable-code-block {
+      margin-top: 1rem;
+    }
+  }
+}
+
+/**
+ * Section: eBook
+ */
+section#ebook {
+  .panel {
+    background-color: black;
+    position: relative;
+    overflow: hidden;
+
+    .bg {
+      background-image: url(../../../assets/images/get-started/ebook/moon-bg.png);
+    }
+
+    img {
+      max-height: 400px;
+    }
+
+    h1 {
+      color: #ffbc00;
+    }
+
+    .button {
+      background-color: #ffbc00;
+      color: var(--color-black);
+    }
+  }
+}
+
+/**
+ * Section: Academy
+ */
+section#academy {
+  .lesson-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 1rem;
+    grid-row-gap: 2rem;
+
+    @media screen and (min-width: 600px) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media screen and (min-width: 800px) {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+}
+
+/**
+ * Section: Implementations
+ */
+section#implementations {
+  .implementations {
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: 1fr;
+
+    @media screen and (min-width: 800px) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    & > a {
+      flex-basis: 50%;
+      background-color: var(--color-hint-third);
+      border-radius: var(--border-radius);
+      text-align: center;
+      overflow: hidden;
+      transition: var(--transition-fast);
+
+      &:hover {
+        transform: var(--transform-focused);
+        box-shadow: var(--box-shadow-focused);
+      }
+
+      > div:nth-of-type(1) {
+        min-height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--color-blue);
+        color: var(--color-white);
+
+        img {
+          max-height: 80px;
+          max-width: 200px;
+          height: auto;
+          width: auto;
+          filter: brightness(0) invert(1);
+        }
+      }
+
+      > div:nth-of-type(2) {
+        padding: 2rem 5rem;
+
+        h1 {
+          font-size: 1.1rem;
+          font-weight: normal;
+          margin-top: 1rem;
+        }
+
+        a.button {
+          margin-top: 1rem;
+        }
+      }
+    }
+  }
+}
+
+
+section#download-compiler {
+  p {
+    font-size: 1rem;
+  }
+
+  a.download {
+    flex: 1;
+    background-color: var(--color-hint-third);
+    text-align: center;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition-fast);
+
+    span {
+      margin: 2rem 0;
+      transition: var(--transition-fast);
+      font-size: 100px;
+    }
+
+    &:hover {
+      box-shadow: var(--box-shadow-focused);
+      transform: var(--transform-focused);
+
+      span {
+        color: var(--color-orange)
+      }
+    }
+  }
+
+  .downloads {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    gap: 1rem;
+    font-size: 1rem;
+
+    @media screen and (min-width: 800px) {
+      flex-direction: row;
+    }
+  }
+
+  st-tab#oneapi {
+    a.toolkit {
+      background-color: var(--color-hint-third);
+      border-radius: var(--border-radius);
+      color: var(--color-white);
+      display: block;
+      padding: 2rem 5rem;
+      margin-top: 1rem;
+      text-align: center;
+      background-image: url(https://www.oneapi.io/wp-content/themes/one-api/images/header-outlines.svg);
+      background-size: cover;
+
+      h1, p {
+        margin: 0;
+      }
+
+      p {
+        margin-top: .5rem;
+        opacity: .6;
+      }
+    }
+  }
+}

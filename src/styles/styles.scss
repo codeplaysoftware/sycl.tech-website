@@ -1,0 +1,182 @@
+@import 'fonts';
+@import 'colors';
+@import 'variables';
+@import 'panels';
+
+body {
+  --nav-bar-height: 118px;
+
+  // Padding
+  --side-padding: 1rem;
+
+  @media screen and (min-width: 900px) {
+    --side-padding: 2rem;
+  }
+
+  -webkit-font-smoothing: antialiased;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  font-size: 14px;
+
+  * {
+    box-sizing: border-box !important;
+  }
+
+  a {
+    text-decoration: inherit;
+    color: inherit;
+  }
+
+  p {
+    a {
+      font-weight: bold;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  }
+
+  h1 {
+    font-weight: 500;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  hr {
+    margin: 2rem 0;
+    opacity: .5;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  .wrapper,
+  .tag-wrapper {
+    margin: auto;
+    max-width: 1200px;
+  }
+
+  .centered {
+    display: flex;
+    align-items: center;
+  }
+
+  .icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  input {
+    color: var(--text-color);
+  }
+
+  .button {
+    padding: 1rem 1.5rem;
+    border-radius: 6px;
+    background: var(--color-orange);
+    color: white;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: inline-block;
+
+    &:hover {
+      box-shadow: var(--box-shadow-focused);
+      transform: var(--transform-focused);
+    }
+
+    i, span {
+      vertical-align: middle;
+      margin-right: .5rem;
+    }
+
+    &.centered {
+      text-align: center;
+    }
+  }
+
+  section {
+    padding: var(--side-padding);
+    background-color: var(--section-bg-color-primary);
+    position: relative;
+
+    &:nth-of-type(even) {
+      background-color: var(--section-bg-color-alt);
+    }
+
+    @media screen and (min-width: 900px) {
+      padding: 2.5rem var(--side-padding);
+    }
+
+    &.standard {
+      padding: 6rem var(--side-padding);
+
+      header {
+        padding: 0 0 2rem 0;
+      }
+    }
+
+    #content {
+      padding: 5rem 0;
+    }
+  }
+}
+
+/**
+ * Styling to support a fading in background for a panel.
+ */
+.faded-bg,
+.fade-in-bg {
+  overflow: hidden;
+  position: relative;
+
+  > *:not(.bg) {
+    position: relative;
+    z-index: 1;
+  }
+
+  .bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: bottom center;
+    z-index: 0;
+    opacity: 0;
+    transition: 2s all;
+    animation: bg-fade-in 2s forwards;
+  }
+
+  &.slight-fade .bg {
+    animation: bg-fade-in-slight 2s forwards;
+  }
+
+  &.fade-in-bg {
+    .bg {
+      opacity: .1;
+      animation: none;
+    }
+
+    &:hover .bg {
+      opacity: .3;
+    }
+  }
+
+  @keyframes bg-fade-in {
+    0% { opacity: 0; }
+    100% { opacity: .2; }
+  }
+
+  @keyframes bg-fade-in-slight {
+    0% { opacity: 0; }
+    100% { opacity: .07; }
+  }
+}

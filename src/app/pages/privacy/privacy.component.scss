@@ -1,0 +1,43 @@
+:host {
+  section#contact-details {
+    ul {
+      list-style: none;
+      font-size: 1rem;
+      padding: 0;
+      margin: 0;
+
+      li {
+        display: flex;
+        margin-bottom: .3rem;
+
+        div {
+          padding: 1rem;
+
+          &:first-of-type {
+            font-weight: bold;
+            flex-basis: 20%;
+            background-color: var(--color-hint-third);
+            border-radius: var(--border-radius);
+          }
+        }
+      }
+    }
+  }
+
+  section#policy {
+    font-size: 1rem;
+    line-height: 170%;
+
+    a {
+      display: inline-block;
+      background-color: var(--color-hint-third);
+      padding: .5rem;
+      border-radius: var(--border-radius);
+      transition: var(--transition-fast);
+
+      &:hover {
+        box-shadow: var(--box-shadow-focused);
+      }
+    }
+  }
+}

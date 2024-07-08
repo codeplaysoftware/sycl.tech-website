@@ -1,0 +1,26 @@
+<section id="research">
+  <div class="wrapper">
+    <st-filter-container
+        collectionName="Research Paper"
+        [(filterGroups)]="filtersGroups"
+        (filterGroupsChange)="onFiltersGroupsChanged()"
+        [state]="state()"
+        [totalResultCount]="totalItemCount"
+        [filteredResultCount]="filteredItemCount"
+        [visibleResultCount]="visibleResults().length"
+        (toggleButtonsChange)="onViewToggleChanged($event)"
+        (viewMore)="onViewMore()"
+        [newCollectionItemUrl]="environment.github_content_repo_collection_base_url + '/research_papers/'">
+      <!-- Results -->
+      @if (visibleItemCount > 0) {
+        <div class="results" [ngClass]="{ 'grid' : gridView(), 'list' : !gridView() }">
+          @for (research of visibleResults(); track research.id) {
+            <st-research-widget
+                [layout]="gridView() ? Layout.WIDGET : Layout.ROW"
+                [research]="research"></st-research-widget>
+          }
+        </div>
+      }
+    </st-filter-container>
+  </div>
+</section>

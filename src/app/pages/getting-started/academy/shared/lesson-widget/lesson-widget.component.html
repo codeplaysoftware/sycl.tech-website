@@ -1,0 +1,17 @@
+<div class="header">
+  <div>
+    <div class="lesson-number">{{ lesson().number }}</div>
+  </div>
+  <div>
+    <a title="Go to GitHub lesson"
+       [href]="lesson().github_homepage_url"
+       target="_blank"
+       rel="noopener">
+      <img ngSrc="./assets/images/github.svg" class="icon" alt="GitHub Icon" height="20" width="20"/>
+    </a>
+  </div>
+</div>
+<a class="content" [routerLink]="'/getting-started/academy/' + lesson().tag" title="Go to lesson {{ lesson().title }}">
+  <h1 [innerHTML]="lesson().title"></h1>
+  <h2 [innerHTML]="lesson().description"></h2>
+</a>

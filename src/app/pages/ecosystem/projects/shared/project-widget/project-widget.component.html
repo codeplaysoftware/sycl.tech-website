@@ -1,0 +1,81 @@
+@if (project(); as project) {
+
+  @if (layout() === Layout.WIDGET) {
+    <!-- Layout: Widget -->
+    <div class="widget">
+      <!-- Header -->
+      <div class="header">
+        <div>
+          @if (project.repository) {
+            <st-layered-contributor-avatars
+                [contributors]="project.repository.contributors"
+                [limit]="4"></st-layered-contributor-avatars>
+          }
+        </div>
+        <div>
+          @if (project.repository && project.repository.stars) {
+            {{ project.repository.stars }} <span class="material-symbols-outlined">star</span>
+          }
+        </div>
+      </div>
+      <!-- Body -->
+      <div class="body">
+        <div>
+          <h2 [innerHTML]="project.repository?.owner?.name"></h2>
+          <h1 [innerHTML]="project.name"></h1>
+        </div>
+        <div>
+          <span [innerHTML]="project.tags.join(', ') | truncate: 100"></span>
+        </div>
+      </div>
+      <!-- Footer -->
+      <div class="footer">
+        <a [href]="project.url" target="_blank" rel="noopener">
+          <span class="material-symbols-outlined">cloud_download</span>Repository</a>
+        @if (project.repository?.cloneUrl) {
+          <div class="clone"
+             (click)="onProjectCloneClicked(project)"
+             [ngClass]="{'copied': this.cloneUrlCopied()}">
+            @if (!cloneUrlCopied()) {
+              <span class="material-symbols-outlined">content_copy</span>Clone
+            } @else {
+              <span class="material-symbols-outlined">check_circle</span>In Clipboard
+            }
+          </div>
+        }
+      </div>
+    </div>
+  } @else if (layout() === Layout.ROW) {
+    <!-- Layout: Row -->
+    <div class="row">
+      <a [href]="project.url" target="_blank" rel="noopener">
+        <div>
+          <div>
+            <h2 [innerHTML]="project.repository?.owner?.name"></h2>
+            <h1 [innerHTML]="project.name"></h1>
+          </div>
+        </div>
+        <div>
+          @if (project.repository) {
+            <st-layered-contributor-avatars
+                [contributors]="project.repository.contributors"
+                [limit]="4"></st-layered-contributor-avatars>
+          }
+        </div>
+      </a>
+      <div class="footer">
+        @if (project.repository?.cloneUrl) {
+          <div class="button clone"
+             (click)="onProjectCloneClicked(project)"
+             [ngClass]="{'copied': this.cloneUrlCopied()}">
+            @if (!cloneUrlCopied()) {
+              <span class="material-symbols-outlined">content_copy</span>Clone
+            } @else {
+              <span class="material-symbols-outlined">check_circle</span>In Clipboard
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+}

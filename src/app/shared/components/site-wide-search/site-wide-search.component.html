@@ -1,0 +1,83 @@
+<div class="header">
+  <div class="search">
+    <st-search
+        #searchInput
+        (valueChange)="onSearchQueryChanged($event)"
+        (keyDown)="onKeyDown($event)"></st-search>
+  </div>
+  <div class="tags">
+    @if (filters(); as filters) {
+      <st-tag
+          title="News"
+          [(selected)]="filters.news"
+          (selectedChange)="onFilterSelected()"></st-tag>
+      <st-tag
+          title="Projects"
+          [(selected)]="filters.projects"
+          (selectedChange)="onFilterSelected()"></st-tag>
+      <st-tag
+          title="Videos"
+          [(selected)]="filters.videos"
+          (selectedChange)="onFilterSelected()"></st-tag>
+      <st-tag
+          title="Research"
+          [(selected)]="filters.research"
+          (selectedChange)="onFilterSelected()"></st-tag>
+      <st-tag
+          title="Pages"
+          [(selected)]="filters.pages"
+          (selectedChange)="onFilterSelected()"></st-tag>
+    }
+  </div>
+</div>
+<div class="body">
+  @if (state() == SearchState.LOADED_WITH_RESULTS) {
+    @for (result of resultsSignal(); track result) {
+      <a class="result" [href]="result.url" [target]="result.target">
+        <div class="thumbnail-container">
+          @if (result.thumbnail) {
+            <img [ngSrc]="result.thumbnail" alt="Thumbnail" fill/>
+          } @else if (result.icon) {
+            <span class="material-symbols-outlined">{{ result.icon }}</span>
+          } @else {
+            <span class="material-symbols-outlined">layers</span>
+          }
+        </div>
+        <div>
+          <div>
+            <h1 [innerHTML]="result.title"></h1>
+            <h2>
+              @if (result.description) {
+                {{ result.description }}
+              } @else {
+                Going to {{ result.url | truncate: 90 }}
+              }
+            </h2>
+          </div>
+        </div>
+        <div [ngClass]="result.type">
+          {{ result.type }}
+        </div>
+      </a>
+    }
+  } @else if (state() == SearchState.LOADED_NO_RESULTS) {
+    <div class="notice">
+      <div>
+        <span class="material-symbols-outlined">search_off</span>
+        No Results
+      </div>
+    </div>
+  } @else if (state() == SearchState.READY) {
+    <div class="notice">
+      <div>
+        <span class="material-symbols-outlined">search</span>
+        Type to Search
+      </div>
+    </div>
+  } @else if (state() == SearchState.LOADING) {
+    <st-loading></st-loading>
+  }
+</div>
+<div class="footer">
+  <span>Showing {{ resultsSignal().length }} results. Press 'Enter' to choose first result.</span>
+</div>

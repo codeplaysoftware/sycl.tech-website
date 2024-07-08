@@ -1,0 +1,27 @@
+:host {
+  background-color: var(--color-orange);
+  border-radius: var(--border-radius);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  min-width: 95px;
+  padding: 1rem;
+
+  > div {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+
+    .day {
+      font-size: 1.6rem;
+      font-weight: var(--font-bold);
+    }
+
+    .month, .year {
+      opacity: .9;
+    }
+  }
+}

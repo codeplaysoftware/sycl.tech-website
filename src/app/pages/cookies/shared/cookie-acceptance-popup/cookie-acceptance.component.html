@@ -1,0 +1,23 @@
+@if (show()) {
+  <div class="dialog">
+    <h1><span class="material-symbols-outlined">security</span> Your Privacy</h1>
+
+    <p>We genuinely value your privacy and we want to be store that we only store data that you are comfortable
+      with.</p>
+
+    <p>You can view and ready our storage and privacy policies below. If you have any questions, please feel free to
+      reach our to us via the contact details on the privacy policy.</p>
+
+    <ul>
+      <li><a routerLink="/cookies">Cookie / Storage Policy</a></li>
+      <li><a routerLink="/privacy">Privacy Policy</a></li>
+    </ul>
+
+    <div class="buttons">
+      <a class="button" (click)="onAcceptPolicies()">
+        <span class="material-symbols-outlined">thumb_up</span>Accept</a>
+      <a class="button" (click)="onRejectPolicies()">
+        <span class="material-symbols-outlined">thumb_down</span>Reject</a>
+    </div>
+  </div>
+}

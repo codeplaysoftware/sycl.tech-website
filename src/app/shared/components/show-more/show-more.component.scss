@@ -1,0 +1,19 @@
+a {
+  background-color: var(--color-hint-seventh);
+  border-radius: var(--border-radius);
+  color: var(--color-white);
+  margin-top: 1rem;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-fast);
+
+  &:hover {
+    transform: var(--transform-focused-slight);
+    background-color: var(--color-orange);
+    color: var(--color-white);
+    box-shadow: var(--box-shadow-focused);
+  }
+}

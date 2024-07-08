@@ -1,0 +1,28 @@
+<div class="head">
+  <div>
+    <h1><span class="material-symbols-outlined">category</span>Choose a Sample</h1>
+  </div>
+  <div>
+    <a class="button" [href]="environment.github_content_repo_collection_base_url + '/playground_samples/'"
+       target="_blank" rel="noopener">
+      <span class="material-symbols-outlined">add</span>Contribute a Sample</a>
+  </div>
+</div>
+<div class="samples">
+  <div class="new" (click)="onChooseNew()">
+    <span class="material-symbols-outlined">add_circle</span>New
+  </div>
+  @if (state() === LoadingState.LOAD_SUCCESS) {
+    <ol>
+      @for (sample of samples(); track sample) {
+        <li (click)="onChooseSample(sample)">
+          {{ sample.title }}
+        </li>
+      }
+    </ol>
+  } @else if (state() === LoadingState.LOADING) {
+    <div class="loading">
+      <st-loading></st-loading>
+    </div>
+  }
+</div>

@@ -1,0 +1,80 @@
+:host {
+  .container {
+    .header {
+      background-color: var(--color-blue);
+      color: var(--color-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      border-radius: 12px 12px 0 0;
+      cursor: pointer;
+      transition: var(--transition-fast);
+
+      span {
+        margin-right: .3rem;
+      }
+
+      &:hover {
+        background-color: var(--color-orange);
+      }
+
+      &.mobile {
+        padding: 2rem;
+
+        @media screen and (min-width: 900px) {
+          display: none;
+        }
+      }
+
+      &.desktop {
+        @media screen and (max-width: 900px) {
+          display: none;
+        }
+      }
+    }
+
+    .filters {
+      .segment {
+        padding: 2rem;
+
+        &:not(:last-of-type) {
+          border-bottom: var(--border-default);
+        }
+      }
+
+      h1 {
+        font-size: 1rem;
+        margin: 0;
+        padding: 0 0 1rem 0;
+      }
+
+      input[type="text"] {
+        display: block;
+        width: 100%;
+        padding: .6rem;
+        border-radius: 6px;
+        border: rgba(0, 0, 0, .2) 1px solid;
+        font-size: 1rem;
+        box-shadow: var(--box-shadow-focused);
+      }
+
+      st-tag {
+        display: inline-block;
+        margin: 0 .2rem .2rem 0;
+      }
+    }
+
+    &.hide-filters {
+      .header.mobile {
+        border-radius: var(--border-radius);
+      }
+
+      .filters {
+        @media screen and (max-width: 900px) {
+          display: none;
+        }
+      }
+    }
+  }
+}

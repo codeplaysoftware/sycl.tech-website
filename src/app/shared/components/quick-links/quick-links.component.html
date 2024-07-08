@@ -1,0 +1,15 @@
+@for (link of links(); track link.name) {
+  @if (link.type == QuickLinkType.FRAGMENT) {
+    <a [routerLink]='"."' [fragment]="link.url">
+      {{ link.name }}
+    </a>
+  } @else if (link.type == QuickLinkType.EXTERNAL) {
+    <a [href]="link.url" target="_blank" rel="noopener">
+      {{ link.name }}
+    </a>
+  } @else if (link.type == QuickLinkType.INTERNAL) {
+    <a [routerLink]='link.url'>
+      {{ link.name }}
+    </a>
+  }
+}

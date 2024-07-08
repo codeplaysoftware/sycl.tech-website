@@ -1,0 +1,213 @@
+<!-- Section: Intro -->
+<section id="intro">
+  <div class="wrapper">
+    <!-- Panel: Get Started -->
+    <div class="panel fancy intro get-started">
+      <div>
+        <header>
+          <h1 routerLink="./getting-started">Get Started with SYCL</h1>
+          <h2>Take advantage of diverse hardware with heterogeneous computing powered by SYCL - the
+            cross-platform, parallel C++ abstraction.</h2>
+        </header>
+      </div>
+      <div>
+        <st-mini-playground-code-block
+            [sample]="playgroundCodeSample()"
+            [startLine]="1"
+            [endLine]="1"
+            [highlight]="false"></st-mini-playground-code-block>
+      </div>
+    </div>
+
+    <!-- Panel: Pinned -->
+    <st-scrolling-panel
+        class="sub-panel pinned"
+        [pins]="pinned()"></st-scrolling-panel>
+
+    <!-- Panel: Khronos Group -->
+    <a class="panel sub-panel khronos faded-bg" href="https://www.khronos.org/sycl/" target="_blank" rel="noopener">
+      <div class="bg"></div>
+      <header>
+        <span class="material-symbols-outlined">cloud_download</span>
+        <img ngSrc="./assets/images/home/khronos-logo.svg" alt="Khronos Group Logo" height="34.84" width="200"/>
+        <h2>The Khronos Group develops royalty-free open standards for 3D graphics, Virtual and Augmented Reality,
+          Parallel Computing, Machine Learning, and Vision Processing.</h2>
+      </header>
+    </a>
+  </div>
+</section>
+
+<!-- Section: News -->
+<section id="news">
+  <div class="wrapper panel content">
+    <header>
+      <div>
+        <h1>News &amp; Updates</h1>
+      </div>
+      <div>
+        <a class="button" routerLink="./news">
+          <span class="material-symbols-outlined">newspaper</span>View All</a>
+      </div>
+    </header>
+
+    @if (news()) {
+      <div class="news-list">
+        <div>
+          @if (news().length > 0) {
+            <st-news-widget
+                class="featured"
+                [news]="news()[0]"></st-news-widget>
+          }
+        </div>
+        <div>
+          @for (newsItem of news().slice(1); track newsItem.id) {
+            <st-news-widget
+                [layout]="Layout.ROW"
+                [news]="newsItem"></st-news-widget>
+          }
+        </div>
+      </div>
+    }
+
+    <h2>Implementation Activity</h2>
+
+    <div class="activity">
+      @for (communityUpdate of communityUpdates(); track communityUpdate) {
+        <a class="update"
+           [href]="communityUpdate.url"
+           target="_blank"
+           rel="noopener">
+          <div>
+            @if (communityUpdate.type == CommunityUpdateModelType.COMMIT) {
+              <span class="material-symbols-outlined">commit</span>
+            } @else if (communityUpdate.type == CommunityUpdateModelType.RELEASE) {
+              <span class="material-symbols-outlined">package</span>
+            }
+          </div>
+          <div>
+            <div>
+              <h1 [innerHTML]="communityUpdate.title"></h1>
+              <h2>{{ communityUpdate.date | date: 'medium' }}</h2>
+            </div>
+          </div>
+          <div>
+            <st-contributor-avatar
+                [contributor]="communityUpdate.contributor"></st-contributor-avatar>
+          </div>
+        </a>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Section: Events -->
+@if (events().length > 0) {
+  <section id="events">
+    <div class="wrapper panel content">
+      <header>
+        <div>
+          <h1>Upcoming Events</h1>
+          <h2>We have over {{ yearlyEventCount() }} events this year.</h2>
+        </div>
+        <div>
+          <div>
+            <a class="button" routerLink="./calendar">
+              <span class="material-symbols-outlined">event</span>Calendar</a>
+            <a class="button" [href]="environment.github_content_repo_collection_base_url + '/events/'" target="_blank"
+               rel="noopener">
+              <span class="material-symbols-outlined">add</span>Add Your Event</a>
+          </div>
+        </div>
+      </header>
+      <div class="container">
+        @for (event of events(); track event) {
+          <st-calendar-item-widget [event]="event"></st-calendar-item-widget>
+        }
+      </div>
+    </div>
+  </section>
+}
+
+<!-- Section: Ecosystem -->
+<section id="ecosystem">
+  <div class="wrapper panel content">
+    <header>
+      <div>
+        <h1>Ecosystem</h1>
+      </div>
+      <div>
+        <a class="button" routerLink="./ecosystem/projects">
+          <span class="material-symbols-outlined">forest</span>
+          Ecosystem</a>
+      </div>
+    </header>
+    <div class="ecosystem-content">
+      <div>
+        <h2>If you have written a new SYCL blog, have created an amazing new SYCL project or would like to share
+          a SYCL based link, please contribute to this project! Our site happily living on GitHub.com and we are happy
+          for anyone to contribute to it.</h2>
+
+        <ol class="items">
+          <li>
+            <a routerLink="./ecosystem/projects">
+              <div>{{ projectCount() }}</div>
+              <div>
+                <div>
+                  <h1>Projects</h1>
+                  <h2>Projects and more other projects</h2>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a routerLink="./ecosystem/research">
+              <div>{{ researchCount() }}</div>
+              <div>
+                <div>
+                  <h1>Research Papers</h1>
+                  <h2>Projects and more other projects</h2>
+                </div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a routerLink="./ecosystem/presentations">
+              <div>{{ videoCount() }}</div>
+              <div>
+                <div>
+                  <h1>Videos</h1>
+                  <h2>Projects and more other projects</h2>
+                </div>
+              </div>
+            </a>
+          </li>
+        </ol>
+      </div>
+      <div class="examples">
+        <div class="widget-container">
+          @if (randomVideo(); as video) {
+            <st-video-widget [video]="video"></st-video-widget>
+          }
+          @if (randomProject(); as project) {
+            <st-project-widget [project]="project"></st-project-widget>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section: Contribute -->
+<section id="contribute">
+  <a class="wrapper panel fancy" [href]="environment.github_content_url" target="_blank" rel="noopener">
+    <div class="bg"></div>
+    <header>
+      <img class="logo" ngSrc="./assets/images/home/github-logo.webp" alt="GitHub Logo" height="71" width="250"/>
+      <h1>Contribute SYCL News, Projects, Event & More!</h1>
+      <h2>We need your help. If you have created a new SYCL based project, found an interesting news post or would
+        like to share an upcoming event, please create a PR on GitHub and add it to our site.</h2>
+      <img class="preview" ngSrc="./assets/images/home/github-repo-preview.webp" alt="GitHub Repo Preview" height="431"
+           width="1040"/>
+    </header>
+  </a>
+</section>

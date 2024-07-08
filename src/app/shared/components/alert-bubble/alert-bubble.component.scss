@@ -1,0 +1,36 @@
+:host {
+  display: flex;
+  gap: 1rem;
+  background-color: #f3e5de;
+  color: #93786e;
+  padding: .7rem 1rem;
+  border-radius: var(--border-radius);
+  width: 100%;
+  transition: var(--transition-fast);
+  cursor: pointer;
+
+  :host-context(body.dark-mode) {
+    background-color: var(--color-orange);
+    color: var(--color-white);
+  }
+
+  &:hover {
+    color: #725a50;
+    box-shadow: var(--box-shadow-focused);
+  }
+
+  > div:nth-of-type(2) {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  > div:nth-of-type(3) span {
+    opacity: .5;
+    transition: var(--transition-fast);
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

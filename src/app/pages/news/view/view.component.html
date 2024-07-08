@@ -1,0 +1,92 @@
+@if (news(); as newsItem) {
+  <section id="intro" class="faded-bg" [style.background-image]="'url(' + newsItem.thumbnail + ')'">
+    <div class="bg"></div>
+    <div class="wrapper">
+      <div>
+        <div>
+          @if (newsItem.contributor | async; as contributor) {
+            <div class="h2">
+              <st-contributor-avatar [contributor]="contributor"></st-contributor-avatar>
+              Shared by {{ contributor.name }}
+            </div>
+          }
+          <h1>{{ newsItem.title }}!</h1>
+        </div>
+      </div>
+      <div>
+        <st-date-display [date]="newsItem.date"></st-date-display>
+      </div>
+    </div>
+  </section>
+
+  <section id="details">
+    <div class="wrapper">
+      <!-- Core content -->
+      <div class="panel">
+        <div class="buttons">
+          <a class="button" routerLink="/news">
+            <span class="material-symbols-outlined">arrow_back</span>Back to News
+          </a>
+          <a class="button" [href]="newsItem.externalUrl" target="_blank" rel="noopener">
+            <span class="material-symbols-outlined">link</span>Read the Full Post
+          </a>
+        </div>
+
+        <div class="content" [innerHTML]="newsItem.body"></div>
+
+        @if (similar().length > 0) {
+          <div class="similar">
+            <h2>Similar Updates</h2>
+
+            @for (similar of similar(); track similar.id) {
+              <st-news-widget
+                  [news]="similar"
+                  [layout]="NewsWidgetLayout.MINIMAL"></st-news-widget>
+            }
+          </div>
+        }
+      </div>
+      <!-- Side content -->
+      <div class="side-content-container">
+        <!-- Details -->
+        <div class="side-container details">
+          <h1>Details</h1>
+          @if (newsItem.contributor | async; as contributor) {
+            <div>
+              <h1>Shared By</h1>
+              <h2>
+                <st-contributor-avatar [contributor]="contributor"></st-contributor-avatar>
+                {{ contributor.name }}
+              </h2>
+            </div>
+          }
+          <div>
+            <h1>Shared Date</h1>
+            <h2>{{ newsItem.date | date: 'medium' }}</h2>
+          </div>
+        </div>
+        <!-- Tags -->
+        @if (newsItem.tags && newsItem.tags.length > 0) {
+          <div class="side-container tags">
+            <h1>Tags</h1>
+            <div class="tag-container">
+              @for (tag of newsItem.tags; track tag) {
+                <st-tag
+                    [title]="tag"
+                    [selected]="true"
+                    (click)="onTagClicked(tag)"
+                    [allowSelection]="false"></st-tag>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+} @else if (state() == LoadingState.LOADING) {
+  <section>
+    <div class="wrapper">
+      <st-loading></st-loading>
+    </div>
+  </section>
+}

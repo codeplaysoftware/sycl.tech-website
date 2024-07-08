@@ -1,0 +1,146 @@
+.panel {
+  $full-scale: 800px;
+
+  border-radius: var(--border-radius);
+  background-color: var(--panel-bg-color);
+  transition: var(--transition-fast);
+  padding: 3rem;
+
+  @media screen and (min-width: $full-scale) {
+    padding: 5rem;
+  }
+
+  header {
+    > * {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 400;
+      margin-top: 0;
+    }
+
+    h2 {
+      font-size: 1.7rem;
+      opacity: .8;
+      font-weight: normal;
+    }
+  }
+
+  /**
+   * Styling for "fancy" panels.
+   */
+  &.fancy {
+    display: flex;
+    flex-direction: column-reverse;
+    background-color: #666;
+    color: var(--color-white);
+    gap: 2rem;
+    position: relative;
+
+    & > div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    @media screen and (min-width: $full-scale) {
+      flex-direction: row;
+      gap: 4rem;
+      min-height: 500px;
+
+      > div:nth-of-type(1) {
+        flex-basis: 60%;
+        justify-content: flex-start;
+        text-align: left;
+      }
+
+      > div:nth-of-type(2) {
+        flex-basis: 40%;
+      }
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-start;
+
+      @media screen and (max-width: $full-scale) {
+        align-items: center;
+        text-align: center;
+      }
+    }
+
+    span.panel-icon {
+      font-size: 8rem;
+
+      @media screen and (min-width: $full-scale) {
+        font-size: 15rem;
+      }
+    }
+  }
+
+  /**
+   * Styling for "intro" panels.
+   */
+  &.intro {
+    background-color: var(--color-orange);
+
+    header {
+      h1 {
+        font-size: 2.3rem;
+      }
+    }
+
+    header .button {
+      background-color: var(--color-blue);
+    }
+  }
+
+  /**
+   * Styling for "content" panels.
+   */
+  &.content {
+    padding: 2rem;
+
+    @media screen and (min-width: 800px) {
+      padding: 4rem;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 1rem;
+      padding-bottom: 1rem;
+
+      @media screen and (min-width: 800px) {
+        flex-direction: row;
+      }
+
+      h1 {
+        font-weight: 400;
+        font-size: 1.7rem;
+      }
+
+      & > div:nth-of-type(1) {
+        flex: 1;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+
+  &.content-and-content {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 4rem;
+
+    @media screen and (min-width: 900px) {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: none;
+    }
+  }
+}

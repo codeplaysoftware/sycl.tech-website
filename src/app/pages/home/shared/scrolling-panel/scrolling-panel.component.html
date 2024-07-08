@@ -1,0 +1,32 @@
+@if (pins()) {
+  <div class="container" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+    <!-- Render hidden panel, used to force correct height calculation -->
+    @if (spacerPanel) {
+      <a class="panel sub-panel scroll-panel spacer" [routerLink]="spacerPanel.link">
+        <header>
+          <h1 [innerHTML]="spacerPanel.title | truncate:65"></h1>
+          <h2 [innerHTML]="spacerPanel.description"></h2>
+        </header>
+      </a>
+    }
+
+    <!-- Render all panels -->
+    @for (pinned of renderPins; track pinned) {
+      <a class="panel sub-panel faded-bg slight-fade scroll-panel" [routerLink]="pinned.link">
+        @if (pinned.thumbnail) {
+          <div class="bg" [style.background-image]="'url(' + pinned.thumbnail + ')'"></div>
+        }
+        <header>
+          <h1 [innerHTML]="pinned.title | truncate:65"></h1>
+          <h2 [innerHTML]="pinned.description"></h2>
+        </header>
+      </a>
+    }
+
+    @if (paused) {
+      <span class="state material-symbols-outlined">pause_circle</span>
+    } @else {
+      <span class="state material-symbols-outlined">play_circle</span>
+    }
+  </div>
+}

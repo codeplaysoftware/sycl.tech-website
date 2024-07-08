@@ -1,0 +1,8 @@
+<div>
+  Matched {{ filteredResultCount() }} of {{ totalResultCount() }} with {{ visibleResultCount() }} currently visible.
+</div>
+<div>
+  <st-toggle
+      [buttons]="toggleButtons()"
+      (toggled)="onViewToggleChanged($event)"></st-toggle>
+</div>

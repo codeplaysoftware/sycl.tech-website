@@ -1,0 +1,12 @@
+@if (limitedContributors(); as limitedContributors) {
+  <div *ngFor="let contributor of limitedContributors">
+    <st-contributor-avatar
+        [contributor]="contributor"
+        (clicked)="onContributorClicked($event)"></st-contributor-avatar>
+  </div>
+  @if (isLimited()) {
+    <div>
+      <div class="more">+{{ contributors().length - limit() }}</div>
+    </div>
+  }
+}

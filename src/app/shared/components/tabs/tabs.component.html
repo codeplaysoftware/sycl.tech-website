@@ -1,0 +1,10 @@
+<div class="tabs">
+  <div class="header">
+    @for (tab of tabs(); track tab) {
+      <div class="tab" (click)="onTabClicked(tab)" [ngClass]="{'selected': tab.selected}" [innerHTML]="tab.name"></div>
+    }
+  </div>
+  <div class="container">
+    <ng-content></ng-content>
+  </div>
+</div>

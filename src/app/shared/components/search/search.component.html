@@ -1,0 +1,9 @@
+<span class="material-symbols-outlined">search</span>
+
+<input type="text"
+       #search
+       aria-label="Search the site"
+       name="search"
+       [(ngModel)]="value"
+       (keydown)="onKeyDown($event)"
+       [placeholder]="placeholder()"/>

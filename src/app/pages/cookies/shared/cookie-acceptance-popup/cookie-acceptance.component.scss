@@ -1,0 +1,65 @@
+:host {
+  .dialog {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    padding: 3rem;
+    z-index: 99999;
+    box-shadow: var(--box-shadow-focused);
+    background-color: rgba(138, 40, 14, 0.6);
+    color: var(--color-white);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    font-size: 1rem;
+    transition: var(--transition-fast);
+
+    @media screen and (min-width: 800px) {
+      bottom: 1rem;
+      right: 1rem;
+      width: 400px;
+      border-radius: var(--border-radius);
+    }
+
+    &:hover {
+      background-color: rgba(255, 61, 0, 0.8);
+    }
+
+    h1 {
+      font-size: 1.1rem;
+
+      span {
+        vertical-align: middle;
+      }
+    }
+
+    p {
+      opacity: .8;
+    }
+
+    ul {
+      padding: 0;
+      list-style: none;
+
+      li {
+        padding: .3rem 0;
+        opacity: .7;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+
+    .buttons {
+      display: flex;
+      gap: .5rem;
+
+      a.button {
+        flex: 1;
+        background-color: rgb(161, 37, 0);
+        text-align: center;
+      }
+    }
+  }
+}

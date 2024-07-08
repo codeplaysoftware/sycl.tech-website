@@ -1,0 +1,113 @@
+section#news {
+  padding-top: 1rem;
+
+  // Header contains search and layout toggles
+  header {
+    background-color: var(--color-hint-third);
+    padding: 1rem;
+    display: flex;
+    border-radius: var(--border-radius);
+    gap: 1rem;
+
+    div {
+      display: flex;
+      align-items: center;
+
+      &:nth-of-type(1) {
+        flex: 1;
+      }
+    }
+  }
+
+  // Container covers results and vip lists
+  .container {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 1rem;
+    padding: 1rem 0;
+
+    @media screen and (min-width: 900px) {
+      flex-direction: row;
+    }
+
+    > div:nth-of-type(1) {
+      flex: 1;
+
+      .results {
+        flex: 1;
+        padding: 0;
+        list-style: none;
+
+        &.grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          grid-gap: 1rem;
+
+          @media screen and (min-width: 700px) {
+            grid-template-columns: 1fr 1fr;
+          }
+        }
+
+        &.list {
+          display: flex;
+          flex-direction: column;
+          gap: .5rem;
+        }
+
+        st-news-widget {
+          height: 100%;
+        }
+      }
+    }
+
+    > div:nth-of-type(2) {
+      .vips {
+        background: var(--color-orange);
+        color: var(--color-white);
+
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow-focused);
+        text-align: center;
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+
+        @media screen and (max-width: 900px) {
+          height: 75px;
+          padding: 1rem;
+        }
+
+        @media screen and (min-width: 900px) {
+          flex-direction: column;
+          width: 75px;
+          padding: 1.5rem 1rem;
+        }
+
+        span {
+          opacity: .6;
+          margin-bottom: 1rem;
+          font-size: 30px;
+        }
+      }
+    }
+  }
+
+  // Notice covers loading and result status
+  .notice {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 500px;
+
+    text-align: center;
+    font-size: 1rem;
+    color: rgba(0, 0, 0, .3);
+
+    span {
+      font-size: 4rem;
+      padding-bottom: 1rem;
+      display: block;
+    }
+  }
+}

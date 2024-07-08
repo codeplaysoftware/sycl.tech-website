@@ -1,0 +1,30 @@
+/**
+ * Section: Projects
+ */
+section#projects {
+  st-project-widget {
+    width: 300px;
+    box-shadow: var(--box-shadow-focused);
+  }
+}
+
+/**
+ * Section: Research
+ */
+section#research {
+  st-research-widget {
+    transform: scale(.8);
+    box-shadow: var(--box-shadow-focused);
+  }
+}
+
+/**
+ * Section: Videos
+ */
+section#videos {
+  st-video-widget {
+    transform: scale(.8);
+    width: 450px;
+    box-shadow: var(--box-shadow-focused);
+  }
+}

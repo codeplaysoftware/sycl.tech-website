@@ -1,0 +1,6 @@
+.idea
+.angular
+node_modules
+.DS_Store
+dist
+src/environments/environment.development.ts

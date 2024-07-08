@@ -1,0 +1,36 @@
+@if (research(); as research) {
+  @if (layout() === Layout.WIDGET) {
+    <!-- Layout: Widget -->
+    <div class="widget">
+      <a [href]="research.url" target="_blank" rel="noopener">
+        <div class="header">
+          2029
+        </div>
+        <div class="title">
+          <h1 [innerHTML]="research.title"></h1>
+        </div>
+        <div class="authors">
+          <ol>
+            @for (author of research.authors; track author) {
+              <li>
+                <h1>{{ author.name }}</h1>
+                <h2>{{ author.affiliation }}</h2>
+              </li>
+            }
+          </ol>
+        </div>
+      </a>
+      <div class="footer">
+        @if (research.contributor | async; as contributor) {
+          <st-contributor-avatar [contributor]="contributor"></st-contributor-avatar>
+          Shared by {{ contributor.name }}
+        }
+      </div>
+    </div>
+  } @else if (layout() === Layout.ROW) {
+    <!-- Layout: Row -->
+    <div class="row">
+      <h1 [innerHTML]="research.title"></h1>
+    </div>
+  }
+}

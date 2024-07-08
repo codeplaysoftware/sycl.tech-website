@@ -1,0 +1,60 @@
+/**
+ * Section: oneAPI
+ */
+section#oneapi {
+  .panel {
+    background-color: #100a6b;
+    min-height: 600px;
+
+    .bg {
+      background-image: url(../../../../assets/images/ecosystem/implementations/oneapi/bg.jpg);
+    }
+
+    .button {
+      background-color: rgba(0, 0, 0, .7);
+    }
+
+    img.panel-icon {
+      width: 200px;
+      height: auto;
+    }
+  }
+}
+
+/**
+ * Section: AdaptiveCpp
+ */
+section#adaptiveCpp {
+  .panel {
+    background-color: #b5001c;
+    min-height: 600px;
+    background-size: cover;
+
+    .button {
+      background-color: rgba(0, 0, 0, .7);
+    }
+
+    img.panel-icon {
+      width: 260px;
+      height: auto;
+    }
+  }
+}
+
+/**
+ * Section: Create
+ */
+section#create {
+  .panel {
+    background: linear-gradient(90deg, rgba(5,0,215,1) 0%, rgba(149,1,0,1) 100%);
+
+    .button {
+      background-color: #000035;
+    }
+
+    img {
+      width: 390px;
+      height: auto;
+    }
+  }
+}

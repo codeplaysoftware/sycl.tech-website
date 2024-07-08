@@ -1,0 +1,146 @@
+<!-- Section: Get Started -->
+<section id="getting-started">
+  <div class="wrapper panel fancy intro">
+    <div>
+      <header>
+        <h1>Get Started</h1>
+        <h2>Starting anything new can be a challenge. To lower the barrier of entry, we have designed this section
+          to help you delve into SYCL, learn the basics and set yourself up for success.</h2>
+        <st-quick-links [links]="getQuickLinks()"></st-quick-links>
+      </header>
+    </div>
+    <div>
+      <span class="material-symbols-outlined panel-icon">school</span>
+    </div>
+  </div>
+</section>
+
+<!-- Section: Try -->
+@if (playgroundCodeSample && playgroundCodeSample(); as sample) {
+  <section id="try">
+    <div class="wrapper panel">
+      <header>
+        <div>
+          <h1>Run Some Code</h1>
+          <h2>Before we jump into the nitty-gritty of the SYCL spec, let's try compiling some code. This code will
+            run in parallel and, depending on setup, can run on GPU, CPU or more!</h2>
+        </div>
+      </header>
+      <div>
+        <st-mini-playground-code-block
+            [sample]="sample"
+            [startLine]="24"
+            [endLine]="32"></st-mini-playground-code-block>
+      </div>
+    </div>
+  </section>
+}
+
+<!-- Section: eBook -->
+<section id="ebook">
+  <div class="wrapper panel fancy faded-bg">
+    <div>
+      <header>
+        <h1>Read the eBook</h1>
+        <h2>Download the FREE Data Parallel C++ eBook or order your hard-copy today! Teaches heterogeneous programming
+          for CPU, GPU, FPGA, ASIC, etc.</h2>
+        <a class="button"
+           href="https://link.springer.com/book/10.1007/978-1-4842-9691-2"
+           target="_blank"
+           rel="noopener">
+          <span class="material-symbols-outlined">cloud_download</span>Download FREE eBook</a>
+      </header>
+    </div>
+    <div>
+      <img ngSrc="./assets/images/get-started/ebook/ebook.png" alt="eBook" height="399" width="263"/>
+    </div>
+    <div class="bg"></div>
+  </div>
+</section>
+
+<!-- Section: Download Compiler -->
+<section id="download-compiler">
+  <div class="wrapper panel content">
+    <header>
+      <div>
+        <h1>Download a SYCL Compiler</h1>
+      </div>
+      <div>
+        <a class="button" href="./ecosystem/implementations">
+          <span class="material-symbols-outlined">book</span>More SYCL Compilers</a>
+      </div>
+    </header>
+    <div class="implementations">
+      <st-tabs>
+        <st-tab id="oneapi" name="oneAPI DPC++">
+          <a href="https://www.intel.com/content/www/us/en/developer/tools/oneapi/overview.html" target="_blank"
+             rel="noopener">
+            <h1>Intel&reg; oneAPI&trade; DPC++</h1>
+          </a>
+          <p>Create performance-optimized application code that takes advantage of more cores and built-in
+            technologies in platforms based on Intel® processors. The compilers are part of the Intel® oneAPI
+            Base Toolkit and the Intel® HPC Toolkit. The Intel® oneAPI DPC++/C++ Compiler does not
+            support macOS.</p>
+          <div class="downloads">
+            <a class="download"
+               href="https://registrationcenter-download.intel.com/akdlm/IRC_NAS/6780ac84-6256-4b59-a647-330eb65f32b6/l_dpcpp-cpp-compiler_p_2024.2.0.495_offline.sh"
+               target="_blank" rel="noopener">
+              <span class="material-symbols-outlined">cloud_download</span>
+              <h1>DPC++ for Linux&reg;</h1>
+            </a>
+            <a class="download"
+               href="https://registrationcenter-download.intel.com/akdlm/IRC_NAS/7991e201-ca0f-4689-bdb6-1ed73a8246fd/w_dpcpp-cpp-compiler_p_2024.2.0.491_offline.exe"
+               target="_blank" rel="noopener">
+              <span class="material-symbols-outlined">cloud_download</span>
+              <h1>DPC++ for Windows&reg;</h1>
+            </a>
+          </div>
+          <a class="download toolkit"
+             href="https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html"
+             target="_blank" rel="noopener">
+            <h1>Download Full oneAPI Toolkit</h1>
+            <p>You can download the entire toolkit instead, rather than just the compiler. The toolkit contains tooling
+              for AI, Fortran, HPC and much more!</p>
+          </a>
+        </st-tab>
+        <st-tab id="adaptivecpp" name="AdaptiveCpp">
+          <h1>AdaptiveCpp</h1>
+          <p>AdaptiveCpp is the independent, community-driven modern platform for C++-based heterogeneous programming
+            models targeting CPUs and GPUs from all major vendors. AdaptiveCpp lets applications adapt themselves
+            to all the hardware found in the system. This includes use cases where a single binary needs to be able
+            to target all supported hardware, or utilize hardware from different vendors simultaneously.</p>
+          <div class="downloads">
+            <a href="https://github.com/AdaptiveCpp/AdaptiveCpp/archive/refs/tags/v24.02.0.zip" class="download"
+               target="_blank"
+               rel="noopener">
+              <span class="material-symbols-outlined">cloud_download</span>
+              <h1>Download Source Code (24.02.0)</h1>
+            </a>
+          </div>
+        </st-tab>
+      </st-tabs>
+    </div>
+  </div>
+</section>
+
+<!-- Section: Academy -->
+@if (lessons && lessons(); as lessons) {
+  <section id="academy">
+    <div class="wrapper panel content">
+      <header>
+        <div>
+          <h1>Follow the Academy Curriculum</h1>
+        </div>
+        <div>
+          <a class="button" routerLink="./academy">
+            <span class="material-symbols-outlined">book</span>View Entire Curriculum</a>
+        </div>
+      </header>
+      <div class="lesson-list">
+        @for (lesson of lessons; track lesson.id) {
+          <st-lesson-widget [lesson]="lesson"></st-lesson-widget>
+        }
+      </div>
+    </div>
+  </section>
+}

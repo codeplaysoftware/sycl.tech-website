@@ -1,0 +1,12 @@
+/
+/getting-started
+/getting-started/academy
+/ecosystem
+/ecosystem/projects
+/ecosystem/presentations
+/ecosystem/research
+/ecosystem/implementations
+/calendar
+/news
+/playground
+/contributors

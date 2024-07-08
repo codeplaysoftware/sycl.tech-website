@@ -1,0 +1,35 @@
+section {
+  header {
+    text-align: center;
+    padding-bottom: 1rem;
+
+    .academy-logo {
+      max-width: 300px;
+      height: auto;
+      margin-bottom: 1rem;
+
+      &.dark-mode {
+        display: none;
+      }
+    }
+  }
+
+  .lesson-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 1rem;
+    grid-row-gap: 2rem;
+    padding: 0;
+  }
+}
+
+:host-context(.dark-mode) {
+  .academy-logo.dark-mode {
+    display: inline-block !important;
+  }
+
+  .academy-logo.light-mode {
+    display: none;
+  }
+}

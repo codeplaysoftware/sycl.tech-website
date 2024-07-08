@@ -1,0 +1,9 @@
+@if (buttons(); as buttons) {
+  <div class="container" [title]="title()">
+    <div *ngFor="let button of buttons"
+         [ngClass]="{'focused': button.selected}"
+         (click)="onClick(button)">
+      <span class="material-symbols-outlined">{{ button.icon }}</span>
+    </div>
+  </div>
+}

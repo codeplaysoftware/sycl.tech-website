@@ -1,0 +1,50 @@
+@if (video(); as video) {
+  @if (layout() === Layout.WIDGET) {
+    <!-- Layout: Widget -->
+    <div class="widget">
+      <a class="header" [href]="video.url" target="_blank" rel="noopener">
+        <div class="tag">
+          <div>
+            <div [innerHTML]="video.type | titlecase"></div>
+            <div class="arrow"></div>
+          </div>
+        </div>
+        <div class="thumbnail-container">
+          <div [style.background-image]="'url(' + video.thumbnail + ')'"></div>
+        </div>
+      </a>
+      <div class="body">
+        <a class="description" [href]="video.url" target="_blank" rel="noopener">
+          <div>
+            <h1 [innerHTML]="video.title | truncate:50"></h1>
+            <h2 [innerHTML]="getFeaturingInfo(video)"></h2>
+          </div>
+        </a>
+        <div class="footer">
+          @if (video.contributor | async; as contributor) {
+            <st-contributor-avatar [contributor]="contributor"></st-contributor-avatar>
+            Shared by {{ contributor.name }}
+          }
+        </div>
+      </div>
+    </div>
+  } @else if (layout() === Layout.ROW) {
+    <!-- Layout: Row -->
+    <a class="row" [href]="video.url" target="_blank" rel="noopener">
+      <div>
+        @if (video.thumbnail) {
+          <img [ngSrc]="video.thumbnail" alt="Video Thumbnail" fill/>
+        }
+      </div>
+      <div>
+        <div>
+          <h1 [innerHTML]="video.title"></h1>
+          <h2 [innerHTML]="getFeaturingInfo(video)"></h2>
+        </div>
+      </div>
+      <div>
+        {{ video.type | titlecase }}
+      </div>
+    </a>
+  }
+}

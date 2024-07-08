@@ -1,0 +1,82 @@
+<div class="container" [ngClass]="{ 'hide-lessons': hideLessonList() }">
+  <div class="side-menu">
+    <div class="header desktop" routerLink="../../academy">
+      <img class="light-mode"
+           ngSrc="./assets/images/get-started/sycl-academy-logo.webp"
+           alt="Sycl Academy Logo"
+           height="138"
+           width="998"/>
+      <img class="dark-mode"
+           ngSrc="./assets/images/get-started/sycl-academy-logo-white.webp"
+           alt="Sycl Academy Logo"
+           height="138"
+           width="998"/>
+    </div>
+    <div class="header mobile" (click)="onToggleLessonList()">
+      <span class="material-symbols-outlined">list</span>Show Lessons List
+    </div>
+    <ol class="lesson-list">
+      @for (currentLesson of lessons(); track currentLesson.id) {
+        <li [class]="{'active': lesson()?.number == currentLesson.number}">
+          <a routerLink="/getting-started/academy/{{ currentLesson.tag }}">{{ currentLesson.title }}</a>
+        </li>
+      }
+    </ol>
+  </div>
+
+  <div class="lesson">
+    @if (state() == LoadingState.LOADING) {
+      <div class="loading">
+        <st-loading></st-loading>
+      </div>
+    } @else if (state() == LoadingState.LOAD_SUCCESS) {
+      @if (lesson(); as currentLesson) {
+        <st-tabs [(selectedTabName)]="this.selectedTabName">
+          <div class="actions">
+            <a [href]="currentLesson.github_homepage_url" title="View on GitHub" target="_blank" rel="noopener">
+              <img ngSrc="./assets/images/github.svg" class="icon" alt="GitHub Icon" height="20" width="20"/>
+            </a>
+            <a [href]="currentLesson.github_homepage_url.replace('blob', 'edit')"
+               title="Edit on GitHub" target="_blank"
+               rel="noopener">
+              <span class="material-symbols-outlined">edit</span>
+            </a>
+          </div>
+
+          <st-tab id="tab-lesson" name="Lesson">
+            <h1>{{ currentLesson.title }}</h1>
+            <slot class="content"
+                  [innerHTML]="currentLesson.content"></slot>
+          </st-tab>
+
+          @if (currentLesson.source) {
+            <st-tab id="tab-source" name="Source">
+              <h1>Source for {{ currentLesson.title }}</h1>
+              @if (showMonacoEditor) {
+                <ngx-monaco-editor
+                    class="content"
+                    [options]="{ theme: this.monacoEditorTheme(), language: 'cpp', automaticLayout: true }"
+                    [ngModel]="currentLesson.source"></ngx-monaco-editor>
+              }
+              <a class="next" routerLink="/getting-started/academy/{{ currentLesson.tag }}/solution">
+                <span class="material-symbols-outlined">public</span> View the Solution
+              </a>
+            </st-tab>
+          }
+
+          @if (currentLesson.solution) {
+            <st-tab id="tab-solution" name="Solution">
+              <h1>Solution for {{ currentLesson.title }}</h1>
+              @if (showMonacoEditor) {
+                <ngx-monaco-editor
+                    class="content"
+                    [options]="{ theme: this.monacoEditorTheme(), language: 'cpp', automaticLayout: true }"
+                    [ngModel]="currentLesson.solution"></ngx-monaco-editor>
+              }
+            </st-tab>
+          }
+        </st-tabs>
+      }
+    }
+  </div>
+</div>

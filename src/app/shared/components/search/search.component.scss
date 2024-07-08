@@ -1,0 +1,33 @@
+:host {
+  display: block;
+  position: relative;
+  width: 100%;
+}
+
+input {
+  padding: 1rem 1rem 1rem 2.5rem;
+  border-radius: 6px;
+  border: 0;
+  box-shadow: var(--box-shadow-focused);
+  width: 100%;
+  display: block;
+  font-size: inherit;
+  box-sizing: border-box;
+  outline: none;
+}
+
+span {
+  position: absolute;
+  left: .7rem;
+  top: .8rem;
+  transition: var(--transition-fast);
+  color: var(--color-orange);
+}
+
+:host:hover i {
+  opacity: 1;
+}
+
+:host-context(.dark-mode) input {
+  background-color: rgba(255, 255, 255, .1) !important;
+}

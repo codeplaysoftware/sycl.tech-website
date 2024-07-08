@@ -1,0 +1,15 @@
+<div class="container">
+  <div class="editor"
+       [innerHTML]="getEscapedCode(this.originalPlainTextCode)"
+       (keyup)="onChange($event)"
+       (keydown)="onKeyDown($event)"
+       [ngStyle]="{'caret-color': caretColor()}"
+       spellcheck="false"
+       contenteditable="true"></div>
+
+  <div class="render"
+       [innerHTML]="highlighted()"></div>
+
+  <div class="sizer"
+       [innerHTML]="this.domSanitizer.bypassSecurityTrustHtml(this.code())"></div>
+</div>

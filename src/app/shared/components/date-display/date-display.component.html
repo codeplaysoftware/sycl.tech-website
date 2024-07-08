@@ -1,0 +1,7 @@
+@if (date(); as date) {
+  <div>
+    <div class="day">{{ date | date:"d" }}</div>
+    <div class="month">{{ date | date:"MMMM" }}</div>
+    <div class="year">{{ date | date:"YYYY" }}</div>
+  </div>
+}

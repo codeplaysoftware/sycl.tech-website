@@ -1,0 +1,69 @@
+@if (contributor(); as contributor) {
+  <!-- Section: Header -->
+  <section id="header">
+    <div class="wrapper panel bio">
+      <div>
+        @if (contributor; as contributor) {
+          <st-contributor-avatar [contributor]="contributor"></st-contributor-avatar>
+        }
+      </div>
+      <div>
+        <h1 [innerHTML]="contributor.name"></h1>
+        <h2>{{ contributor.position }} at {{ contributor.affiliation }}</h2>
+        <div [innerHTML]="contributor.bio"></div>
+      </div>
+    </div>
+    <div class="wrapper panel socials">
+      @for (social of contributor.links; track social.name) {
+        <a [href]="social.url" target="_blank" rel="noopener">
+          <img ngSrc="./assets/images/social-icons/{{ social.tag }}.svg"
+               height="800"
+               width="800"
+               alt="{{ social.name }}"
+               title="Visit {{ contributor.name }}'s {{ social.name }}"/>
+        </a>
+      }
+    </div>
+  </section>
+
+  <!-- Section: Shares -->
+  <section id="shares">
+    <div class="wrapper">
+      <div class="share">
+        <span class="material-symbols-outlined">event</span>
+        <h1>{{ contributor.contribution_counts.events }}</h1>
+        <h2>Events Shared</h2>
+      </div>
+
+      <div class="share">
+        <span class="material-symbols-outlined">event</span>
+        <h1>{{ contributor.contribution_counts.projects }}</h1>
+        <h2>Projects Shared</h2>
+      </div>
+
+      <div class="share">
+        <span class="material-symbols-outlined">event</span>
+        <h1>{{ contributor.contribution_counts.news }}</h1>
+        <h2>News Shared</h2>
+      </div>
+
+      <div class="share">
+        <span class="material-symbols-outlined">event</span>
+        <h1>{{ contributor.contribution_counts.researchPapers }}</h1>
+        <h2>Papers Shared</h2>
+      </div>
+
+      <div class="share">
+        <span class="material-symbols-outlined">event</span>
+        <h1>{{ contributor.contribution_counts.videos }}</h1>
+        <h2>Videos Shared</h2>
+      </div>
+    </div>
+  </section>
+} @else {
+  <section>
+    <div class="wrapper">
+      <st-loading></st-loading>
+    </div>
+  </section>
+}

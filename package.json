@@ -1,0 +1,49 @@
+{
+  "name": "sycl.tech-front-end",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
+  },
+  "dependencies": {
+    "@angular/animations": "^18.0.3",
+    "@angular/common": "^18.0.3",
+    "@angular/compiler": "^18.0.3",
+    "@angular/core": "^18.0.3",
+    "@angular/forms": "^18.0.3",
+    "@angular/platform-browser": "^18.0.3",
+    "@angular/platform-browser-dynamic": "^18.0.3",
+    "@angular/platform-server": "^18.0.3",
+    "@angular/router": "^18.0.3",
+    "@angular/ssr": "^18.0.5",
+    "ansi-to-html": "^0.7.2",
+    "express": "^4.19.2",
+    "ngx-clipboard": "^16.0.0",
+    "ngx-highlightjs": "^12.0.0",
+    "ngx-monaco-editor-v2": "^18.0.1",
+    "ngx-webstorage-service": "^5.0.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.6.3",
+    "zone.js": "^0.14.7"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^18.0.5",
+    "@angular/cli": "^18.0.5",
+    "@angular/compiler-cli": "^18.0.3",
+    "@types/ansi-html": "^0.0.0",
+    "@types/express": "^4.17.21",
+    "@types/jasmine": "~5.1.0",
+    "@types/node": "^20.14.6",
+    "jasmine-core": "~5.1.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "typescript": "~5.4.5"
+  }
+}

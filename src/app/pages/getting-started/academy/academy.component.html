@@ -1,0 +1,21 @@
+<!-- Section: Academy Lessons -->
+<section>
+  <div class="wrapper panel">
+    <header>
+      <img class="academy-logo light-mode" ngSrc="./assets/images/get-started/sycl-academy-logo.webp"
+           alt="SYCL Academy" height="138" width="998"/>
+      <img class="academy-logo dark-mode" ngSrc="./assets/images/get-started/sycl-academy-logo-white.webp"
+           alt="SYCL Academy" height="138" width="998"/>
+      <h2>The wonderful team over at the SYCL Academy have created an entire curriculum that will get you started
+        with the basics of SYCL and progressing into the more advanced features.</h2>
+    </header>
+
+    <ol class="lesson-list">
+      @for (lesson of lessons(); track lesson.id) {
+        <li [routerLink]="getRouterLink(lesson)">
+          <st-lesson-widget [lesson]="lesson"></st-lesson-widget>
+        </li>
+      }
+    </ol>
+  </div>
+</section>

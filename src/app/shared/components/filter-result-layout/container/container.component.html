@@ -1,0 +1,40 @@
+<st-filter-side-bar
+    [(filterGroups)]="filterGroups"
+    [collectionName]="collectionName()"
+    [newCollectionItemUrl]="newCollectionItemUrl()"></st-filter-side-bar>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <st-filter-container-header
+        [totalResultCount]="totalResultCount()"
+        [filteredResultCount]="filteredResultCount()"
+        [visibleResultCount]="visibleResultCount()"
+        [toggleButtons]="toggleButtons()"
+        (toggleButtonSelected)="onViewToggleChanged($event)"></st-filter-container-header>
+  </div>
+  @if (state() === LoadingState.LOAD_SUCCESS) {
+    @if (visibleResultCount() > 0) {
+      <!-- When results are available -->
+      <div class="results">
+        <ng-content></ng-content>
+
+        <!-- Show More -->
+        @if (filteredResultCount() > visibleResultCount()) {
+          <st-show-more
+              (click)="onViewMore()"></st-show-more>
+        }
+      </div>
+    } @else {
+      <!-- When no results are available -->
+      <div class="no-results">
+        <div>
+          <span class="material-symbols-outlined">sentiment_dissatisfied</span> No Results Available
+        </div>
+      </div>
+    }
+  } @else if (state() === LoadingState.LOADING) {
+    <!-- When loading -->
+    <st-loading></st-loading>
+  }
+</div>

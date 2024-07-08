@@ -1,0 +1,32 @@
+<div class="container" [ngClass]="{ 'hide-filters': hideFilters() }">
+  <div class="header mobile" (click)="onMobileMenuClicked()">
+    <span class="material-symbols-outlined">tune</span> Filter Results
+  </div>
+
+  <a class="header desktop" [href]="newCollectionItemUrl()" target="_blank" rel="noopener">
+    <span class="material-symbols-outlined">add_circle</span> Contribute a {{ collectionName() }}
+  </a>
+
+  <div class="filters">
+    @for (filterGroup of filterGroups(); track filterGroup) {
+      <div class="segment">
+        <h1>{{ filterGroup.name | titlecase }}</h1>
+        <div>
+          @for (filter of filterGroup.filters; track filter) {
+            @if (filter.getType() == 'boolean') {
+              <st-tag
+                  [title]="filter.name"
+                  [subTitle]="getSubTitle(filter)"
+                  [(selected)]="filter.value"
+                  (selectedChange)="onFiltersChanged()"></st-tag>
+            } @else if (filter.getType() === 'string') {
+              <st-search
+                  [(value)]="filter.value"
+                  (valueChange)="onFiltersChanged()"></st-search>
+            }
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

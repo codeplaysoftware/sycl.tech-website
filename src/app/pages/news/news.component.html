@@ -1,0 +1,68 @@
+<!-- Section: News -->
+<section id="news">
+  <div class="wrapper">
+    <!-- Header -->
+    <header>
+      <div>
+        <st-search
+            [(value)]="searchFilter.value"
+            (valueChange)="onFiltersGroupsChanged()"></st-search>
+      </div>
+      <div>
+        <a class="button" [href]="environment.github_content_repo_collection_base_url + '/news/'"
+           target="_blank" rel="noopener">
+          <span class="material-symbols-outlined">add</span>Contribute News</a>
+      </div>
+      <div>
+        <st-toggle
+            [buttons]="[{ icon: 'grid_view', title: 'Grid View', value: 'grid', selected: true },
+          { icon: 'list', title: 'View View', value: 'list', selected: false}]"
+            (toggled)="onViewToggleChanged($event)"></st-toggle>
+      </div>
+    </header>
+
+    @if (state() === LoadingState.LOADING) {
+      <div class="notice">
+        <st-loading></st-loading>
+      </div>
+    } @else if (state() === LoadingState.LOAD_SUCCESS) {
+      @if (0 < visibleResults().length) {
+        <div class="container">
+          <div>
+            <div class="results" [ngClass]="{ 'grid' : gridView(), 'list' : !gridView() }">
+              @for (newsItem of visibleResults(); track newsItem.id) {
+                <st-news-widget
+                    [layout]="gridView() ? Layout.WIDGET : Layout.ROW"
+                    [news]="newsItem"></st-news-widget>
+              }
+            </div>
+            <!-- Show More -->
+            @if (filteredItemCount > visibleItemCount) {
+              <st-show-more
+                  [fallbackHref]="this.getNextPageUrl()"
+                  (click)="onViewMore()"></st-show-more>
+            }
+          </div>
+          <div>
+            <div class="vips">
+              <span class="material-symbols-outlined"
+                    title="VIPs in the SYCL World">star_rate</span>
+              @for (vip of vips | async; track vip) {
+                <st-contributor-avatar
+                    [contributor]="vip"
+                    title="Follow {{vip.name}}, {{vip.position}}"></st-contributor-avatar>
+              }
+            </div>
+          </div>
+        </div>
+      } @else {
+        <div class="notice">
+          <div>
+            <span class="material-symbols-outlined">search_off</span>
+            No Results
+          </div>
+        </div>
+      }
+    }
+  </div>
+</section>
