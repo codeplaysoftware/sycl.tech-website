@@ -62,6 +62,15 @@ def fetch_news_routes(base_url: str):
     return routes
 
 
+def fetch_contributor_routes(base_url: str):
+    routes = []
+
+    for item in load_all_feed_items(base_url, 'contributors'):
+        routes.append(f'/contributors/{item["_username"]}')
+
+    return routes
+
+
 def fetch_academy_routes(base_url: str):
     routes = []
 
@@ -81,7 +90,7 @@ def fetch_academy_routes(base_url: str):
 
 
 def generate(base_url: str):
-    routes = fetch_academy_routes(base_url) + fetch_news_routes(base_url)
+    routes = fetch_academy_routes(base_url) + fetch_news_routes(base_url) + fetch_contributor_routes(base_url)
     return '\n'.join(routes)
 
 

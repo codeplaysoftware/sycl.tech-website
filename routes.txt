@@ -10,3 +10,7 @@
 /news
 /playground
 /contributors
+/settings
+/privacy
+/cookies
+/404

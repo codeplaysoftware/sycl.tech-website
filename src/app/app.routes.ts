@@ -35,6 +35,7 @@ import { PlaygroundComponent } from './pages/playground/playground.component';
 import { CookiesComponent } from './pages/cookies/cookies.component';
 import { PrivacyComponent } from './pages/privacy/privacy.component';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { Error404Component } from './pages/404/error-404.component';
 
 export const routes: Routes = [
   {
@@ -114,4 +115,13 @@ export const routes: Routes = [
     path: 'contributors/:username',
     component: ContributorComponent
   },
+  {
+    path: '404',
+    component: Error404Component,
+    pathMatch: 'full'
+  },
+  {
+    path: '**',
+    redirectTo: '404'
+  }
 ];
