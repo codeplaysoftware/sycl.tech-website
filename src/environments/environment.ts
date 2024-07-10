@@ -17,7 +17,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 export const environment = {
-  json_feed_base_url: 'https://codeplaysoftware.github.io/sycl.tech-content',
+  json_feed_base_url: 'https://feeds.sycl.tech',
   github_front_end_url: 'https://github.com/codeplaysoftware/sycl.tech-website',
   github_content_repo_collection_base_url: 'https://github.com/codeplaysoftware/sycl.tech-content/tree/main/content',
   github_content_url: 'https://github.com/codeplaysoftware/sycl.tech-content',
