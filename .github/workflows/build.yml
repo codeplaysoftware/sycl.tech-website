@@ -15,8 +15,8 @@ permissions:
   id-token: write
 
 env:
-  SITE_URL: https://codeplaysoftware.github.io/sycl.tech-website/
-  CONTENT_URL: https://codeplaysoftware.github.io/sycl.tech-content
+  SITE_URL: https://sycl.tech/
+  CONTENT_URL: https://feeds.sycl.tech
 
 jobs:
   # Generates a series of routes that Angular can then use to pre-render
