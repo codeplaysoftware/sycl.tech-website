@@ -30,6 +30,7 @@ import { provideHighlightOptions } from 'ngx-highlightjs';
 import { MonacoEditorModule, NgxMonacoEditorConfig } from 'ngx-monaco-editor-v2';
 import { TitleCasePipe } from '@angular/common';
 import { httpCacheInterceptor } from './http-cache.interceptor';
+import { appLegacyRoutes } from './app.legacy-routes';
 
 const scrollConfig: InMemoryScrollingOptions = {
   scrollPositionRestoration: 'top',
@@ -65,14 +66,14 @@ const monacoConfig: NgxMonacoEditorConfig = {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(
-      routes,
+      appLegacyRoutes.concat(routes),
       inMemoryScrollingFeature,
       withPreloading(PreloadAllModules)
     ),
     provideClientHydration(
       // withNoHttpTransferCache Enabled = Faster HTML page download, requires API call on first load
       // withNoHttpTransferCache Disabled = Slower HTML page download, no API call required
-      //withNoHttpTransferCache()
+      // withNoHttpTransferCache()
     ),
     provideHttpClient(
       withInterceptors([httpCacheInterceptor]),

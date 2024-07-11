@@ -116,10 +116,6 @@ export const routes: Routes = [
     component: ContributorComponent
   },
   {
-    path: 'learn',
-    redirectTo: 'getting-started'
-  },
-  {
     path: 'e404',
     component: Error404Component
   },
