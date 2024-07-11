@@ -14,3 +14,10 @@
 /privacy
 /cookies
 /404
+/learn
+/releases
+/projects
+/research
+/sessions
+/summer-sessions/2020/sessions
+/summer-sessions/2021/sessions
