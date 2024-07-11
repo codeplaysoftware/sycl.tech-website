@@ -4,7 +4,7 @@
     <div class="widget">
       <a [href]="research.url" target="_blank" rel="noopener">
         <div class="header">
-          2029
+          {{ research.date | date: "y" }}
         </div>
         <div class="title">
           <h1 [innerHTML]="research.title"></h1>
