@@ -98,12 +98,14 @@ export class StateService {
     if (!state.cookiesAccepted) {
       this.storageService.clear();
       this.storageService.set('st-cookies-accepted', state.cookiesAccepted);
+      this.stateSubject.next(state);
       return ;
     }
 
     this.storageService.set('st-cookies-accepted', state.cookiesAccepted);
     this.storageService.set('st-dark-mode-enabled', state.darkModeEnabled);
     this.storageService.set('st-enable-tracking', state.enableTracking);
+
     this.stateSubject.next(state);
   }
 }
