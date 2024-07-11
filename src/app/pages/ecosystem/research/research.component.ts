@@ -54,6 +54,9 @@ export class ResearchComponent extends FilterableBaseComponent implements OnInit
     protected meta: Meta
   ) {
     super(researchService);
+
+    this.maxResultsPerPage = 20;
+
     this.titleService.setTitle('Research - Ecosystem - SYCL.tech');
     this.meta.addTag({ name: 'keywords', content: this.getKeywords().join(', ') });
     this.meta.addTag({ name: 'description', content: this.getDescription() });

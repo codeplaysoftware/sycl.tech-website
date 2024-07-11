@@ -54,6 +54,9 @@ export class VideosComponent extends FilterableBaseComponent implements OnInit, 
     protected meta: Meta
   ) {
     super(videosService);
+
+    this.maxResultsPerPage = 20;
+
     this.titleService.setTitle('Videos - Ecosystem - SYCL.tech');
     this.meta.addTag({ name: 'keywords', content: this.getKeywords().join(', ') });
     this.meta.addTag({ name: 'description', content: this.getDescription() });
