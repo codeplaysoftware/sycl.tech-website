@@ -116,11 +116,11 @@ export const routes: Routes = [
     component: ContributorComponent
   },
   {
-    path: 'e404',
+    path: '404',
     component: Error404Component
   },
   {
     path: '**',
-    redirectTo: 'e404'
+    redirectTo: '404'
   }
 ];
