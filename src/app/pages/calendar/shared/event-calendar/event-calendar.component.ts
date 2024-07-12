@@ -17,7 +17,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CommonModule, Location } from '@angular/common';
-import { ChangeDetectionStrategy, Component, model, OnInit, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, model, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { DayModel } from './models/day.model';
 import { CalendarItemModel } from './models/calendar-item.model';
 import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
@@ -42,7 +42,7 @@ import { map, Observable, tap } from 'rxjs';
   styleUrl: './event-calendar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EventCalendarComponent implements OnInit {
+export class EventCalendarComponent implements OnInit, OnDestroy {
   readonly currentDate = model<Date>(new Date());
 
   protected focusedEvent: CalendarItemModel | null = null;
