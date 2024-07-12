@@ -18,6 +18,7 @@
 
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'st-error-404',
@@ -29,5 +30,11 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Error404Component {
-
+  /**
+   * Constructor.
+   * @param title
+   */
+  constructor(title: Title) {
+    title.setTitle('404 - SYCL.tech');
+  }
 }
