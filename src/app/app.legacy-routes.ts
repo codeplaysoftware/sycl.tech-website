@@ -40,6 +40,10 @@ export const appLegacyRoutes: Routes = [
     redirectTo: 'ecosystem/presentations'
   },
   {
+    path: 'events',
+    redirectTo: 'calendar'
+  },
+  {
     path: 'news/16/05/26/khronos-updates-opencl-and-sycl-specifications',
     redirectTo: 'news/2016/05/26/khronos-updates-opencl-and-sycl-specifications'
   },
