@@ -3,6 +3,7 @@
 /learn/
 /releases/
 /research/
+/events/
 /news/16/05/26/khronos-updates-opencl-and-sycl-specifications
 /news/16/05/26/khronos-updates-opencl-and-sycl-specifications.html
 /news/16/05/26/khronos-releases-wave-of-new-standards
