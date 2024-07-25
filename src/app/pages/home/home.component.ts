@@ -155,7 +155,7 @@ export class HomeComponent implements SearchablePage {
       { initialValue: PlaygroundSampleService.getDefaultSample() });
 
     this.projectCount = toSignal(
-      this.eventService.count(), { initialValue: 0 });
+      this.projectService.count(), { initialValue: 0 });
 
     this.videoCount = toSignal(
       this.videoService.count(), { initialValue: 0 });
