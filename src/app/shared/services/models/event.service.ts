@@ -108,7 +108,8 @@ export class EventService extends JsonFeedService {
       map(events => events.filter((event) => {
         return event.starts > currentDateTime ? event : null;
       })),
-      map(events => limit ? events.slice(offset, limit) : events.slice(offset))
+      map(events => limit ? events.slice(offset, limit) : events.slice(offset)),
+      map(events => events.sort((a, b) => (a.starts > b.starts) ? 1 : -1))
     );
   }
 

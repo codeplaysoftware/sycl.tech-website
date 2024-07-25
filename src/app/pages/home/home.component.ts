@@ -136,7 +136,7 @@ export class HomeComponent implements SearchablePage {
       this.communityUpdateService.all(6), { initialValue: [] });
 
     this.events = toSignal(
-      this.eventService.all(4), { initialValue: [] });
+      this.eventService.getUpcomingEvents(4), { initialValue: [] });
 
     this.yearlyEventCount = toSignal(
       this.eventService.getYearlyEventCount(new Date().getFullYear()), { initialValue: 0 } );
