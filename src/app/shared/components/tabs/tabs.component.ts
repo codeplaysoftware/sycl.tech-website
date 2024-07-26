@@ -73,7 +73,7 @@ export class TabsComponent implements AfterViewInit, OnChanges {
       return ;
     }
 
-    let selectedTabName = this.selectedTabName();
+    const selectedTabName = this.selectedTabName();
 
     if (selectedTabName === undefined) {
       this.setSelectedTab(this.tabs()[0]);

@@ -31,7 +31,7 @@
       </div>
     } @else if (state() == LoadingState.LOAD_SUCCESS) {
       @if (lesson(); as currentLesson) {
-        <st-tabs [(selectedTabName)]="this.selectedTabName">
+        <st-tabs [(selectedTabName)]="this.selectedTabName" (selectedTabNameChange)="onTabChange()">
           <div class="actions">
             <a [href]="currentLesson.github_homepage_url" title="View on GitHub" target="_blank" rel="noopener">
               <img ngSrc="./assets/images/github.svg" class="icon" alt="GitHub Icon" height="20" width="20"/>
