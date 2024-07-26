@@ -136,7 +136,7 @@ export class HomeComponent implements SearchablePage {
       this.communityUpdateService.all(6), { initialValue: [] });
 
     this.events = toSignal(
-      this.eventService.all(4), { initialValue: [] });
+      this.eventService.getUpcomingEvents(4), { initialValue: [] });
 
     this.yearlyEventCount = toSignal(
       this.eventService.getYearlyEventCount(new Date().getFullYear()), { initialValue: 0 } );
@@ -155,7 +155,7 @@ export class HomeComponent implements SearchablePage {
       { initialValue: PlaygroundSampleService.getDefaultSample() });
 
     this.projectCount = toSignal(
-      this.eventService.count(), { initialValue: 0 });
+      this.projectService.count(), { initialValue: 0 });
 
     this.videoCount = toSignal(
       this.videoService.count(), { initialValue: 0 });
