@@ -30,8 +30,5 @@ export interface ResearchModel {
   description: string
   tags: string[]
   contributor: Observable<ContributorModel>
-  authors: [{
-    name: string
-    affiliation: string
-  }]
+  authors: string[]
 }

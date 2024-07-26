@@ -53,12 +53,7 @@ export class ResearchService extends JsonFeedService {
       tags: feedItem['tags'] ? feedItem['tags'] : [],
       contributor: of(ContributorService.convertFeedItem(
         feedItem['author'])),
-      authors: feedItem['_authors'].map((author: any) => {
-        return {
-          name: author['name'],
-          affiliation: author['affiliation']
-        }
-      })
+      authors: feedItem['_authors']
     }
   }
 
