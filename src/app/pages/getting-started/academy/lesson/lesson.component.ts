@@ -16,7 +16,7 @@
  *
  *--------------------------------------------------------------------------------------------*/
 
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule, Location, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, signal, Signal, WritableSignal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map, Observable, switchMap, tap } from 'rxjs';
@@ -72,6 +72,7 @@ export class LessonComponent {
    * @param stateService
    * @param titleService
    * @param meta
+   * @param location
    */
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -80,6 +81,7 @@ export class LessonComponent {
     protected stateService: StateService,
     protected titleService: Title,
     protected meta: Meta,
+    protected location: Location
   ) {
     const lesson = this.activatedRoute.params.pipe(
       switchMap(params => this.loadLessonContent(params['lessonTag'], params['tabName'])));
@@ -121,5 +123,13 @@ export class LessonComponent {
    */
   onToggleLessonList() {
     this.hideLessonList.set(!this.hideLessonList());
+  }
+
+  /**
+   * Called when a user changes the current tab. Updates the URL to match the current state.
+   */
+  onTabChange() {
+    this.location.replaceState(
+      `/getting-started/academy/${this.lesson()?.tag}/${this.selectedTabName()?.toLowerCase()}`)
   }
 }
