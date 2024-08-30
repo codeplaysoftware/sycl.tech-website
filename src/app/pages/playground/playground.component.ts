@@ -19,8 +19,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  effect,
-  OnDestroy,
+  OnDestroy, OnInit,
   signal,
   Signal,
   ViewChild,
@@ -38,7 +37,7 @@ import { InfoPanelComponent } from './shared/info-panel/info-panel.component';
 import { PlaygroundSampleModel } from '../../shared/models/playground-sample.model';
 import { PlatformService } from '../../shared/services/platform.service';
 import { PlaygroundService } from '../../shared/services/models/playground.service';
-import { BehaviorSubject, firstValueFrom, map, Observable, take, tap } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, map, Observable, Subscription, take, tap } from 'rxjs';
 import { CompilationResultModel } from '../../shared/models/compilation-result.model';
 import { Meta, Title } from '@angular/platform-browser';
 import { PlaygroundSampleService } from '../../shared/services/models/playground-sample.service';
@@ -47,6 +46,8 @@ import { PlatformInfoPopupComponent } from './shared/platform-info-popup/platfor
 import { SearchablePage } from '../../shared/components/site-wide-search/SearchablePage';
 import { StateService } from '../../shared/services/state.service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
+import { SharePopupComponent } from './shared/share-popup/share-popup.component';
 
 @Component({
   selector: 'st-playground',
@@ -64,7 +65,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
   styleUrl: './playground.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PlaygroundComponent implements SearchablePage, OnDestroy {
+export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
   @ViewChild('codeBlock')
   protected readonly codeBlock: any;
   protected readonly LoadingState = LoadingState;
@@ -77,13 +78,14 @@ export class PlaygroundComponent implements SearchablePage, OnDestroy {
   protected readonly compilationResult: Signal<CompilationResultModel | undefined>;
   protected readonly compileState: WritableSignal<LoadingState>;
   protected readonly lastRunCode: WritableSignal<string>;
-  protected readonly sample: Signal<PlaygroundSampleModel | undefined>;
+  protected readonly sample: WritableSignal<PlaygroundSampleModel | undefined>;
   protected readonly monacoEditorTheme: Signal<string>;
   protected readonly showMonacoEditor: WritableSignal<boolean>;
 
   protected compilationResult$: BehaviorSubject<CompilationResultModel | undefined>;
   protected popupReference: PopupReference | undefined;
   protected code: WritableSignal<string>;
+  protected routerArgsSub: Subscription | undefined;
 
   /**
    * Constructor.
@@ -93,6 +95,7 @@ export class PlaygroundComponent implements SearchablePage, OnDestroy {
    * @param platformService
    * @param playgroundService
    * @param stateService
+   * @param activatedRoute
    */
   constructor(
     protected titleService: Title,
@@ -100,7 +103,8 @@ export class PlaygroundComponent implements SearchablePage, OnDestroy {
     protected popupService: PopupService,
     protected platformService: PlatformService,
     protected playgroundService: PlaygroundService,
-    protected stateService: StateService
+    protected stateService: StateService,
+    protected activatedRoute: ActivatedRoute
   ) {
     this.titleService.setTitle('Playground - SYCL.tech');
     this.meta.addTag({ name: 'keywords', content: this.getKeywords().join(', ') });
@@ -116,23 +120,39 @@ export class PlaygroundComponent implements SearchablePage, OnDestroy {
     this.monacoEditorTheme = toSignal(this.getEditorTheme(), { initialValue: 'vs-light' });
     this.compileState = signal(LoadingState.NOT_STARTED);
     this.compilationResult = toSignal(this.compilationResult$, { initialValue: undefined });
-    this.code = signal(PlaygroundSampleService.getDefaultSample().code);
+    this.code = signal('');
     this.lastRunCode = signal('');
-    this.sample = toSignal(this.getPlaygroundSample(), { initialValue: PlaygroundSampleService.getDefaultSample() });
+    this.sample = signal(undefined);
+  }
 
-    effect(() => {
-      const sample = this.sample();
-
-      if (sample) {
-        this.setSample(sample);
-      } else {
-        this.setSample(PlaygroundSampleService.getDefaultSample());
-
-        setTimeout(() => {
-          this.onChooseSample();
-        });
-      }
-    });
+  /**
+   * @inheritDoc
+   */
+  ngOnInit() {
+    this.routerArgsSub = this.activatedRoute.queryParams.pipe(
+      tap((params) => {
+        if (params['s']) {
+          this.playgroundService.loadCodeSample(params['s']).subscribe((response) => {
+            this.setCode(response);
+          })
+        } else {
+          this.playgroundService.getSample().pipe(
+            tap((sample) => {
+              setTimeout(() => {
+                if (sample == undefined) {
+                  this.setSample(PlaygroundSampleService.getDefaultSample());
+                  this.onChooseSample()
+                } else {
+                  this.setSample(sample);
+                }
+              });
+            }),
+            take(1)
+          ).subscribe();
+        }
+      }),
+      take(1)
+    ).subscribe();
   }
 
   /**
@@ -141,6 +161,7 @@ export class PlaygroundComponent implements SearchablePage, OnDestroy {
   ngOnDestroy(): void {
     this.playgroundService.clearSample();
     this.popupReference?.close(undefined);
+    this.routerArgsSub?.unsubscribe();
   }
 
   /**
@@ -149,18 +170,6 @@ export class PlaygroundComponent implements SearchablePage, OnDestroy {
   getEditorTheme(): Observable<string> {
     return this.stateService.getObservable().pipe(
       map(state => state.darkModeEnabled ? 'st-dark' : 'vs-light'));
-  }
-
-  /**
-   * Get playground sample.
-   */
-  getPlaygroundSample(): Observable<PlaygroundSampleModel | undefined> {
-    return this.playgroundService.getSample().pipe(
-      tap((sample) => {
-        this.code.set(sample ? sample.code : PlaygroundSampleService.getDefaultSample().code);
-        this.lastRunCode.set(this.code());
-      })
-    )
   }
 
   /**
@@ -227,8 +236,17 @@ export class PlaygroundComponent implements SearchablePage, OnDestroy {
     this.titleService.setTitle(sample.title + ' - Playground - SYCL.tech');
 
     if (this.codeBlock) {
-      this.codeBlock.updateCode(sample.code);
+      this.setCode(sample.code);
     }
+  }
+
+  /**
+   * Set code.
+   * @param code
+   */
+  setCode(code: string) {
+    this.code.set(code);
+    this.lastRunCode.set(code);
   }
 
   /**
@@ -280,7 +298,7 @@ export class PlaygroundComponent implements SearchablePage, OnDestroy {
   onChooseSample() {
     this.popupReference = this.popupService.create(SampleChooserComponent, null, true);
     firstValueFrom(this.popupReference.onChanged).then((sample: PlaygroundSampleModel) => {
-      this.playgroundService.setSample(sample);
+      this.setSample(sample);
     });
   }
 
@@ -398,5 +416,14 @@ export class PlaygroundComponent implements SearchablePage, OnDestroy {
    */
   getDefaultRoutePath(): string {
     return '/playground'
+  }
+
+  /**
+   * Called when a user presses the share code button.
+   */
+  onShareSample() {
+    this.popupReference = this.popupService.create(SharePopupComponent, {
+      'code': this.code()
+    }, true);
   }
 }
