@@ -141,7 +141,10 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
               setTimeout(() => {
                 if (sample == undefined) {
                   this.setSample(PlaygroundSampleService.getDefaultSample());
-                  this.onChooseSample()
+
+                  if (this.platformService.isClient()){
+                    this.onChooseSample();
+                  }
                 } else {
                   this.setSample(sample);
                 }
