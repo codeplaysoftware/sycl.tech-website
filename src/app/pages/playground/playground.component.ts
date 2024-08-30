@@ -418,6 +418,9 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
     return '/playground'
   }
 
+  /**
+   * Called when a user presses the share code button.
+   */
   onShareSample() {
     this.popupReference = this.popupService.create(SharePopupComponent, {
       'code': this.code()
