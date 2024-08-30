@@ -1,0 +1,37 @@
+<header>
+  <div>
+    <span class="material-symbols-outlined">share</span>
+    <h1>Share Your Code</h1>
+  </div>
+</header>
+<div>
+  @if (loading() == LoadingState.LOADING) {
+    <st-loading></st-loading>
+  } @else if (loading() == LoadingState.LOAD_SUCCESS) {
+    <div>
+      <div>
+        <h1>SYCL.tech URL</h1>
+        <input [value]="syclTechUrl()">
+      </div>
+      <div>
+        <h1>Compiler Explorer URL</h1>
+        <input [value]="compilerExplorerUrl()">
+      </div>
+    </div>
+    <div>
+      <a class="button" (click)="onClose()">
+        <span class="material-symbols-outlined">close</span> Close</a>
+    </div>
+  } @else if (loading() == LoadingState.LOAD_FAILURE) {
+    <div>
+      <div>
+        <h1>Error</h1>
+        <p>There was a problem loading your shortened URL, please try again.</p>
+      </div>
+      <div>
+        <a class="button" (click)="onClose()">
+          <span class="material-symbols-outlined">close</span> Close</a>
+      </div>
+    </div>
+  }
+</div>
