@@ -12,6 +12,10 @@
                 title="Compile and run your source code">play_circle</span>
         }
       </a>
+      <a (click)="onShareSample()">
+        <span class="material-symbols-outlined"
+              title="Show the sample chooser">share</span></a>
+
       <a (click)="onChooseSample()">
         <span class="material-symbols-outlined"
               title="Show the sample chooser">category</span></a>
@@ -55,6 +59,7 @@
               (actionButtonClicked)="onMiniPanelActionButtonPressed('source', $event)">
             @if (isCodeReady()) {
               <ngx-monaco-editor
+                  #codeBlock
                   class="content"
                   [options]="{ theme: this.monacoEditorTheme(), language: 'cpp', automaticLayout: true }"
                   [(ngModel)]="code"></ngx-monaco-editor>

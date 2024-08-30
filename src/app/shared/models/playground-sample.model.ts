@@ -28,5 +28,5 @@ export interface PlaygroundSampleModel {
   title: string
   code: string
   cached_response?: string
-  contributor: Observable<ContributorModel>
+  contributor?: Observable<ContributorModel>
 }
