@@ -16,10 +16,9 @@
  *
  *--------------------------------------------------------------------------------------------*/
 
-import { ChangeDetectionStrategy, Component, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, model, signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ClipboardService } from 'ngx-clipboard';
-
 
 @Component({
   selector: 'st-copy-input',
@@ -33,6 +32,7 @@ import { ClipboardService } from 'ngx-clipboard';
 })
 export class CopyInputComponent {
   readonly content = model<string>('');
+  readonly copied: WritableSignal<boolean> = signal(false);
 
   /**
    * Constructor.
@@ -47,5 +47,11 @@ export class CopyInputComponent {
    */
   onCopy() {
     this.clipboardService.copy(this.content());
+
+    this.copied.set(true);
+
+    setTimeout(() => {
+      this.copied.set(false);
+    }, 1500);
   }
 }
