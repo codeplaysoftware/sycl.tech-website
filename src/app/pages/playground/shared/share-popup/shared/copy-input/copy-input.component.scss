@@ -5,20 +5,23 @@
   input {
     border: var(--border-default);
     border-radius: var(--border-radius) 0 0 var(--border-radius);
-    padding: 1.5rem;
+    padding: 1.5rem 1rem;
     width: 100%;
     z-index: 0;
     outline: none;
   }
 
   .button {
-    right: .3rem;
-    top: .3rem;
-    z-index: 1;
     display: flex;
     align-items: center;
     border-radius: 0 var(--border-radius) var(--border-radius) 0;
     background-color: var(--color-hint-sixth);
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    span {
+      margin: 0;
+    }
 
     &:hover {
       background-color: var(--color-orange);

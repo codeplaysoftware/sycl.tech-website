@@ -1,2 +1,9 @@
 <input [(ngModel)]="content" />
-<a (click)="onCopy()" class="button" title="Copy the contents to clipboard">Copy</a>
+
+<a (click)="onCopy()" class="button" title="Copy the contents to clipboard">
+  @if (copied()) {
+    <span class="material-symbols-outlined copied">check_circle</span>
+  } @else {
+    <span class="material-symbols-outlined">content_copy</span>
+  }
+</a>
