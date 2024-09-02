@@ -40,6 +40,8 @@ export class MiniPanelComponent {
   readonly title = input<string>('Untitled');
   readonly icon = input<string>('code');
   readonly state = input<MiniPanelState>(MiniPanelState.SHOWING);
+  readonly loadingMessage = input<string | null>(
+    'Sometimes this can take up to 30 seconds, depending on how many people are compiling!');
 
   actionButtonClicked = output<ActionButton>();
 

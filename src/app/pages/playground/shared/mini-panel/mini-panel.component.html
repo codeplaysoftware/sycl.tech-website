@@ -38,11 +38,11 @@
       <div class="top">
         <div>
           <st-loading></st-loading>
-          <h1>Sometimes this can take up to 30 seconds, depending on how many people are compiling!</h1>
+          <h1 [innerHTML]="loadingMessage()"></h1>
         </div>
       </div>
       <div class="bottom">
-        <a href="https://godbolt.org/" target="_blank" rel="noopener">
+        <a href="https://godbolt.org/" target="_blank" rel="noopener" class="ce-logo">
           <img ngSrc="./assets/images/playground/compiler-explorer.svg" alt="Compiler Explorer Logo" height="326"
                width="876" />
         </a>

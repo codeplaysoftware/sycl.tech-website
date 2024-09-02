@@ -71,20 +71,22 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
   protected readonly LoadingState = LoadingState;
   protected readonly MiniPanelState = MiniPanelState;
   protected readonly PanelViewState = PanelViewState;
-  protected readonly sourcePanelViewState: WritableSignal<PanelViewState>;
-  protected readonly asmPanelViewState: WritableSignal<PanelViewState>;
-  protected readonly execPanelViewState: WritableSignal<PanelViewState>;
-  protected readonly errorPanelViewState: WritableSignal<PanelViewState>;
+  protected readonly sourcePanelViewState: WritableSignal<PanelViewState> = signal(PanelViewState.NORMAL);
+  protected readonly asmPanelViewState: WritableSignal<PanelViewState> = signal(PanelViewState.NORMAL);
+  protected readonly execPanelViewState: WritableSignal<PanelViewState> = signal(PanelViewState.NORMAL);
+  protected readonly errorPanelViewState: WritableSignal<PanelViewState> = signal(PanelViewState.HIDDEN);
   protected readonly compilationResult: Signal<CompilationResultModel | undefined>;
-  protected readonly compileState: WritableSignal<LoadingState>;
-  protected readonly lastRunCode: WritableSignal<string>;
-  protected readonly sample: WritableSignal<PlaygroundSampleModel | undefined>;
-  protected readonly monacoEditorTheme: Signal<string>;
-  protected readonly showMonacoEditor: WritableSignal<boolean>;
+  protected readonly compileState: WritableSignal<LoadingState> = signal(LoadingState.NOT_STARTED);
+  protected readonly sample: WritableSignal<PlaygroundSampleModel | undefined>  = signal(undefined);
+  protected readonly monacoEditorTheme: Signal<string> = toSignal(this.getEditorTheme(), { initialValue: 'vs-light' });
+  protected readonly showMonacoEditor: WritableSignal<boolean> = signal(false);
+  protected readonly code: WritableSignal<string> = signal('');
+  protected readonly lastRunCode: WritableSignal<string> = signal('');
+  protected readonly loadingMessage: WritableSignal<string> = signal('Loading source code...');
+  protected readonly sourceCodeEditorReady: WritableSignal<boolean> = signal(false);
 
   protected compilationResult$: BehaviorSubject<CompilationResultModel | undefined>;
   protected popupReference: PopupReference | undefined;
-  protected code: WritableSignal<string>;
   protected routerArgsSub: Subscription | undefined;
 
   /**
@@ -110,28 +112,21 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
     this.meta.addTag({ name: 'keywords', content: this.getKeywords().join(', ') });
     this.meta.addTag({ name: 'description', content: this.getDescription() });
 
+    this.showMonacoEditor.set(this.platformService.isClient());
     this.compilationResult$ = new BehaviorSubject<CompilationResultModel | undefined>(undefined);
-
-    this.sourcePanelViewState = signal(PanelViewState.NORMAL);
-    this.asmPanelViewState = signal(PanelViewState.NORMAL);
-    this.execPanelViewState = signal(PanelViewState.NORMAL);
-    this.errorPanelViewState = signal(PanelViewState.HIDDEN);
-    this.showMonacoEditor = signal(this.platformService.isClient());
-    this.monacoEditorTheme = toSignal(this.getEditorTheme(), { initialValue: 'vs-light' });
-    this.compileState = signal(LoadingState.NOT_STARTED);
     this.compilationResult = toSignal(this.compilationResult$, { initialValue: undefined });
-    this.code = signal('');
-    this.lastRunCode = signal('');
-    this.sample = signal(undefined);
   }
 
   /**
    * @inheritDoc
    */
   ngOnInit() {
+    this.loadingMessage.set('Loading source code...')
+
     this.routerArgsSub = this.activatedRoute.queryParams.pipe(
       tap((params) => {
         if (params['s']) {
+          this.loadingMessage.set('Loading your saved source code...')
           this.playgroundService.loadCodeSample(params['s']).subscribe((response) => {
             this.setCode(response);
           })
@@ -328,10 +323,17 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
   }
 
   /**
-   * Check if we are ready to show the code.
+   * Check if the source code editor is ready.
    */
-  isCodeReady(): boolean {
-    return !!(this.showMonacoEditor() && this.sample);
+  isSourceCodeEditorReady(): boolean {
+    return this.sourceCodeEditorReady();
+  }
+
+  /**
+   * Called when the source code editor is ready to be shown.
+   */
+  onSourceCodeEditorReady() {
+    this.sourceCodeEditorReady.set(true);
   }
 
   /**

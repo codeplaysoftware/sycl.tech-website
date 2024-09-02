@@ -14,7 +14,7 @@
       </a>
       <a (click)="onShareSample()">
         <span class="material-symbols-outlined"
-              title="Show the sample chooser">share</span></a>
+              title="Share this code with someone else via a sharable link">share</span></a>
 
       <a (click)="onChooseSample()">
         <span class="material-symbols-outlined"
@@ -51,16 +51,18 @@
               title="Source Code"
               icon="code"
               class="source"
-              [state]="isCodeReady() ? MiniPanelState.SHOWING : MiniPanelState.LOADING"
+              [state]="isSourceCodeEditorReady() ? MiniPanelState.SHOWING : MiniPanelState.LOADING"
               [tag]="'source'"
               [viewState]="sourcePanelViewState()"
               (viewStateChange)="onPanelViewStateChanged('source', $event)"
               [actionButtons]="[{name: 'Run', icon: 'play_circle', active: this.isCompiling(), title: 'Compile and run the source code'}]"
-              (actionButtonClicked)="onMiniPanelActionButtonPressed('source', $event)">
-            @if (isCodeReady()) {
+              (actionButtonClicked)="onMiniPanelActionButtonPressed('source', $event)"
+              [loadingMessage]="loadingMessage()">
+            @if (showMonacoEditor()) {
               <ngx-monaco-editor
                   #codeBlock
                   class="content"
+                  (onInit)="onSourceCodeEditorReady()"
                   [options]="{ theme: this.monacoEditorTheme(), language: 'cpp', automaticLayout: true }"
                   [(ngModel)]="code"></ngx-monaco-editor>
             }

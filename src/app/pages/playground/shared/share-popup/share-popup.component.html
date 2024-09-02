@@ -2,6 +2,7 @@
   <div>
     <span class="material-symbols-outlined">share</span>
     <h1>Share Your Code</h1>
+    <p>Share your code with someone by sending them a playground link.</p>
   </div>
 </header>
 <div>
@@ -9,14 +10,18 @@
     <st-loading></st-loading>
   } @else if (loading() == LoadingState.LOAD_SUCCESS) {
     <div>
-      <div>
-        <h1>SYCL.tech URL</h1>
-        <input [value]="syclTechUrl()">
-      </div>
-      <div>
-        <h1>Compiler Explorer URL</h1>
-        <input [value]="compilerExplorerUrl()">
-      </div>
+      @if (syclTechUrl(); as url) {
+        <div>
+          <h1>SYCL.tech Playground Link</h1>
+          <st-copy-input [content]="url"></st-copy-input>
+        </div>
+      }
+      @if (compilerExplorerUrl(); as url) {
+        <div>
+          <h1>Compiler Explorer Link</h1>
+          <st-copy-input [content]="url"></st-copy-input>
+        </div>
+      }
     </div>
     <div>
       <a class="button" (click)="onClose()">
