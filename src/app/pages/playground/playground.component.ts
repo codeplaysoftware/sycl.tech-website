@@ -18,7 +18,7 @@
 
 import {
   ChangeDetectionStrategy,
-  Component,
+  Component, Inject,
   OnDestroy, OnInit,
   signal,
   Signal,
@@ -48,6 +48,8 @@ import { StateService } from '../../shared/services/state.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { SharePopupComponent } from './shared/share-popup/share-popup.component';
+import { LoadAndSavePopupComponent } from './shared/load-and-save-popup/load-and-save-popup.component';
+import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 
 @Component({
   selector: 'st-playground',
@@ -98,6 +100,7 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
    * @param playgroundService
    * @param stateService
    * @param activatedRoute
+   * @param storageService
    */
   constructor(
     protected titleService: Title,
@@ -106,7 +109,8 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
     protected platformService: PlatformService,
     protected playgroundService: PlaygroundService,
     protected stateService: StateService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
+    @Inject(LOCAL_STORAGE) protected storageService: StorageService,
   ) {
     this.titleService.setTitle('Playground - SYCL.tech');
     this.meta.addTag({ name: 'keywords', content: this.getKeywords().join(', ') });
@@ -137,7 +141,9 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
                 if (sample == undefined) {
                   this.setSample(PlaygroundSampleService.getDefaultSample());
 
-                  if (this.platformService.isClient()){
+                  if (this.storageService.has(LoadAndSavePopupComponent.storageKey)) {
+                    this.onSaveLoadSample();
+                  } else if (this.platformService.isClient()) {
                     this.onChooseSample();
                   }
                 } else {
@@ -430,5 +436,24 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
     this.popupReference = this.popupService.create(SharePopupComponent, {
       'code': this.code()
     }, true);
+  }
+
+  /**
+   * Called when a user presses the save/load code button.
+   */
+  onSaveLoadSample() {
+    this.popupReference = this.popupService.create(LoadAndSavePopupComponent, {
+      'code': this.code()
+    }, true);
+
+    // Subscribe to any save code samples and load them into the editor
+    this.popupReference.onChanged.pipe(
+      tap((data) => {
+        if (data) {
+          this.setCode(data.code);
+        }
+      }),
+      take(1)
+    ).subscribe();
   }
 }
