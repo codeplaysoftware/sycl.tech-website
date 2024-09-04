@@ -1,0 +1,131 @@
+:host {
+  min-height: 300px;
+
+  @media screen and (min-width: 805px) {
+    display: flex;
+    flex-direction: row;
+    width: 800px !important;
+    height: 550px;
+  }
+
+  > header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 4rem;
+    flex-basis: 40%;
+    background-color: var(--color-blue);
+    color: white;
+
+    span {
+      font-size: 60px;
+    }
+
+    p {
+      font-size: 1rem;
+      opacity: .6;
+    }
+  }
+
+  main {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--popup-bg-color);
+    flex: 1;
+
+    .content {
+      padding: 2rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      overflow: auto;
+
+      .saved {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 0;
+
+        > li {
+          padding: 1rem 1.5rem;
+          border: var(--border-default);
+          border-radius: var(--border-radius);
+          box-shadow: var(--box-shadow);
+          transition: var(--transition-fast);
+          cursor: pointer;
+          display: flex;
+
+          > div:nth-of-type(1) {
+            flex: 1;
+          }
+
+          > div:nth-of-type(2) {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: .5;
+            transition: var(--transition-fast);
+
+            &:hover {
+              opacity: 1;
+            }
+          }
+
+          &:hover {
+            box-shadow: var(--box-shadow-focused);
+            transform: var(--transform-focused);
+          }
+
+          h1 {
+            font-size: 1rem;
+            margin-bottom: .2rem;
+          }
+
+          h2 {
+            font-size: .8rem;
+            opacity: .5;
+            font-weight: normal;
+            margin-top: 0;
+          }
+        }
+      }
+    }
+
+    footer {
+      background-color: var(--color-hint-third);
+      padding: 1rem 2rem;
+      display: flex;
+      gap: .5rem;
+      box-shadow: var(--box-shadow-focused);
+
+      a.button {
+        width: 100%;
+        text-align: center;
+
+        &.cancel {
+          background-color: var(--color-hint-sixth);
+        }
+      }
+    }
+
+    .warning {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 100%;
+      opacity: .5;
+      padding: 0 2rem;
+
+      span {
+        font-size: 60px;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+    }
+  }
+}
