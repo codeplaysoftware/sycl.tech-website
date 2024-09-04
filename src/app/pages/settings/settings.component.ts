@@ -21,6 +21,7 @@ import { CommonModule } from '@angular/common';
 import { SwitchComponent } from '../../shared/components/switch/switch.component';
 import { StateService } from '../../shared/services/state.service';
 import { tap } from 'rxjs';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'st-settings',
@@ -40,11 +41,15 @@ export class SettingsComponent {
 
   /**
    * Constructor.
+   * @param title
    * @param stateService
    */
   constructor(
-    protected stateService: StateService
+    protected title: Title,
+    protected stateService: StateService,
   ) {
+    this.title.setTitle('Settings - SYCL.tech');
+
     stateService.getObservable().pipe(
       tap((state) => {
         this.enableDarkMode.set(state.darkModeEnabled);

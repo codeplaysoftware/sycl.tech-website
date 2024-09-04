@@ -19,6 +19,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../environments/environment';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'st-privacy',
@@ -32,4 +33,14 @@ import { environment } from '../../../environments/environment';
 })
 export class PrivacyComponent {
   readonly contactEmailAddress = environment.privacy_policy_email;
+
+  /**
+   * Constructor.
+   * @param title
+   */
+  constructor(
+    protected title: Title
+  ) {
+    this.title.setTitle('Privacy - SYCL.tech');
+  }
 }
