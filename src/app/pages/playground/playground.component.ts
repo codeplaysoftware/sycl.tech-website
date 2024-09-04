@@ -145,9 +145,9 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
                   this.setSample(PlaygroundSampleService.getDefaultSample());
 
                   if (this.storageService.has(LoadAndSavePopupComponent.storageKey)) {
-                    this.onChooseCompiler();
+                    this.onSaveLoadSample();
                   } else if (this.platformService.isClient()) {
-                    this.onChooseCompiler();
+                    this.onChooseSample();
                   }
                 } else {
                   this.setSample(sample);
