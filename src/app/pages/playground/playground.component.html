@@ -111,8 +111,8 @@
                     icon="info"
                     (clicked)="onTargetPlatformClicked()"
                     [closable]="false"
-                    [message]="'Your code was compiled via Compiler Explorer and executed on an '
-                  + compilationResult.platform + '.'"></st-alert-bubble>
+                    [message]="'Your code was compiled using ' + playgroundService.selectedCompiler().name
+                    + ' and executed on an ' + compilationResult.platform + '.'"></st-alert-bubble>
                 <pre [innerHTML]="compilationResult.result" class="content"></pre>
               </div>
             }

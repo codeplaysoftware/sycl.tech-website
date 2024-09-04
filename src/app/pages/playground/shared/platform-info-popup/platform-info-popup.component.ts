@@ -23,7 +23,11 @@ import { PopupReference } from '../../../../shared/components/popup/PopupService
   selector: 'st-platform-info-popup',
   standalone: true,
   templateUrl: './platform-info-popup.component.html',
-  styleUrl: './platform-info-popup.component.scss',
+  styleUrls: [
+    '../../../../shared/components/popup/styles/common.scss',
+    '../../../../shared/components/popup/styles/side-header.scss',
+    './platform-info-popup.component.scss',
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PlatformInfoPopupComponent {
@@ -37,5 +41,12 @@ export class PlatformInfoPopupComponent {
     @Inject('POPUP_DATA') protected popupReference: PopupReference
   ) {
     this.platformName = signal(this.popupReference.data['platform']);
+  }
+
+  /**
+   * Called when a user closes the popup.
+   */
+  onClose() {
+    this.popupReference.close(null);
   }
 }
