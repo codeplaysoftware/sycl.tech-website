@@ -1,70 +1,12 @@
 :host {
-  min-height: 300px;
-
-  @media screen and (min-width: 740px) {
+  article {
     display: flex;
     flex-direction: column;
-    width: 470px !important;
-  }
+    gap: 1rem;
 
-  > header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem 4rem;
-
-    span {
-      font-size: 60px;
+    h1 {
+      margin: 0 0 .4rem 0;
+      font-size: 1.1rem;
     }
-  }
-
-  > div {
-    display: flex;
-    flex-direction: column;
-    background-color: var(--popup-bg-color);
-
-    > div:nth-of-type(1) {
-      padding: 3rem 4rem;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-
-      h1 {
-        margin: 0 0 .4rem 0;
-        font-size: 1.1rem;
-      }
-
-      input {
-        width: 100%;
-        padding: 1rem;
-        border: var(--border-default);
-        border-radius: var(--border-radius);
-      }
-    }
-
-    > div:nth-of-type(2) {
-      background-color: var(--color-hint-third);
-      padding: 1rem 4rem
-    }
-
-    st-loading {
-      margin: 2rem 0;
-    }
-  }
-
-  header {
-    background-color: var(--color-blue);
-    color: white;
-  }
-
-  p {
-    font-size: 1rem;
-    opacity: .6;
-  }
-
-  a.button {
-    width: 100%;
-    text-align: center;
   }
 }

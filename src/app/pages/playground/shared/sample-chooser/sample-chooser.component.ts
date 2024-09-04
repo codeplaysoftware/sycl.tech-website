@@ -35,7 +35,10 @@ import { environment } from '../../../../../environments/environment';
     LoadingComponent,
   ],
   templateUrl: './sample-chooser.component.html',
-  styleUrl: './sample-chooser.component.scss',
+  styleUrls: [
+    '../../../../shared/components/popup/styles/slim-top-header.scss',
+    './sample-chooser.component.scss'
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SampleChooserComponent {

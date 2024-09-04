@@ -28,7 +28,11 @@ import { CopyInputComponent } from './shared/copy-input/copy-input.component';
   selector: 'st-share-popup',
   standalone: true,
   templateUrl: './share-popup.component.html',
-  styleUrl: './share-popup.component.scss',
+  styleUrls: [
+    '../../../../shared/components/popup/styles/common.scss',
+    '../../../../shared/components/popup/styles/default-top-header.scss',
+    './share-popup.component.scss'
+  ],
   imports: [
     LoadingComponent,
     CopyInputComponent

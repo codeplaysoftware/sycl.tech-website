@@ -5,11 +5,12 @@
     <p>You can share your code sample with someone else by sending them the below playground link.</p>
   </div>
 </header>
-<div>
-  @if (loading() == LoadingState.LOADING) {
-    <st-loading></st-loading>
-  } @else if (loading() == LoadingState.LOAD_SUCCESS) {
-    <div>
+
+<main>
+  <article>
+    @if (loading() == LoadingState.LOADING) {
+      <st-loading></st-loading>
+    } @else if (loading() == LoadingState.LOAD_SUCCESS) {
       @if (syclTechUrl(); as url) {
         <div>
           <h1>SYCL.tech Playground Link</h1>
@@ -22,21 +23,18 @@
           <st-copy-input [content]="url"></st-copy-input>
         </div>
       }
-    </div>
-    <div>
-      <a class="button" (click)="onClose()">
-        <span class="material-symbols-outlined">close</span> Close</a>
-    </div>
-  } @else if (loading() == LoadingState.LOAD_FAILURE) {
-    <div>
-      <div>
-        <h1>Error</h1>
-        <p>There was a problem loading your shortened URL, please try again.</p>
+    } @else if (loading() == LoadingState.LOAD_FAILURE) {
+      <div class="warning">
+        <div>
+          <span class="material-symbols-outlined">error</span>
+          <h1>Error</h1>
+          <p>There was a problem loading your shortened URL, please try again.</p>
+        </div>
       </div>
-      <div>
-        <a class="button" (click)="onClose()">
-          <span class="material-symbols-outlined">close</span> Close</a>
-      </div>
-    </div>
-  }
-</div>
+    }
+  </article>
+  <footer>
+    <a class="button" (click)="onClose()">
+      <span class="material-symbols-outlined">close</span> Close</a>
+  </footer>
+</main>
