@@ -26,7 +26,9 @@
             @if (!compiler.enabled) {
               <div class="coming-soon">Coming Soon!</div>
             }
-            <img [src]="compiler.logo" alt="{{ compiler.name }} Logo" />
+            <div class="logo-container">
+              <img [ngSrc]="compiler.logo" alt="{{ compiler.name }} Logo" fill />
+            </div>
             <p>Click to compile your SYCL code with {{ compiler.name }} {{ compiler.version }} compiler.</p>
           </div>
         </li>

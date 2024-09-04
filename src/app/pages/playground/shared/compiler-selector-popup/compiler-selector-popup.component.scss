@@ -85,9 +85,15 @@
         margin-bottom: 0;
       }
 
+      .logo-container {
+        position: relative;
+      }
+
       img {
-        max-width: 170px;
-        max-height: 100px;
+        position: static !important;
+        max-width: 170px !important;
+        max-height: 100px !important;
+        width: auto !important;
       }
     }
   }
