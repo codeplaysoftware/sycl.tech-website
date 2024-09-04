@@ -50,6 +50,9 @@ import { ActivatedRoute } from '@angular/router';
 import { SharePopupComponent } from './shared/share-popup/share-popup.component';
 import { LoadAndSavePopupComponent } from './shared/load-and-save-popup/load-and-save-popup.component';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
+import {
+  CompilerSelectorPopupComponent
+} from './shared/compiler-selector-popup/compiler-selector-popup.component';
 
 @Component({
   selector: 'st-playground',
@@ -455,5 +458,13 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
       }),
       take(1)
     ).subscribe();
+  }
+
+  /**
+   * Called when a user wishes to change the compiler used.
+   */
+  onChooseCompiler() {
+    this.popupReference = this.popupService.create(
+      CompilerSelectorPopupComponent, null, true);
   }
 }

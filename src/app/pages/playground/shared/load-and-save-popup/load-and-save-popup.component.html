@@ -6,7 +6,7 @@
   </div>
 </header>
 <main>
-  <div class="content">
+  <article>
     @if (storageEnabled()) {
       @if (saved().length > 0) {
         <ul class="saved">
@@ -41,7 +41,7 @@
         </div>
       </div>
     }
-  </div>
+  </article>
   <footer>
     <a class="button cancel" (click)="onClose()">
       <span class="material-symbols-outlined">close</span> Close</a>

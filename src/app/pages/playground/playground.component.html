@@ -12,36 +12,34 @@
                 title="Compile and run your source code">play_circle</span>
         }
       </a>
-      <a (click)="onShareSample()">
-        <span class="material-symbols-outlined"
-              title="Share this code with someone else via a sharable link">share</span></a>
+      <a (click)="onShareSample()" title="Share this code with someone else via a sharable link">
+        <span class="material-symbols-outlined">share</span></a>
 
-      <a (click)="onSaveLoadSample()">
-        <span class="material-symbols-outlined"
-              title="Save or load this code to browser storage">save</span></a>
+      <a (click)="onSaveLoadSample()" title="Save or load this code to browser storage">
+        <span class="material-symbols-outlined">save</span></a>
 
-      <a (click)="onChooseSample()">
-        <span class="material-symbols-outlined"
-              title="Show the sample chooser">category</span></a>
+      <a (click)="onChooseSample()" title="Show the sample chooser">
+        <span class="material-symbols-outlined">category</span></a>
+
+      <a (click)="onChooseCompiler()" title="Change the SYCL compiler">
+        <span class="material-symbols-outlined">settings</span></a>
 
       @if (!isPanelVisible('source') && !this.isAnyPanelMaximized()) {
-        <a (click)="this.sourcePanelViewState.set(PanelViewState.NORMAL)">
-        <span class="material-symbols-outlined"
-              title="Show the Source Code panel">code</span></a>
+        <a (click)="this.sourcePanelViewState.set(PanelViewState.NORMAL)" title="Show the Source Code panel">
+          <span class="material-symbols-outlined">code</span></a>
       }
       @if (!isPanelVisible('asm') && !this.isAnyPanelMaximized()) {
-        <a (click)="this.asmPanelViewState.set(PanelViewState.NORMAL)">
-        <span class="material-symbols-outlined"
-              title="Show the Assembly Output panel">code_blocks</span></a>
+        <a (click)="this.asmPanelViewState.set(PanelViewState.NORMAL)"
+           title="Show the Assembly Output panel">
+          <span class="material-symbols-outlined">code_blocks</span></a>
       }
       @if (!isPanelVisible('exec') && !this.isAnyPanelMaximized()) {
-        <a (click)="this.execPanelViewState.set(PanelViewState.NORMAL)">
-        <span class="material-symbols-outlined"
-              title="Show the Execution Output panel">terminal</span></a>
+        <a (click)="this.execPanelViewState.set(PanelViewState.NORMAL)" title="Show the Execution Output panel">
+          <span class="material-symbols-outlined">terminal</span></a>
       }
     </div>
     <div>
-      <a (click)="onShowInfoPanel()">
+      <a (click)="onShowInfoPanel()" title="Show the about popup">
         <img ngSrc="./assets/images/playground/compiler-explorer-icon.svg" alt="Compiler Explorer Icon" height="16"
              width="16" /></a>
     </div>
@@ -52,7 +50,7 @@
         <!-- Panel: Source Code -->
         @if (isPanelVisible('source')) {
           <st-mini-panel
-              title="Source Code"
+              title="SYCL Code (compile using {{ playgroundService.selectedCompiler().name }})"
               icon="code"
               class="source"
               [state]="isSourceCodeEditorReady() ? MiniPanelState.SHOWING : MiniPanelState.LOADING"

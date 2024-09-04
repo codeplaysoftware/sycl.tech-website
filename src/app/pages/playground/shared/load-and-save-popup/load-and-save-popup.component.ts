@@ -29,7 +29,11 @@ import { RouterLink } from '@angular/router';
   selector: 'st-load-popup',
   standalone: true,
   templateUrl: './load-and-save-popup.component.html',
-  styleUrl: './load-and-save-popup.component.scss',
+  styleUrls: [
+    '../../../../shared/components/popup/styles/common.scss',
+    '../../../../shared/components/popup/styles/side-header.scss',
+    './load-and-save-popup.component.scss'
+  ],
   imports: [
     LoadingComponent,
     DatePipe,

@@ -1,41 +1,12 @@
 :host {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-
-  @media screen and (min-width: 800px) {
-    width: 450px;
-  }
-
-  .head {
-    padding: 4rem 0;
+  header {
     background-color: #d1ffd1;
-    color: var(--color-white);
-    display: flex;
-    justify-content: center;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
 
     img {
       width: 250px;
       height: auto;
-    }
-  }
-
-  .info {
-    flex: 1;
-    flex-basis: 40%;
-    padding: 3rem;
-    background-color: var(--popup-bg-color);
-    backdrop-filter: blur(5px);
-
-    p {
-      margin: 0;
-      font-size: 1.1rem;
-    }
-
-    .button {
-      width: 100%;
-      background-color: #006900;
-      margin-top: 1rem;
     }
   }
 }

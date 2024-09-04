@@ -1,0 +1,36 @@
+<header>
+  <div>
+    <span class="material-symbols-outlined">settings</span>
+    <h1>Choose a SYCL Compiler</h1>
+  </div>
+</header>
+
+<main>
+  <div class="content">
+    <div class="info">
+      Since SYCL is an open standard, anyone can create a compiler implementation. You can choose which compiler you
+      want to use by clicking on one.
+    </div>
+
+    <ul class="compilers">
+      @for (compiler of supportedCompilers(); track compiler.tag) {
+        <li [class]="{'disabled': !compiler.enabled, 'selected': isSelected(compiler)}" (click)="onSelectCompiler(compiler)">
+          <div>
+            @if (selectedCompiler(); as selectedCompiler) {
+              @if (compiler.tag == selectedCompiler.tag) {
+                <div class="tick">
+                  <span class="material-symbols-outlined">check</span>
+                </div>
+              }
+            }
+            @if (!compiler.enabled) {
+              <div class="coming-soon">Coming Soon!</div>
+            }
+            <img [src]="compiler.logo" alt="{{ compiler.name }} Logo" />
+            <p>Click to compile your SYCL code with {{ compiler.name }} {{ compiler.version }} compiler.</p>
+          </div>
+        </li>
+      }
+    </ul>
+  </div>
+</main>

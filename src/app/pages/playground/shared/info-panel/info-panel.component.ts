@@ -26,7 +26,11 @@ import { NgOptimizedImage } from '@angular/common';
   imports: [
     NgOptimizedImage
   ],
-  styleUrl: './info-panel.component.scss',
+  styleUrls: [
+    '../../../../shared/components/popup/styles/common.scss',
+    '../../../../shared/components/popup/styles/default-top-header.scss',
+    './info-panel.component.scss'
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InfoPanelComponent {

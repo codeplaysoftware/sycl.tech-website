@@ -1,4 +1,4 @@
-<div class="head">
+<header>
   <div>
     <h1><span class="material-symbols-outlined">category</span>Choose a Sample</h1>
   </div>
@@ -7,11 +7,13 @@
        target="_blank" rel="noopener">
       <span class="material-symbols-outlined">add</span>Contribute a Sample</a>
   </div>
-</div>
-<div class="samples">
+</header>
+
+<main class="samples">
   <div class="new" (click)="onChooseNew()">
     <span class="material-symbols-outlined">add_circle</span>New
   </div>
+
   @if (state() === LoadingState.LOAD_SUCCESS) {
     <ol>
       @for (sample of samples(); track sample) {
@@ -25,4 +27,4 @@
       <st-loading></st-loading>
     </div>
   }
-</div>
+</main>
