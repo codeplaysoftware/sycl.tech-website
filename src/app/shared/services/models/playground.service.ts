@@ -16,12 +16,15 @@
  *
  *--------------------------------------------------------------------------------------------*/
 
-import { Injectable } from '@angular/core';
+import { effect, Inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
 import { CompilationResultModel } from '../../models/compilation-result.model';
 import { PlaygroundSampleModel } from '../../models/playground-sample.model';
+import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
+import { StateService } from '../state.service';
+
 import Convert from 'ansi-to-html';
 
 @Injectable({
@@ -29,23 +32,18 @@ import Convert from 'ansi-to-html';
 })
 export class PlaygroundService {
   /**
-   * Compiler explorer compiler.
-   * @protected
+   * The storage key for the selected compiler.
    */
-  protected static readonly CE_COMPILER = 'icx202420';
+  public static readonly COMPILER_STORAGE_KEY = 'st-playground-compiler-tag';
 
   /**
-   * Compiler explorer compiler flags.
-   * @protected
+   * A list of supported compilers.
+   * @public
    */
-  protected static readonly CE_COMPILER_FLAGS = '-fsycl -g0 -Rno-debug-disables-optimization';
-
-  /**
-   * Compiler explorer compilation url.
-   * @protected
-   */
-  protected static readonly CE_COMPILATION_URL: string = `https://godbolt.org/api/compiler/${
-    PlaygroundService.CE_COMPILER}/compile`;
+  public readonly supportedCompilers: PlaygroundCompiler[] = [
+    new OneApiCompiler(),
+    new AdaptiveCppCompiler()
+  ];
 
   /**
    * Used to track changes to the selected sample.
@@ -53,16 +51,44 @@ export class PlaygroundService {
    */
   protected readonly sampleSubject: BehaviorSubject<PlaygroundSampleModel | undefined>;
 
+  public readonly selectedCompiler: WritableSignal<PlaygroundCompiler> = signal(new OneApiCompiler());
+
   /**
    * Constructor.
    * @param httpClient
    * @param domSanitizer
+   * @param stateService
+   * @param storageService
    */
   constructor(
     protected httpClient: HttpClient,
-    protected domSanitizer: DomSanitizer
+    protected domSanitizer: DomSanitizer,
+    protected stateService: StateService,
+    @Inject(LOCAL_STORAGE) protected storageService: StorageService
   ) {
     this.sampleSubject = new BehaviorSubject<PlaygroundSampleModel | undefined>(undefined);
+
+    if (this.storageService.has(PlaygroundService.COMPILER_STORAGE_KEY)) {
+      const compilerTag = this.storageService.get(PlaygroundService.COMPILER_STORAGE_KEY);
+
+      for (const compiler of this.supportedCompilers) {
+        if (compiler.tag == compilerTag) {
+          this.setCompiler(compiler);
+          break;
+        }
+      }
+    }
+
+    /**
+     * This effect will update the storage service with the selected compiler
+     */
+    effect(() => {
+      const selectedCompiler = this.selectedCompiler();
+
+      if (this.stateService.snapshot().cookiesAccepted) {
+        this.storageService.set('st-playground-compiler-tag', selectedCompiler.tag);
+      }
+    })
   }
 
   /**
@@ -103,10 +129,12 @@ export class PlaygroundService {
     // Prepare a response from the compilation result.
     const compileResponse: CompilationResultModel = PlaygroundService.getEmptyResult();
 
+    const url: string = `https://godbolt.org/api/compiler/${this.selectedCompiler().tag}/compile`;
+
     // Send our code to compiler explorer backend
     return this.httpClient.post<any>(
-      PlaygroundService.CE_COMPILATION_URL,
-      PlaygroundService.wrapCompileRequest(code))
+      url,
+      this.wrapCompileRequest(code))
       .pipe(
         map(response => {
           // Load assembly
@@ -152,7 +180,7 @@ export class PlaygroundService {
   createCodeSampleUrl(code: string) {
     return this.httpClient.post<any>(
       'https://godbolt.org/api/shortener',
-      JSON.stringify(PlaygroundService.wrapSaveRequest(code)),
+      JSON.stringify(this.wrapSaveRequest(code)),
       {
         headers: {
           'Content-Type': 'application/json',
@@ -161,6 +189,14 @@ export class PlaygroundService {
       .pipe(
         map(response => response['url'])
       );
+  }
+
+  /**
+   * Set the current playground compiler.
+   * @param compiler
+   */
+  setCompiler(compiler: PlaygroundCompiler) {
+    this.selectedCompiler.set(compiler);
   }
 
   /**
@@ -177,50 +213,17 @@ export class PlaygroundService {
   }
 
   /**
-   * Return an empty compilation result.
-   */
-  static getEmptyResult(): CompilationResultModel {
-    return new CompilationResultModel();
-  }
-
-  /**
-   * Return the most helpful error result we can.
-   * @param response
-   */
-  static discoverErrorResponse(
-    response: any
-  ): [] {
-    let errorLines = [];
-
-    if (response['execResult']
-      && response['execResult']['stderr']) {
-      errorLines = response['execResult']['stderr'];
-    }
-
-    if (response['stderr']) {
-      errorLines = errorLines.concat(response['stderr']);
-    }
-
-    response['asm'] = [];
-    console.error(response);
-
-    return errorLines.map((line: any) => {
-      return line['text'].replaceAll('<', '&lt;').replaceAll('>', '&gt;');
-    });
-  }
-
-  /**
    * Wrap a request in all the necessary options/configs.
    * @param code
    */
-  static wrapCompileRequest(
+  wrapCompileRequest(
     code: string
   ): {} {
     return {
       'source': code,
-      'compiler': PlaygroundService.CE_COMPILER,
+      'compiler': this.selectedCompiler().tag,
       'options': {
-        'userArguments': PlaygroundService.CE_COMPILER_FLAGS,
+        'userArguments': this.selectedCompiler().flags,
         'compilerOptions': {
           'producePp': null,
           'produceGccDump': {},
@@ -259,7 +262,7 @@ export class PlaygroundService {
    * Wrap a save request in all the necessary options/configs.
    * @param code
    */
-  static wrapSaveRequest(
+  wrapSaveRequest(
     code: string
   ): {} {
     return {
@@ -352,9 +355,9 @@ export class PlaygroundService {
                     'componentName': 'compiler',
                     'componentState': {
                       'id': 1,
-                      'compiler': PlaygroundService.CE_COMPILER,
+                      'compiler': this.selectedCompiler().tag,
                       'source': 1,
-                      'options': PlaygroundService.CE_COMPILER_FLAGS,
+                      'options': this.selectedCompiler().flags,
                       'filters': {
                         'binaryObject': false,
                         'binary': false,
@@ -403,5 +406,73 @@ export class PlaygroundService {
       }
     };
   }
+
+  /**
+   * Return an empty compilation result.
+   */
+  static getEmptyResult(): CompilationResultModel {
+    return new CompilationResultModel();
+  }
+
+  /**
+   * Return the most helpful error result we can.
+   * @param response
+   */
+  static discoverErrorResponse(
+    response: any
+  ): [] {
+    let errorLines = [];
+
+    if (response['execResult']
+      && response['execResult']['stderr']) {
+      errorLines = response['execResult']['stderr'];
+    }
+
+    if (response['stderr']) {
+      errorLines = errorLines.concat(response['stderr']);
+    }
+
+    response['asm'] = [];
+    console.error(response);
+
+    return errorLines.map((line: any) => {
+      return line['text'].replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+    });
+  }
 }
 
+/**
+ * Represents a save code item.
+ */
+export interface PlaygroundCompiler {
+  name: string
+  logo: string
+  tag: string
+  enabled: boolean
+  flags: string
+  version: string
+}
+
+/**
+ * oneAPI Compiler.
+ */
+export class OneApiCompiler implements PlaygroundCompiler {
+  public name = 'oneAPI';
+  public enabled: boolean = true;
+  public logo: string = '/assets/images/ecosystem/implementations/oneapi/logo-black.webp';
+  public tag = 'icx202420'
+  public flags = '-fsycl -g0 -Rno-debug-disables-optimization';
+  public version = '2024.2.0';
+}
+
+/**
+ * AdaptiveCpp Compiler.
+ */
+export class AdaptiveCppCompiler implements PlaygroundCompiler {
+  public name = 'AdaptiveCpp';
+  public enabled: boolean = false;
+  public logo: string = '/assets/images/ecosystem/implementations/adaptivecpp/logo-black.webp';
+  public tag = 'adaptive'
+  public flags = '-fsycl -g0 -Rno-debug-disables-optimization';
+  public version = '';
+}
