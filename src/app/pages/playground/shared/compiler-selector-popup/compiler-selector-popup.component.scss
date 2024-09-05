@@ -14,7 +14,12 @@
     margin: 1rem 0 0 0;
     list-style: none;
     display: flex;
+    flex-direction: column;
     gap: 1rem;
+
+    @media screen and (min-width: 800px) {
+      flex-direction: row;
+    }
 
     li {
       flex: 1;
@@ -85,9 +90,15 @@
         margin-bottom: 0;
       }
 
+      .logo-container {
+        position: relative;
+      }
+
       img {
-        max-width: 170px;
-        max-height: 100px;
+        position: static !important;
+        max-width: 170px !important;
+        max-height: 100px !important;
+        width: auto !important;
       }
     }
   }

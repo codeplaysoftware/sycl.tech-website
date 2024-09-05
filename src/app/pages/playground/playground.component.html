@@ -40,8 +40,7 @@
     </div>
     <div>
       <a (click)="onShowInfoPanel()" title="Show the about popup">
-        <img ngSrc="./assets/images/playground/compiler-explorer-icon.svg" alt="Compiler Explorer Icon" height="16"
-             width="16" /></a>
+        <span class="material-symbols-outlined">info</span></a>
     </div>
   </div>
   <div class="container">
@@ -50,7 +49,7 @@
         <!-- Panel: Source Code -->
         @if (isPanelVisible('source')) {
           <st-mini-panel
-              title="SYCL Code (compile using {{ playgroundService.selectedCompiler().name }})"
+              title="SYCL Code"
               icon="code"
               class="source"
               [state]="isSourceCodeEditorReady() ? MiniPanelState.SHOWING : MiniPanelState.LOADING"
@@ -78,7 +77,7 @@
         @if (isPanelVisible('asm')) {
           <!-- Panel: Assembly -->
           <st-mini-panel
-              title="Assembly"
+              title="Assembly (compiled with {{ playgroundService.selectedCompiler().name }})"
               icon="code_blocks"
               class="asm"
               [tag]="'asm'"
@@ -98,7 +97,7 @@
         @if (isPanelVisible('exec')) {
           <!-- Panel: Execution Result -->
           <st-mini-panel
-              title="Execution Result"
+              title="Result (compiled with {{ playgroundService.selectedCompiler().name }})"
               icon="terminal"
               class="exec"
               [tag]="'exec'"
@@ -112,8 +111,8 @@
                     icon="info"
                     (clicked)="onTargetPlatformClicked()"
                     [closable]="false"
-                    [message]="'Your code was compiled via Compiler Explorer and executed on an '
-                  + compilationResult.platform + '.'"></st-alert-bubble>
+                    [message]="'Your code was compiled using ' + playgroundService.selectedCompiler().name
+                    + ' and executed on an ' + compilationResult.platform + '.'"></st-alert-bubble>
                 <pre [innerHTML]="compilationResult.result" class="content"></pre>
               </div>
             }
@@ -123,7 +122,7 @@
         @if (isPanelVisible('error')) {
           <!-- Panel: Error -->
           <st-mini-panel
-              title="Error Result"
+              title="Error Result (compiled with {{ playgroundService.selectedCompiler().name }})"
               icon="error"
               class="error"
               [tag]="'error'"

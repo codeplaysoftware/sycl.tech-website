@@ -20,6 +20,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../environments/environment';
 import { StateService } from '../../shared/services/state.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'st-cookies',
@@ -37,10 +38,14 @@ export class CookiesComponent {
   /**
    * Constructor.
    * @param stateService
+   * @param title
    */
   constructor(
-    protected stateService: StateService
-  ) { }
+    protected stateService: StateService,
+    protected title: Title
+  ) {
+    this.title.setTitle('Cookies - SYCL.tech');
+  }
 
   /**
    * Called when a user wishes to change their cookie/storage acceptance.
