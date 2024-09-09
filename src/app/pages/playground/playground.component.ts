@@ -18,14 +18,14 @@
 
 import {
   ChangeDetectionStrategy,
-  Component, Inject,
+  Component, effect, Inject,
   OnDestroy, OnInit, Renderer2,
   signal,
   Signal,
   ViewChild,
   WritableSignal
 } from '@angular/core';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule, DOCUMENT, NgOptimizedImage } from '@angular/common';
 import { LoadingState } from '../../shared/LoadingState';
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
@@ -46,7 +46,7 @@ import { PlatformInfoPopupComponent } from './shared/platform-info-popup/platfor
 import { SearchablePage } from '../../shared/components/site-wide-search/SearchablePage';
 import { StateService } from '../../shared/services/state.service';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { SharePopupComponent } from './shared/share-popup/share-popup.component';
 import { LoadAndSavePopupComponent } from './shared/load-and-save-popup/load-and-save-popup.component';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
@@ -105,6 +105,9 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
    * @param stateService
    * @param activatedRoute
    * @param storageService
+   * @param document
+   * @param renderer
+   * @param router
    */
   constructor(
     protected titleService: Title,
@@ -115,7 +118,9 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
     protected stateService: StateService,
     protected activatedRoute: ActivatedRoute,
     @Inject(LOCAL_STORAGE) protected storageService: StorageService,
-    protected renderer: Renderer2
+    @Inject(DOCUMENT) protected document: Document,
+    protected renderer: Renderer2,
+    protected router: Router
   ) {
     this.titleService.setTitle('Playground - SYCL.tech');
     this.meta.addTag({ name: 'keywords', content: this.getKeywords().join(', ') });
@@ -124,6 +129,31 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
     this.showMonacoEditor.set(this.platformService.isClient());
     this.compilationResult$ = new BehaviorSubject<CompilationResultModel | undefined>(undefined);
     this.compilationResult = toSignal(this.compilationResult$, { initialValue: undefined });
+
+    // Effect to handle full screen mode
+    effect(() => {
+      const fs = this.fullscreenMode();
+
+      const topNav = document.body.querySelectorAll('nav');
+      const topFooter = document.body.querySelectorAll('footer');
+
+      if (topNav.length == 0 || topFooter.length == 0) {
+        return;
+      }
+
+      if (fs) {
+        this.renderer.addClass(topNav[0], 'hidden');
+        this.renderer.addClass(topFooter[0], 'hidden');
+      } else {
+        this.renderer.removeClass(topNav[0], 'hidden');
+        this.renderer.removeClass(topFooter[0], 'hidden');
+      }
+
+      // Update query params with fs value
+      const queryParams: Params = { fs: fs ? true : null };
+      this.router.navigate([], {
+        relativeTo: this.activatedRoute, queryParams, queryParamsHandling: 'merge'}).then();
+    });
   }
 
   /**
@@ -158,6 +188,11 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
             }),
             take(1)
           ).subscribe();
+        }
+
+        // Enable full screen mode if its set via params
+        if (params['fs'] === 'true') {
+          this.fullscreenMode.set(true);
         }
       }),
       take(1)
@@ -475,20 +510,5 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
    */
   onToggleFullscreen() {
     this.fullscreenMode.set(!this.fullscreenMode());
-
-    const topNav = document.body.querySelectorAll('nav');
-    const topFooter = document.body.querySelectorAll('footer');
-
-    if (topNav.length == 0 || topFooter.length == 0) {
-      return ;
-    }
-
-    if (this.fullscreenMode()) {
-      this.renderer.addClass(topNav[0], 'hidden');
-      this.renderer.addClass(topFooter[0], 'hidden');
-    } else {
-      this.renderer.removeClass(topNav[0], 'hidden');
-      this.renderer.removeClass(topFooter[0], 'hidden');
-    }
   }
 }
