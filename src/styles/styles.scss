@@ -129,6 +129,13 @@ body {
 }
 
 /**
+ * Global style to hide an element.
+ */
+.hidden {
+  display: none;
+}
+
+/**
  * Styling to support a fading in background for a panel.
  */
 .faded-bg,
@@ -179,4 +186,5 @@ body {
     0% { opacity: 0; }
     100% { opacity: .07; }
   }
+
 }
