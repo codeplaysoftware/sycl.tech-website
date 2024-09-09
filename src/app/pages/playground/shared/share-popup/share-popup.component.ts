@@ -16,7 +16,15 @@
  *
  *--------------------------------------------------------------------------------------------*/
 
-import { ChangeDetectionStrategy, Component, Inject, signal, Signal, WritableSignal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  Inject,
+  signal,
+  Signal,
+  WritableSignal
+} from '@angular/core';
 import { PopupReference } from '../../../../shared/components/popup/PopupService';
 import { PlaygroundService } from '../../../../shared/services/models/playground.service';
 import { LoadingState } from '../../../../shared/LoadingState';
@@ -43,9 +51,11 @@ export class SharePopupComponent {
   protected readonly LoadingState = LoadingState;
 
   protected readonly code: Signal<string>;
+  protected readonly syclTechUrl: Signal<string>;
+  protected readonly fullscreenMode: Signal<boolean>;
+
   protected readonly loading: WritableSignal<LoadingState> = signal(LoadingState.LOADING);
   protected readonly compilerExplorerUrl: WritableSignal<string | undefined> = signal(undefined);
-  protected readonly syclTechUrl: WritableSignal<string | undefined> = signal(undefined);
 
   /**
    * Constructor.
@@ -57,11 +67,11 @@ export class SharePopupComponent {
     protected playgroundService: PlaygroundService
   ) {
     this.code = signal(this.popupReference.data['code']);
+    this.fullscreenMode = signal(this.popupReference.data['fullScreen']);
 
     this.playgroundService.createCodeSampleUrl(this.code()).pipe(
       tap((url) => {
         this.compilerExplorerUrl.set(url);
-        this.syclTechUrl.set(url.replace('https://godbolt.org/z/', 'https://sycl.tech/playground?s='));
         this.loading.set(LoadingState.LOAD_SUCCESS);
       }),
       catchError(() => {
@@ -70,6 +80,26 @@ export class SharePopupComponent {
       }),
       take(1)
     ).subscribe();
+
+    // Update the sycl.tech url based on compiler explorer url
+    this.syclTechUrl = computed(() => {
+      const compilerExplorerUrl = this.compilerExplorerUrl();
+      const fullscreenMode = this.fullscreenMode();
+      let syclTechUrl = '';
+
+      if (compilerExplorerUrl == undefined) {
+        return '';
+      }
+
+      syclTechUrl = compilerExplorerUrl
+        .replace('https://godbolt.org/z/', 'https://sycl.tech/playground?s=');
+
+      if (fullscreenMode) {
+        syclTechUrl += '&fs=true';
+      }
+
+      return syclTechUrl;
+    });
   }
 
   /**
