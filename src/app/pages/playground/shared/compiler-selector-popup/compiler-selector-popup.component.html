@@ -8,13 +8,14 @@
 <main>
   <div class="content">
     <div class="info">
-      Since SYCL is an open standard, anyone can create a compiler implementation. You can choose which compiler you
-      want to use by clicking on one.
+      SYCL is a fully open standard that anyone can implement and support. Below is a list of the SYCL compilers that
+      you can use on the playground.
     </div>
 
     <ul class="compilers">
       @for (compiler of supportedCompilers(); track compiler.tag) {
-        <li [class]="{'disabled': !compiler.enabled, 'selected': isSelected(compiler)}" (click)="onSelectCompiler(compiler)">
+        <li [class]="{'disabled': !compiler.enabled, 'selected': isSelected(compiler)}"
+            (click)="onSelectCompiler(compiler)">
           <div>
             @if (selectedCompiler(); as selectedCompiler) {
               @if (compiler.tag == selectedCompiler.tag) {
@@ -29,7 +30,7 @@
             <div class="logo-container">
               <img [ngSrc]="compiler.logo" alt="{{ compiler.name }} Logo" fill />
             </div>
-            <p>Click to compile your SYCL code with {{ compiler.name }} {{ compiler.version }} compiler.</p>
+            <p [innerHTML]="compiler.description"></p>
           </div>
         </li>
       }
