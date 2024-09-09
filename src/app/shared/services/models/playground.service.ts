@@ -451,6 +451,7 @@ export interface PlaygroundCompiler {
   enabled: boolean
   flags: string
   version: string
+  description: string;
 }
 
 /**
@@ -463,6 +464,7 @@ export class OneApiCompiler implements PlaygroundCompiler {
   public tag = 'icx202420'
   public flags = '-fsycl -g0 -Rno-debug-disables-optimization';
   public version = '2024.2.0';
+  public description = 'Compile your SYCL code with the industry leading Intel® oneAPI DPC++ compiler.';
 }
 
 /**
@@ -475,4 +477,5 @@ export class AdaptiveCppCompiler implements PlaygroundCompiler {
   public tag = 'adaptive'
   public flags = '-fsycl -g0 -Rno-debug-disables-optimization';
   public version = '';
+  public description = 'Compile your SYCL code with the widely supported, community driven AdaptiveCpp compiler.'
 }
