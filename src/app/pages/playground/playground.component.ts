@@ -474,7 +474,8 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
    */
   onShareSample() {
     this.popupReference = this.popupService.create(SharePopupComponent, {
-      'code': this.code()
+      'code': this.code(),
+      'fullScreen': this.fullscreenMode()
     }, true);
   }
 

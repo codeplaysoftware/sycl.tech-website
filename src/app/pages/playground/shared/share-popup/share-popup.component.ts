@@ -43,6 +43,7 @@ export class SharePopupComponent {
   protected readonly LoadingState = LoadingState;
 
   protected readonly code: Signal<string>;
+  protected readonly fullscreenMode: Signal<boolean> = signal(false);
   protected readonly loading: WritableSignal<LoadingState> = signal(LoadingState.LOADING);
   protected readonly compilerExplorerUrl: WritableSignal<string | undefined> = signal(undefined);
   protected readonly syclTechUrl: WritableSignal<string | undefined> = signal(undefined);
@@ -57,11 +58,17 @@ export class SharePopupComponent {
     protected playgroundService: PlaygroundService
   ) {
     this.code = signal(this.popupReference.data['code']);
+    this.fullscreenMode = signal(this.popupReference.data['fullScreen']);
 
     this.playgroundService.createCodeSampleUrl(this.code()).pipe(
       tap((url) => {
         this.compilerExplorerUrl.set(url);
         this.syclTechUrl.set(url.replace('https://godbolt.org/z/', 'https://sycl.tech/playground?s='));
+
+        if (this.fullscreenMode()) {
+          this.syclTechUrl.set(this.syclTechUrl() + '&fs=true')
+        }
+
         this.loading.set(LoadingState.LOAD_SUCCESS);
       }),
       catchError(() => {
