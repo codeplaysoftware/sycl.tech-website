@@ -19,7 +19,7 @@
 import {
   ChangeDetectionStrategy,
   Component, Inject,
-  OnDestroy, OnInit,
+  OnDestroy, OnInit, Renderer2,
   signal,
   Signal,
   ViewChild,
@@ -89,6 +89,7 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
   protected readonly lastRunCode: WritableSignal<string> = signal('');
   protected readonly loadingMessage: WritableSignal<string> = signal('Loading source code...');
   protected readonly sourceCodeEditorReady: WritableSignal<boolean> = signal(false);
+  protected readonly fullscreenMode: WritableSignal<boolean> = signal(false);
 
   protected compilationResult$: BehaviorSubject<CompilationResultModel | undefined>;
   protected popupReference: PopupReference | undefined;
@@ -114,6 +115,7 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
     protected stateService: StateService,
     protected activatedRoute: ActivatedRoute,
     @Inject(LOCAL_STORAGE) protected storageService: StorageService,
+    protected renderer: Renderer2
   ) {
     this.titleService.setTitle('Playground - SYCL.tech');
     this.meta.addTag({ name: 'keywords', content: this.getKeywords().join(', ') });
@@ -466,5 +468,27 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
   onChooseCompiler() {
     this.popupReference = this.popupService.create(
       CompilerSelectorPopupComponent, null, true);
+  }
+
+  /**
+   * Called when a user chooses to view the playground in fullscreen mode.
+   */
+  onToggleFullscreen() {
+    this.fullscreenMode.set(!this.fullscreenMode());
+
+    const topNav = document.body.querySelectorAll('nav');
+    const topFooter = document.body.querySelectorAll('footer');
+
+    if (topNav.length == 0 || topFooter.length == 0) {
+      return ;
+    }
+
+    if (this.fullscreenMode()) {
+      this.renderer.addClass(topNav[0], 'hidden');
+      this.renderer.addClass(topFooter[0], 'hidden');
+    } else {
+      this.renderer.removeClass(topNav[0], 'hidden');
+      this.renderer.removeClass(topFooter[0], 'hidden');
+    }
   }
 }
