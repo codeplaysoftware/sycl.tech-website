@@ -54,6 +54,12 @@
     flex: 1;
   }
 
+  @media screen and (max-width: 900px) {
+    .body {
+      flex: 500px;
+    }
+  }
+
   .loading {
     display: flex;
     flex-direction: column;
