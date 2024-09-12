@@ -21,14 +21,15 @@ import { NgOptimizedImage } from '@angular/common';
 import { PopupReference } from '../../../../../../shared/components/popup/PopupService';
 import { ProjectModel } from '../../../../../../shared/models/project.model';
 import { ProjectService } from '../../../../../../shared/services/models/project.service';
-import { take, tap } from 'rxjs';
+import { catchError, of, take, tap } from 'rxjs';
 import { TagComponent } from '../../../../../../shared/components/tag/tag.component';
 import {
   LayeredContributorAvatarsComponent
 } from '../../../../../../shared/components/layered-contributor-avatars/layered-contributor-avatars.component';
-import { MarkdownComponent, MarkdownService } from 'ngx-markdown';
+import { MarkdownComponent } from 'ngx-markdown';
 import { LoadingState } from '../../../../../../shared/LoadingState';
 import { LoadingComponent } from '../../../../../../shared/components/loading/loading.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'st-project-view-popup',
@@ -39,7 +40,8 @@ import { LoadingComponent } from '../../../../../../shared/components/loading/lo
     TagComponent,
     LayeredContributorAvatarsComponent,
     MarkdownComponent,
-    LoadingComponent
+    LoadingComponent,
+    RouterLink
   ],
   styleUrls: [
     '../../../../../../shared/components/popup/styles/common.scss',
@@ -59,20 +61,21 @@ export class ProjectViewPopupComponent {
    * Constructor.
    * @param popupReference
    * @param projectService
-   * @param markdownService
    */
   constructor(
     @Inject('POPUP_DATA') protected popupReference: PopupReference,
     protected projectService: ProjectService,
-    private markdownService: MarkdownService
   ) {
     this.project = popupReference.data['project'];
 
     this.projectService.loadReadme(this.project()).pipe(
       tap((contents) => {
-        const parsed = this.markdownService.parse(contents.toString());
-        this.readme.set(parsed.toString());
+        this.readme.set(contents.toString());
         this.loading.set(LoadingState.LOAD_SUCCESS);
+      }),
+      catchError(error => {
+        this.loading.set(LoadingState.LOAD_FAILURE);
+        return of(error)
       }),
       take(1)
     ).subscribe()

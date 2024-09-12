@@ -24,6 +24,7 @@ import { ContributorService } from './contributor.service';
 import { ContributorModel } from '../../models/contributor.model';
 import { JsonFeedService } from '../json-feed.service';
 import { map, Observable, of } from 'rxjs';
+import { MarkdownService } from 'ngx-markdown';
 
 @Injectable({
   providedIn: 'root'
@@ -32,9 +33,11 @@ export class ProjectService extends JsonFeedService {
   /**
    * Constructor.
    * @param contributorService
+   * @param markdownService
    */
   constructor(
     protected contributorService: ContributorService,
+    protected markdownService: MarkdownService
   ) {
     super(environment.json_feed_base_url + '/projects/');
   }
@@ -121,9 +124,29 @@ export class ProjectService extends JsonFeedService {
    * @param projectModel
    */
   loadReadme(projectModel: ProjectModel): Observable<Object> {
-    return this.httpClient.get(
-      'https://raw.githubusercontent.com/codeplaysoftware/sycl.tech-website/main/README.md',
-      {responseType: 'text'}).pipe();
+    const rawContentUrl = projectModel.url.replace('https://github.com', 'https://raw.githubusercontent.com');
+    const projectUrl = rawContentUrl + '/master/README.md';
+
+    return this.httpClient.get(projectUrl, {responseType: 'text'}).pipe(
+      // Convert the plaintext to markdown
+      map((content) => {
+        return this.markdownService.parse(content.toString()).toString();
+      }),
+      // Replace any relative URLs
+      map((html: string) => {
+        const baseUrl = rawContentUrl + '/master/';
+
+        // Replace any relative images with absolute ones
+        const srcRegex = /src\s*=\s*"(.+?)"/g;
+        for (const find of html.matchAll(srcRegex)) {
+          if (!find[1].startsWith('http')) {
+            html = html.replaceAll(find[1], baseUrl + find[1]);
+          }
+        }
+
+        return html;
+      })
+    );
   }
 
   /**
