@@ -23,7 +23,17 @@
 
   <main>
     @if (loading() == LoadingState.LOAD_SUCCESS) {
-      <article [innerHTML]="readme()"></article>
+      <article>
+        <div [innerHTML]="readme()"></div>
+      </article>
+    } @else if(loading() == LoadingState.LOAD_FAILURE) {
+      <div class="warning">
+        <div>
+          <span class="material-symbols-outlined">eyeglasses</span>
+          <h1>No Read Me Found</h1>
+          <p>No read me file was found for this project.</p>
+        </div>
+      </div>
     } @else {
       <st-loading></st-loading>
     }

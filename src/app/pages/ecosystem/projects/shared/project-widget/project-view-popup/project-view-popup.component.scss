@@ -3,6 +3,7 @@
     display: flex;
     flex-direction: row;
     max-width: 1000px !important;
+    min-height: 688px;
     width: 100% !important;
   }
 
@@ -36,19 +37,17 @@
     overflow: auto;
     max-height: 600px;
     font-size: 1rem;
+    max-width: 600px;
 
     ::ng-deep {
-      h1, h2, h3, p, ul {
-        margin: 0;
-        padding: 0;
-      }
-
-      h1 {
-        display: none;
-      }
-
-      ul {
-        list-style-position: inside;
+      pre code {
+        display: block;
+        background-color: var(--color-blue);
+        color: var(--color-white);
+        border-radius: var(--border-radius);
+        padding: 1rem;
+        overflow: auto;
+        word-break: break-word;
       }
     }
   }
