@@ -134,14 +134,12 @@ export class ProjectService extends JsonFeedService {
       }),
       // Replace any relative URLs
       map((html: string) => {
-        const baseUrl = rawContentUrl + '/master/';
+        const baseUrl = rawContentUrl + '/master';
 
-        // Replace any relative images with absolute ones
-        const srcRegex = /src\s*=\s*"(.+?)"/g;
+        // Attempt to match and replace any relative paths with absolute paths
+        const srcRegex = /(src|href)="(?!https?:\/\/)(.+?)"/gm;
         for (const find of html.matchAll(srcRegex)) {
-          if (!find[1].startsWith('http')) {
-            html = html.replaceAll(find[1], baseUrl + find[1]);
-          }
+          html = html.replace(find[0], find[1] + `="${baseUrl}/${find[2]}"`);
         }
 
         return html;
