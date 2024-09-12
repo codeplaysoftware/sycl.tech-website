@@ -39,6 +39,11 @@ nav {
         display: none;
       }
 
+      ::ng-deep st-search input {
+        border: #efefef 1px solid;
+        box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, .10);
+      }
+
       @media screen and (min-width: 950px) {
         &.settings {
           display: flex;
@@ -301,6 +306,10 @@ footer {
 
     st-switch {
       background-color: var(--color-hint-fith);
+    }
+
+    ::ng-deep .settings st-search input {
+      border: transparent 1px solid !important;
     }
   }
 }
