@@ -31,6 +31,7 @@ import { MonacoEditorModule, NgxMonacoEditorConfig } from 'ngx-monaco-editor-v2'
 import { TitleCasePipe } from '@angular/common';
 import { httpCacheInterceptor } from './http-cache.interceptor';
 import { appLegacyRoutes } from './app.legacy-routes';
+import { provideMarkdown } from 'ngx-markdown';
 
 const scrollConfig: InMemoryScrollingOptions = {
   scrollPositionRestoration: 'top',
@@ -85,6 +86,7 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       MonacoEditorModule.forRoot(monacoConfig),
     ),
-    TitleCasePipe
+    TitleCasePipe,
+    provideMarkdown(),
   ]
 };
