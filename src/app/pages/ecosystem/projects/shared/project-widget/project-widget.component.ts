@@ -24,6 +24,8 @@ import {
 } from '../../../../../shared/components/layered-contributor-avatars/layered-contributor-avatars.component';
 import { TruncatePipe } from '../../../../../shared/pipes/truncate.pipe';
 import { ClipboardService } from 'ngx-clipboard';
+import { PopupService } from '../../../../../shared/components/popup/PopupService';
+import { ProjectViewPopupComponent } from './project-view-popup/project-view-popup.component';
 
 @Component({
   selector: 'st-project-widget',
@@ -48,9 +50,11 @@ export class ProjectWidgetComponent {
   /**
    * Constructor.
    * @param clipboardService
+   * @param popupService
    */
   constructor(
-    protected clipboardService: ClipboardService
+    protected clipboardService: ClipboardService,
+    protected popupService: PopupService
   ) {
     this.cloneUrlCopied = signal(false);
   }
@@ -68,6 +72,15 @@ export class ProjectWidgetComponent {
         this.cloneUrlCopied.set(false);
       }, 2000);
     }
+  }
+
+  /**
+   * Called when a user clicks on the body of the widget and not the buttons.
+   */
+  onWidgetBodyClicked() {
+    this.popupService.create(ProjectViewPopupComponent, {
+      'project': this.project
+    }, true);
   }
 }
 

@@ -1,0 +1,55 @@
+:host {
+  @media screen and (min-width: 805px) {
+    display: flex;
+    flex-direction: row;
+    max-width: 1000px !important;
+    width: 100% !important;
+  }
+
+  header {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    align-items: flex-start;
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    h2 {
+      font-weight: normal;
+      opacity: .8;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .2rem;
+      margin-top: 2rem;
+    }
+
+    ::ng-deep st-tag > div {
+      background-color: #bd2d00 !important;
+    }
+  }
+
+  article {
+    overflow: auto;
+    max-height: 600px;
+    font-size: 1rem;
+
+    ::ng-deep {
+      h1, h2, h3, p, ul {
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        display: none;
+      }
+
+      ul {
+        list-style-position: inside;
+      }
+    }
+  }
+}

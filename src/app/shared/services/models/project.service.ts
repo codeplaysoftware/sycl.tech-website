@@ -34,7 +34,7 @@ export class ProjectService extends JsonFeedService {
    * @param contributorService
    */
   constructor(
-    protected contributorService: ContributorService
+    protected contributorService: ContributorService,
   ) {
     super(environment.json_feed_base_url + '/projects/');
   }
@@ -95,26 +95,6 @@ export class ProjectService extends JsonFeedService {
   }
 
   /**
-   * Create a wrapper repo contributor.
-   * @param name
-   * @param avatar
-   * @param url
-   */
-  static createRepoContributor(name: string, avatar: string, url: string): ContributorModel {
-    const anonymous = ContributorService.getAnonymousContributor();
-    anonymous.name = name;
-    anonymous.username = name;
-    anonymous.avatar = avatar;
-    anonymous.links = [{
-      name: 'GitHub',
-      url: url,
-      tag: 'github'
-    }];
-
-    return anonymous
-  }
-
-  /**
    * @inheritDoc
    */
   all(
@@ -134,5 +114,35 @@ export class ProjectService extends JsonFeedService {
         return items[Math.floor(Math.random() * items.length)];
       })
     );
+  }
+
+  /**(
+   *
+   * @param projectModel
+   */
+  loadReadme(projectModel: ProjectModel): Observable<Object> {
+    return this.httpClient.get(
+      'https://raw.githubusercontent.com/codeplaysoftware/sycl.tech-website/main/README.md',
+      {responseType: 'text'}).pipe();
+  }
+
+  /**
+   * Create a wrapper repo contributor.
+   * @param name
+   * @param avatar
+   * @param url
+   */
+  static createRepoContributor(name: string, avatar: string, url: string): ContributorModel {
+    const anonymous = ContributorService.getAnonymousContributor();
+    anonymous.name = name;
+    anonymous.username = name;
+    anonymous.avatar = avatar;
+    anonymous.links = [{
+      name: 'GitHub',
+      url: url,
+      tag: 'github'
+    }];
+
+    return anonymous
   }
 }
