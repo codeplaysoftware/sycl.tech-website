@@ -4,7 +4,7 @@
     <!-- Layout: Widget -->
     <div class="widget">
       <!-- Header -->
-      <div class="header">
+      <div class="header" (click)="onWidgetBodyClicked()">
         <div>
           @if (project.repository) {
             <st-layered-contributor-avatars
@@ -19,7 +19,7 @@
         </div>
       </div>
       <!-- Body -->
-      <div class="body">
+      <div class="body" (click)="onWidgetBodyClicked()">
         <div>
           <h2 [innerHTML]="project.repository?.owner?.name"></h2>
           <h1 [innerHTML]="project.name"></h1>

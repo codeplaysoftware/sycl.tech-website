@@ -24,6 +24,7 @@ import { ContributorService } from './contributor.service';
 import { ContributorModel } from '../../models/contributor.model';
 import { JsonFeedService } from '../json-feed.service';
 import { map, Observable, of } from 'rxjs';
+import { MarkdownService } from 'ngx-markdown';
 
 @Injectable({
   providedIn: 'root'
@@ -32,9 +33,11 @@ export class ProjectService extends JsonFeedService {
   /**
    * Constructor.
    * @param contributorService
+   * @param markdownService
    */
   constructor(
-    protected contributorService: ContributorService
+    protected contributorService: ContributorService,
+    protected markdownService: MarkdownService
   ) {
     super(environment.json_feed_base_url + '/projects/');
   }
@@ -95,26 +98,6 @@ export class ProjectService extends JsonFeedService {
   }
 
   /**
-   * Create a wrapper repo contributor.
-   * @param name
-   * @param avatar
-   * @param url
-   */
-  static createRepoContributor(name: string, avatar: string, url: string): ContributorModel {
-    const anonymous = ContributorService.getAnonymousContributor();
-    anonymous.name = name;
-    anonymous.username = name;
-    anonymous.avatar = avatar;
-    anonymous.links = [{
-      name: 'GitHub',
-      url: url,
-      tag: 'github'
-    }];
-
-    return anonymous
-  }
-
-  /**
    * @inheritDoc
    */
   all(
@@ -134,5 +117,53 @@ export class ProjectService extends JsonFeedService {
         return items[Math.floor(Math.random() * items.length)];
       })
     );
+  }
+
+  /**(
+   *
+   * @param projectModel
+   */
+  loadReadme(projectModel: ProjectModel): Observable<Object> {
+    const rawContentUrl = projectModel.url.replace('https://github.com', 'https://raw.githubusercontent.com');
+    const projectUrl = rawContentUrl + '/master/README.md';
+
+    return this.httpClient.get(projectUrl, {responseType: 'text'}).pipe(
+      // Convert the plaintext to markdown
+      map((content) => {
+        return this.markdownService.parse(content.toString()).toString();
+      }),
+      // Replace any relative URLs
+      map((html: string) => {
+        const baseUrl = rawContentUrl + '/master';
+
+        // Attempt to match and replace any relative paths with absolute paths
+        const srcRegex = /(src|href)="(?!https?:\/\/)(.+?)"/gm;
+        for (const find of html.matchAll(srcRegex)) {
+          html = html.replace(find[0], find[1] + `="${baseUrl}/${find[2]}"`);
+        }
+
+        return html;
+      })
+    );
+  }
+
+  /**
+   * Create a wrapper repo contributor.
+   * @param name
+   * @param avatar
+   * @param url
+   */
+  static createRepoContributor(name: string, avatar: string, url: string): ContributorModel {
+    const anonymous = ContributorService.getAnonymousContributor();
+    anonymous.name = name;
+    anonymous.username = name;
+    anonymous.avatar = avatar;
+    anonymous.links = [{
+      name: 'GitHub',
+      url: url,
+      tag: 'github'
+    }];
+
+    return anonymous
   }
 }

@@ -1,0 +1,46 @@
+@if (project(); as project) {
+  <header>
+    <div>
+      @if (project.repository) {
+        <st-layered-contributor-avatars
+            [contributors]="project.repository.contributors"
+            [limit]="4"></st-layered-contributor-avatars>
+      }
+
+      <h1>{{ project.name }}</h1>
+      <h2>{{ project.description }}</h2>
+
+      <div class="tags">
+        @for (tag of project.tags; track tag) {
+          <st-tag
+              [title]="tag"
+              [selected]="true"
+              [allowSelection]="false"></st-tag>
+        }
+      </div>
+    </div>
+  </header>
+
+  <main>
+    @if (loading() == LoadingState.LOAD_SUCCESS) {
+      <article>
+        <div [innerHTML]="readme()"></div>
+      </article>
+    } @else if(loading() == LoadingState.LOAD_FAILURE) {
+      <div class="warning">
+        <div>
+          <span class="material-symbols-outlined">eyeglasses</span>
+          <h1>No Read Me Found</h1>
+          <p>No read me file was found for this project.</p>
+        </div>
+      </div>
+    } @else {
+      <st-loading></st-loading>
+    }
+    <footer>
+      <a class="button centered" [href]="project.url" target="_blank">
+        <span class="material-symbols-outlined">link</span> View on GitHub
+      </a>
+    </footer>
+  </main>
+}
