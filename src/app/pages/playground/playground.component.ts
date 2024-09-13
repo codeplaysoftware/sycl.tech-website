@@ -341,7 +341,11 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
    */
   onChooseSample() {
     this.popupReference = this.popupService.create(SampleChooserComponent, null, true);
-    firstValueFrom(this.popupReference.onChanged).then((sample: PlaygroundSampleModel) => {
+    firstValueFrom(this.popupReference.onChanged).then((sample) => {
+      if (!sample) {
+        return ;
+      }
+
       this.setSample(sample);
     });
   }
