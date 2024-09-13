@@ -78,7 +78,7 @@ export class EventCalendarComponent implements OnInit, OnDestroy {
    * @inheritDoc
    */
   ngOnDestroy(): void {
-    this.popupReference?.close(undefined);
+    this.popupReference?.close();
   }
 
   /**

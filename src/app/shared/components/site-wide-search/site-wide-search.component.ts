@@ -120,7 +120,7 @@ export class SiteWideSearchComponent {
       });
     } else {
       this.searchQuery$.complete();
-      this.popupReference.close(null);
+      this.popupReference.close();
     }
   }
 

@@ -47,6 +47,6 @@ export class PlatformInfoPopupComponent {
    * Called when a user closes the popup.
    */
   onClose() {
-    this.popupReference.close(null);
+    this.popupReference.close();
   }
 }

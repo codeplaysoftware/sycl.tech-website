@@ -204,7 +204,7 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     this.playgroundService.clearSample();
-    this.popupReference?.close(undefined);
+    this.popupReference?.close();
     this.routerArgsSub?.unsubscribe();
   }
 

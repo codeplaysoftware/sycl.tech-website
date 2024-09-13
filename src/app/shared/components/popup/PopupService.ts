@@ -86,7 +86,7 @@ export class PopupReference {
    * Close the popup.
    * @param data
    */
-  close(data: any) {
+  close(data?: any) {
     this.onChanged.emit(data);
     this.componentRef.instance.hide();
     this.componentRef.destroy();

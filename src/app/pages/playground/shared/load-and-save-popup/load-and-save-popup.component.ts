@@ -92,7 +92,7 @@ export class LoadAndSavePopupComponent implements OnInit {
    * Called when the user wishes to close the popup window.
    */
   onClose() {
-    this.popupReference.close(null);
+    this.popupReference.close();
   }
 
   /**

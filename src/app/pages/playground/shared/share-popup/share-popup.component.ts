@@ -106,6 +106,6 @@ export class SharePopupComponent {
    * Called when the user presses the close button.
    */
   onClose() {
-    this.popupReference.close(null);
+    this.popupReference.close();
   }
 }
