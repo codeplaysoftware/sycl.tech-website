@@ -32,6 +32,7 @@ import { ClipboardService } from 'ngx-clipboard';
 })
 export class CopyInputComponent {
   readonly content = model<string>('');
+  readonly title = model<string>('');
   readonly copied: WritableSignal<boolean> = signal(false);
 
   /**

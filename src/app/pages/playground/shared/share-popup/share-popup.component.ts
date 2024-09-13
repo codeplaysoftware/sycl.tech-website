@@ -30,7 +30,7 @@ import { PlaygroundService } from '../../../../shared/services/models/playground
 import { LoadingState } from '../../../../shared/LoadingState';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 import { catchError, of, take, tap } from 'rxjs';
-import { CopyInputComponent } from './shared/copy-input/copy-input.component';
+import { CopyInputComponent } from '../../../../shared/components/copy-input/copy-input.component';
 
 @Component({
   selector: 'st-share-popup',
