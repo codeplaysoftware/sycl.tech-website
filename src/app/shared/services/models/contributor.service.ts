@@ -81,37 +81,46 @@ export class ContributorService extends JsonFeedService {
   static deserializeSocial(
     socialUrl: string
   ): SocialModel {
+    const hostname = new URL(socialUrl).hostname.replace('www.', '');
     let name = socialUrl;
     let tag = 'unknown';
 
-    if (name.includes('twitter.com')) {
-      name = 'Twitter';
-      tag = 'twitter';
-    }
+    switch (hostname) {
+      case 'twitter.com': {
+        name = 'Twitter';
+        tag = 'twitter';
+        break ;
+      }
 
-    if (name.includes('x.com')) {
-      name = 'X.com';
-      tag = 'twitter';
-    }
+      case 'x.com': {
+        name = 'X.com';
+        tag = 'twitter';
+        break ;
+      }
 
-    if (name.includes('facebook.com')) {
-      name = 'Facebook';
-      tag = 'facebook'
-    }
+      case 'facebook.com': {
+        name = 'Facebook';
+        tag = 'facebook'
+        break ;
+      }
 
-    if (name.includes('linkedin.com')) {
-      name = 'LinkedIn';
-      tag = 'linkedin';
-    }
+      case 'linkedin.com': {
+        name = 'LinkedIn';
+        tag = 'linkedin';
+        break ;
+      }
 
-    if (name.includes('github.com')) {
-      name = 'GitHub';
-      tag = 'github';
-    }
+      case 'github.com': {
+        name = 'GitHub';
+        tag = 'github';
+        break ;
+      }
 
-    if (name.includes('stackoverflow.com')) {
-      name = 'StackOverflow';
-      tag = 'stackoverflow';
+      case 'stackoverflow.com': {
+        name = 'StackOverflow';
+        tag = 'stackoverflow';
+        break ;
+      }
     }
 
     return {
