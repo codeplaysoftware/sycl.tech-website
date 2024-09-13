@@ -38,7 +38,11 @@
       <st-loading></st-loading>
     }
     <footer>
-      <st-copy-input [content]="project.url" title="Clone"></st-copy-input>
+      @if (project.repository; as repo) {
+        @if (repo.cloneUrl; as cloneUrl) {
+          <st-copy-input [content]="cloneUrl" title="Clone"></st-copy-input>
+        }
+      }
       <a class="button centered" [href]="project.url" target="_blank">
         <span class="material-symbols-outlined">link</span> View on GitHub
       </a>
