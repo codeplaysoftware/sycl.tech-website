@@ -24,7 +24,7 @@
   <main>
     @if (loading() == LoadingState.LOAD_SUCCESS) {
       <article>
-        <div [innerHTML]="readme()"></div>
+        <div class="content" [innerHTML]="readme()"></div>
       </article>
     } @else if(loading() == LoadingState.LOAD_FAILURE) {
       <div class="warning">
@@ -38,6 +38,7 @@
       <st-loading></st-loading>
     }
     <footer>
+      <st-copy-input [content]="project.url" title="Clone"></st-copy-input>
       <a class="button centered" [href]="project.url" target="_blank">
         <span class="material-symbols-outlined">link</span> View on GitHub
       </a>

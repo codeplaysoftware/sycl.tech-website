@@ -30,6 +30,7 @@ import { MarkdownComponent } from 'ngx-markdown';
 import { LoadingState } from '../../../../../../shared/LoadingState';
 import { LoadingComponent } from '../../../../../../shared/components/loading/loading.component';
 import { RouterLink } from '@angular/router';
+import { CopyInputComponent } from '../../../../../../shared/components/copy-input/copy-input.component';
 
 @Component({
   selector: 'st-project-view-popup',
@@ -41,9 +42,11 @@ import { RouterLink } from '@angular/router';
     LayeredContributorAvatarsComponent,
     MarkdownComponent,
     LoadingComponent,
-    RouterLink
+    RouterLink,
+    CopyInputComponent
   ],
   styleUrls: [
+    '../../../../../getting-started/academy/lesson/lesson-content-styling.scss',
     '../../../../../../shared/components/popup/styles/common.scss',
     '../../../../../../shared/components/popup/styles/side-header.scss',
     './project-view-popup.component.scss'
