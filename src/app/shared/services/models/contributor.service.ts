@@ -82,51 +82,57 @@ export class ContributorService extends JsonFeedService {
     socialUrl: string
   ): SocialModel {
     const hostname = new URL(socialUrl).hostname.replace('www.', '');
-    let name = socialUrl;
-    let tag = 'unknown';
 
     switch (hostname) {
       case 'twitter.com': {
-        name = 'Twitter';
-        tag = 'twitter';
-        break ;
+        return {
+          name: 'Twitter',
+          tag: 'twitter',
+          url: socialUrl
+        }
       }
-
       case 'x.com': {
-        name = 'X.com';
-        tag = 'twitter';
-        break ;
+        return {
+          name: 'X.com',
+          tag: 'twitter',
+          url: socialUrl
+        }
       }
-
       case 'facebook.com': {
-        name = 'Facebook';
-        tag = 'facebook'
-        break ;
+        return {
+          name: 'Facebook',
+          tag: 'facebook',
+          url: socialUrl
+        }
       }
-
       case 'linkedin.com': {
-        name = 'LinkedIn';
-        tag = 'linkedin';
-        break ;
+        return {
+          name: 'LinkedIn',
+          tag: 'linkedin',
+          url: socialUrl
+        }
       }
-
       case 'github.com': {
-        name = 'GitHub';
-        tag = 'github';
-        break ;
+        return {
+          name: 'GitHub',
+          tag: 'github',
+          url: socialUrl
+        }
       }
-
       case 'stackoverflow.com': {
-        name = 'StackOverflow';
-        tag = 'stackoverflow';
-        break ;
+        return {
+          name: 'StackOverflow',
+          tag: 'stackoverflow',
+          url: socialUrl
+        }
       }
-    }
-
-    return {
-      name: name,
-      tag: tag,
-      url: socialUrl
+      default : {
+        return {
+          name: socialUrl,
+          tag: 'unknown',
+          url: socialUrl
+        }
+      }
     }
   }
 
