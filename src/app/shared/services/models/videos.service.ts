@@ -44,6 +44,13 @@ export class VideosService extends JsonFeedService {
   convertFeedItem<VideoModel>(
     feedItem: any
   ): VideoModel {
+    const url = new URL(feedItem['external_url']);
+    let embedUrl = undefined;
+
+    if (url.hostname.includes('youtube.com')) {
+      embedUrl = feedItem['external_url'].replace('watch?v=', 'embed/');
+    }
+
     return <VideoModel> {
       id: feedItem['id'],
       title: feedItem['title'],
@@ -55,7 +62,8 @@ export class VideosService extends JsonFeedService {
         feedItem['author'])),
       type: feedItem['_type'],
       featuring: feedItem['_featuring'],
-      tags: feedItem['tags'] ? feedItem['tags'] : []
+      tags: feedItem['tags'] ? feedItem['tags'] : [],
+      embedUrl: embedUrl
     }
   }
 
