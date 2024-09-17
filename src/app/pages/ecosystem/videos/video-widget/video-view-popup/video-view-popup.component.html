@@ -1,0 +1,50 @@
+@if (video(); as video) {
+  <header>
+    <div>
+      <h1>{{ video.title }}</h1>
+      <h2>{{ video.description }}</h2>
+
+      <div class="tags">
+        @for (tag of video.tags; track tag) {
+          <st-tag
+              [title]="tag"
+              [selected]="true"
+              [allowSelection]="false"></st-tag>
+        }
+      </div>
+    </div>
+  </header>
+
+  <main>
+    @if (cookiesEnabled() && embedUrl()) {
+      <article>
+        <iframe [src]="embedUrl()"
+                title="YouTube video player"
+                allow="accelerometer; autoplay;"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen></iframe>
+      </article>
+    } @else if (!embedUrl()) {
+      <div class="warning">
+        <div>
+          <span class="material-symbols-outlined">security</span>
+          <h1>Video Not Supported</h1>
+          <p>Unfortunately, we cannot embed this video for you but you can view it on {{ externalUrl() }}.</p>
+        </div>
+      </div>
+    } @else if (!cookiesEnabled()) {
+      <div class="warning">
+        <div>
+          <span class="material-symbols-outlined">security</span>
+          <h1>Video Blocked</h1>
+          <p>To view this video inline, you need to accept our <a href="/cookies">Cookie Policy</a>.</p>
+        </div>
+      </div>
+    }
+    <footer>
+      <a class="button centered" [href]="video.url" target="_blank">
+        <span class="material-symbols-outlined">captive_portal</span> Watch Video on {{ externalUrl() }}
+      </a>
+    </footer>
+  </main>
+}
