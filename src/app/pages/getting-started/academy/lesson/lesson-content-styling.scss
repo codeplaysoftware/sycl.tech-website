@@ -17,8 +17,14 @@
       width: 100%;
       overflow: auto;
       white-space: break-spaces;
+      word-break: break-all;
       display: block;
       font-size: .8rem;
+    }
+
+    table {
+      table-layout: fixed;
+      word-break: break-all;
     }
 
     h3 {
