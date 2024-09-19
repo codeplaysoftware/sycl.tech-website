@@ -1,10 +1,11 @@
 :host {
-  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 
-  @media screen and (min-width: 740px) {
-    display: flex;
-    flex-direction: column;
-    width: 470px !important;
+  @media screen and (min-width: 800px) {
+    max-width: 470px !important;
+    width: 100%;
   }
 
   > header {
@@ -15,7 +16,7 @@
     background-color: var(--color-orange);
     color: white;
 
-    span {
+    span.popup-icon {
       font-size: 60px;
     }
 
@@ -26,12 +27,14 @@
   }
 
   > main {
+    flex: 1;
     display: flex;
     flex-direction: column;
     background-color: var(--popup-bg-color);
 
     article {
       padding: 2rem 3rem;
+      flex: 1;
     }
 
     footer {

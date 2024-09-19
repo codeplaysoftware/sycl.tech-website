@@ -33,9 +33,12 @@
 
   article {
     overflow: auto;
-    max-height: 600px;
     font-size: 1rem;
     padding: 0 !important;
+
+    @media screen and (min-width: 805px) {
+      max-height: 600px;
+    }
 
     ::ng-deep h1 {
       display: none;

@@ -34,7 +34,11 @@ import { environment } from '../../../../../../environments/environment';
     LayeredContributorAvatarsComponent
   ],
   templateUrl: './event-viewer-popup.component.html',
-  styleUrl: './event-viewer-popup.component.scss',
+  styleUrls: [
+    '../../../../../shared/components/popup/styles/common.scss',
+    '../../../../../shared/components/popup/styles/side-header.scss',
+    './event-viewer-popup.component.scss'
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventViewerPopupComponent {

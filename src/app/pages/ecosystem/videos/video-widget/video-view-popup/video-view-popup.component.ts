@@ -32,7 +32,6 @@ import { StateService } from '../../../../../shared/services/state.service';
 import { map } from 'rxjs';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { FriendlyNamingService } from '../../../../../shared/services/friendly-naming.service';
 
 @Component({
   selector: 'st-video-view-popup',
@@ -85,19 +84,17 @@ export class VideoViewPopupComponent {
    * @param popupReference
    * @param stateService
    * @param sanitizer
-   * @param friendlyNamingService
    */
   constructor(
     @Inject('POPUP_DATA') popupReference: PopupReference,
     private stateService: StateService,
     private sanitizer: DomSanitizer,
-    private friendlyNamingService: FriendlyNamingService
   ) {
     this.video = popupReference.data['video'];
 
     this.externalUrl = computed(() => {
       const url = new URL(this.video().url);
-      return this.friendlyNamingService.renameInString(url.hostname.replace('www.', ''));
+      return url.hostname.replace('www.', '');
     });
 
     this.embedUrl = computed(() => {

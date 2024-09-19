@@ -1,14 +1,15 @@
 @if (calendarItem(); as calendarItem) {
-  <div class="left">
-    <header>
+  <header>
+    <div class="title">
       <div>
-        <span class="material-symbols-outlined">calendar_month</span>
+        <span class="material-symbols-outlined popup-icon">calendar_month</span>
       </div>
       <div>
         <h1 [innerHTML]="calendarItem.event.title"></h1>
       </div>
-    </header>
-    <div>
+    </div>
+
+    <div class="overview">
       <ol class="details">
         <li title="Start Time">
           <div><span class="material-symbols-outlined">play_circle</span></div>
@@ -48,11 +49,13 @@
         </a>
       </div>
     </div>
-  </div>
+  </header>
 
   @if (calendarItem.event.content) {
-    <div class="right">
-      <div class="content" [innerHTML]="calendarItem.event.content"></div>
-    </div>
+    <main>
+      <article>
+        <div class="content" [innerHTML]="calendarItem.event.content"></div>
+      </article>
+    </main>
   }
 }

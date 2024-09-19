@@ -1,37 +1,14 @@
 :host {
-  display: flex;
-  flex-direction: row;
-  min-height: 600px;
-  max-height: 900px;
-
-  @media screen and (max-width: 800px) {
-    height: 100%;
-    flex-direction: column;
-  }
-
-  .left {
+  header {
     display: flex;
     flex-direction: column;
-    overflow: auto;
+    flex-basis: 50%;
 
-    header {
-      display: block;
-      text-align: center;
-      background-color: var(--color-orange);
-      color: var(--color-white);
-      padding: 3rem;
-
-      span {
-        font-size: 4rem;
-      }
-    }
-
-    > div {
+    .overview {
       display: flex;
       flex-direction: column;
       flex: 1;
-      padding: 1rem 3rem;
-      background-color: var(--popup-bg-color);
+      width: 100%;
 
       ol.details {
         list-style: none;
@@ -43,6 +20,11 @@
         li {
           display: grid;
           grid-template-columns: 50px 1fr;
+
+          span {
+            font-size: 30px !important;
+            opacity: .6;
+          }
 
           > div {
             display: flex;
@@ -76,24 +58,16 @@
       }
     }
 
-    @media screen and (min-width: 800px) {
-      width: 400px;
-    }
   }
 
-  .right {
+  article {
     background-color: var(--color-hint-second);
     box-shadow: inset 3px 0 15px 0 rgba(0, 0, 0, .1);
     font-size: 1rem;
 
-    @media screen and (min-width: 800px) {
-      width: 400px;
-    }
-
     .content {
       overflow: scroll;
       height: 100%;
-      padding: 3rem;
     }
   }
 }
