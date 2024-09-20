@@ -26,6 +26,7 @@ export interface VideoModel {
   id: string
   title: string
   date: Date
+  year: number
   type: string
   url: string
   thumbnail?: string

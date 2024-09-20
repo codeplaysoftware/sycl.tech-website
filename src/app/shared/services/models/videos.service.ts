@@ -49,12 +49,16 @@ export class VideosService extends JsonFeedService {
 
     if (url.hostname.includes('youtube.com')) {
       embedUrl = feedItem['external_url'].replace('watch?v=', 'embed/');
+      embedUrl = embedUrl.replace('youtube.com', 'youtube-nocookie.com');
     }
+
+    const date = new Date(feedItem['date_published']);
 
     return <VideoModel> {
       id: feedItem['id'],
       title: feedItem['title'],
-      date: new Date(feedItem['date_published']),
+      date: date,
+      year: date.getFullYear(),
       url: feedItem['external_url'],
       thumbnail: feedItem['image'] ? feedItem['image'] : undefined,
       description: feedItem['summary'],

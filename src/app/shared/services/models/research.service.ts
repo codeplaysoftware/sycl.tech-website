@@ -44,9 +44,12 @@ export class ResearchService extends JsonFeedService {
   convertFeedItem<ResearchModel>(
     feedItem: any
   ): ResearchModel {
+    const publishedDate = new Date(feedItem['date_published']);
+
     return <ResearchModel> {
       id: feedItem['id'],
-      date: new Date(feedItem['date_published']),
+      date: publishedDate,
+      year: publishedDate.getFullYear(),
       title: feedItem['title'],
       url: feedItem['external_url'],
       description: feedItem['summary'],
