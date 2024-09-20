@@ -23,7 +23,6 @@ import {
 } from '../../../../../shared/components/layered-contributor-avatars/layered-contributor-avatars.component';
 import { PopupReference } from '../../../../../shared/components/popup/PopupService';
 import { CalendarItemModel } from '../models/calendar-item.model';
-import { ContributorModel } from '../../../../../shared/models/contributor.model';
 import { environment } from '../../../../../../environments/environment';
 
 @Component({
@@ -53,13 +52,5 @@ export class EventViewerPopupComponent {
     @Inject('POPUP_DATA') protected popupReference: PopupReference
   ) {
     this.calendarItem = signal(this.popupReference.data);
-  }
-
-  /**
-   * Called when an attendee is clicked.
-   * @param $event
-   */
-  onContributorClicked($event: ContributorModel) {
-    this.popupReference.close($event);
   }
 }

@@ -27,6 +27,8 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import { PopupReference } from './PopupService';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'st-popup',
@@ -50,15 +52,27 @@ export class PopupComponent implements AfterViewInit {
    */
   visible: boolean = false;
 
+  routerChangeSubscription: Subscription;
+
   /**
    * Constructor.
-   * @param applicationRef
    * @param document
+   * @param applicationRef
+   * @param router
    */
   constructor(
+    @Inject(DOCUMENT) private document: Document,
     protected applicationRef: ApplicationRef,
-    @Inject(DOCUMENT) private document: Document
-  ) { }
+    protected router: Router
+  ) {
+    /**
+     * To avoid the popup lingering when a link is clicked, we will subscribe to router changes
+     * and then hide the popup.
+     */
+    this.routerChangeSubscription = this.router.events.subscribe(() => {
+      this.hide();
+    });
+  }
 
   /**
    * When the view is ready and the @ViewChild is ready, attach the component into the popup container.
@@ -104,6 +118,10 @@ export class PopupComponent implements AfterViewInit {
   hide() {
     this.visible = false;
     this.document.body.style.overflow = 'auto';
+
+    if (this.routerChangeSubscription) {
+      this.routerChangeSubscription.unsubscribe();
+    }
   }
 
   /**
