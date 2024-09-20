@@ -98,7 +98,7 @@ export class EcosystemComponent implements SearchablePage {
       },
       {
         name: 'Videos',
-        url: 'presentations',
+        url: 'videos',
         type: QuickLinkType.FRAGMENT
       }
     ]
