@@ -1,21 +1,17 @@
-:host {
-  section#what-we-store {
-    table {
-      width: 100%;
+table {
+  width: 100%;
 
-      td, th {
-        padding: 1.2rem;
-      }
+  td, th {
+    padding: 1.2rem;
+  }
 
-      thead {
-        tr {
-          background-color: var(--color-orange);
-          color: var(--color-white);
+  thead {
+    tr {
+      background-color: var(--color-orange);
+      color: var(--color-white);
 
-          th {
-            text-align: left;
-          }
-        }
+      th {
+        text-align: left;
       }
     }
   }
