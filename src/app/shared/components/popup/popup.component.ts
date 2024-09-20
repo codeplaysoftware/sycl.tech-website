@@ -27,8 +27,8 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import { PopupReference } from './PopupService';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { NavigationStart, Router } from '@angular/router';
+import { filter, Subscription } from 'rxjs';
 
 @Component({
   selector: 'st-popup',
@@ -69,8 +69,12 @@ export class PopupComponent implements AfterViewInit {
      * To avoid the popup lingering when a link is clicked, we will subscribe to router changes
      * and then hide the popup.
      */
-    this.routerChangeSubscription = this.router.events.subscribe(() => {
-      this.hide();
+    this.routerChangeSubscription = this.router.events
+      .pipe(
+        filter(event => (event instanceof NavigationStart))
+      )
+      .subscribe(() => {
+        this.hide();
     });
   }
 
