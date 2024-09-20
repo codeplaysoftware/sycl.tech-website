@@ -16,7 +16,7 @@
  *
  *--------------------------------------------------------------------------------------------*/
 
-import { ChangeDetectionStrategy, Component, HostListener, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, input, signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 
@@ -35,7 +35,7 @@ export class MultiDateComponent {
   /**
    * This signal represents the date that the item was added to sycl.tech.
    */
-  readonly submitted = input<Date | undefined>();
+  readonly submitted = input.required<Date>();
 
   /**
    * This signal represents the date that the item was originally created.
@@ -48,10 +48,28 @@ export class MultiDateComponent {
   readonly format = input<string>('mediumDate');
 
   /**
+   * The currently focused date.
+   */
+  readonly focusedDate: WritableSignal<FocusedDate> = signal(FocusedDate.SUBMITTED);
+
+  /**
    * Called when the container is clicked.
    */
   @HostListener('click')
   onClicked() {
-    alert('Added to SYCL.tech on ' + this.submitted() + ' and originally published on ' + this.created());
+    if (this.focusedDate() == FocusedDate.SUBMITTED && this.created()) {
+      this.focusedDate.set(FocusedDate.CREATED);
+    } else if (this.focusedDate() == FocusedDate.CREATED && this.submitted()) {
+      this.focusedDate.set(FocusedDate.SUBMITTED);
+    } else {
+      this.focusedDate.set(FocusedDate.SUBMITTED);
+    }
   }
+
+  protected readonly FocusedDate = FocusedDate;
+}
+
+enum FocusedDate {
+  SUBMITTED,
+  CREATED
 }

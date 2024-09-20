@@ -1,7 +1,7 @@
 :host {
   display: flex;
   align-items: center;
-  gap: .5rem;
+  gap: .3rem;
   cursor: pointer;
   opacity: .6;
   transition: var(--transition-fast);
@@ -14,10 +14,16 @@
 div {
   display: flex;
   align-items: center;
+  animation: fadeIn 1.5s;
 }
 
 span {
   font-size: 20px;
   vertical-align: middle;
   margin: 0;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
