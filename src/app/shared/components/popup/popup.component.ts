@@ -19,7 +19,6 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
 import {
   AfterViewInit,
-  ApplicationRef,
   Component, HostListener,
   Inject,
   Injector,
@@ -40,11 +39,25 @@ import { filter, Subscription } from 'rxjs';
   styleUrl: './popup.component.scss'
 })
 export class PopupComponent implements AfterViewInit {
+  /**
+   * Popup target reference, this is where the popup will be attached.
+   */
   @ViewChild('popupTarget', { read: ViewContainerRef })
   popupContainerRef: ViewContainerRef | null = null;
 
+  /**
+   * Reference to the popup component.
+   */
   component: any = null;
+
+  /**
+   * Injector reference.
+   */
   injector: Injector | null = null;
+
+  /**
+   * Reference to the popup.
+   */
   popupReference: PopupReference | null = null;
 
   /**
@@ -52,17 +65,18 @@ export class PopupComponent implements AfterViewInit {
    */
   visible: boolean = false;
 
+  /**
+   * Used to track route change events.
+   */
   routerChangeSubscription: Subscription;
 
   /**
    * Constructor.
    * @param document
-   * @param applicationRef
    * @param router
    */
   constructor(
     @Inject(DOCUMENT) private document: Document,
-    protected applicationRef: ApplicationRef,
     protected router: Router
   ) {
     /**
@@ -122,10 +136,7 @@ export class PopupComponent implements AfterViewInit {
   hide() {
     this.visible = false;
     this.document.body.style.overflow = 'auto';
-
-    if (this.routerChangeSubscription) {
-      this.routerChangeSubscription.unsubscribe();
-    }
+    this.routerChangeSubscription.unsubscribe();
   }
 
   /**
