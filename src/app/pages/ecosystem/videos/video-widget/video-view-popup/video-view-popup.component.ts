@@ -17,34 +17,32 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { ChangeDetectionStrategy, Component, computed, Inject, Signal, WritableSignal } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { TagComponent } from '../../../../../shared/components/tag/tag.component';
 import { MarkdownComponent } from 'ngx-markdown';
-import {
-  LayeredContributorAvatarsComponent
-} from '../../../../../shared/components/layered-contributor-avatars/layered-contributor-avatars.component';
-import { LoadingComponent } from '../../../../../shared/components/loading/loading.component';
 import { RouterLink } from '@angular/router';
-import { CopyInputComponent } from '../../../../../shared/components/copy-input/copy-input.component';
 import { VideoModel } from '../../../../../shared/models/video.model';
 import { PopupReference } from '../../../../../shared/components/popup/PopupService';
 import { StateService } from '../../../../../shared/services/state.service';
 import { map } from 'rxjs';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { toSignal } from '@angular/core/rxjs-interop';
+import {
+  ContributorAvatarComponent
+} from '../../../../../shared/components/contributor-avatar/contributor-avatar.component';
+import { MultiDateComponent } from '../../../../../shared/components/multi-date/multi-date.component';
 
 @Component({
   selector: 'st-video-view-popup',
   standalone: true,
   templateUrl: './video-view-popup.component.html',
   imports: [
-    NgOptimizedImage,
     TagComponent,
-    LayeredContributorAvatarsComponent,
     MarkdownComponent,
-    LoadingComponent,
     RouterLink,
-    CopyInputComponent
+    ContributorAvatarComponent,
+    AsyncPipe,
+    MultiDateComponent
   ],
   styleUrls: [
     '../../../../getting-started/academy/lesson/lesson-content-styling.scss',
@@ -68,10 +66,10 @@ export class VideoViewPopupComponent {
   protected cookiesEnabled: Signal<boolean | undefined>;
 
   /**
-   * Signal for the external URL to which the video originates from.
+   * Signal for the external video provider to which the video is hosted.
    * @protected
    */
-  protected externalUrl: Signal<string>;
+  protected videoProviderName: Signal<string>;
 
   /**
    * Signal to store the embeddable URL.
@@ -92,7 +90,7 @@ export class VideoViewPopupComponent {
   ) {
     this.video = popupReference.data['video'];
 
-    this.externalUrl = computed(() => {
+    this.videoProviderName = computed(() => {
       const url = new URL(this.video().url);
       return url.hostname.replace('www.', '');
     });
