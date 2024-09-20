@@ -1,0 +1,23 @@
+:host {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  cursor: pointer;
+  opacity: .6;
+  transition: var(--transition-fast);
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+div {
+  display: flex;
+  align-items: center;
+}
+
+span {
+  font-size: 20px;
+  vertical-align: middle;
+  margin: 0;
+}

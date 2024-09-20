@@ -1,0 +1,8 @@
+<div>
+  <span class="material-symbols-outlined">security</span>
+</div>
+<div>
+  @if (created()) {
+    {{ created() | date: format() }}
+  }
+</div>
