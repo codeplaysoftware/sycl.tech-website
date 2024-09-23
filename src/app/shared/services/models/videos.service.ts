@@ -44,14 +44,6 @@ export class VideosService extends JsonFeedService {
   convertFeedItem<VideoModel>(
     feedItem: any
   ): VideoModel {
-    const url = new URL(feedItem['external_url']);
-    let embedUrl = undefined;
-
-    if (url.hostname.includes('youtube.com')) {
-      embedUrl = feedItem['external_url'].replace('watch?v=', 'embed/');
-      embedUrl = embedUrl.replace('youtube.com', 'youtube-nocookie.com');
-    }
-
     const date = new Date(feedItem['date_published']);
 
     return <VideoModel> {
@@ -67,7 +59,7 @@ export class VideosService extends JsonFeedService {
       type: feedItem['_type'],
       featuring: feedItem['_featuring'],
       tags: feedItem['tags'] ? feedItem['tags'] : [],
-      embedUrl: embedUrl
+      embedUrl: VideosService.generateEmbedUrl(feedItem['external_url'])
     }
   }
 
@@ -91,5 +83,22 @@ export class VideosService extends JsonFeedService {
         return items[Math.floor(Math.random() * items.length)];
       })
     );
+  }
+
+  /**
+   * Attempt to generate an embed URL based on the external provider.
+   * @param externalUrl
+   */
+  static generateEmbedUrl(externalUrl: string): string | undefined {
+    const url = new URL(externalUrl);
+    let embedUrl = undefined;
+
+    // Handle YouTube
+    if (url.hostname.includes('youtube.com')) {
+      embedUrl = externalUrl.replace('watch?v=', 'embed/');
+      return embedUrl.replace('youtube.com', 'youtube-nocookie.com');
+    }
+
+    return undefined;
   }
 }
