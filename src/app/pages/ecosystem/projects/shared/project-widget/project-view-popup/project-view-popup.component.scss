@@ -8,19 +8,7 @@
   }
 
   header {
-    padding-top: 5rem;
-    padding-bottom: 5rem;
-    align-items: flex-start;
     background-color: var(--color-blue);
-
-    h1 {
-      font-size: 2rem;
-    }
-
-    h2 {
-      font-weight: normal;
-      opacity: .8;
-    }
 
     .tags {
       display: flex;

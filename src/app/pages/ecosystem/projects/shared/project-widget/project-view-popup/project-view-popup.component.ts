@@ -17,8 +17,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { ChangeDetectionStrategy, Component, Inject, signal, WritableSignal } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
-import { PopupReference } from '../../../../../../shared/components/popup/PopupService';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
+import { PopupReference } from '../../../../../../shared/components/popup/popup.service';
 import { ProjectModel } from '../../../../../../shared/models/project.model';
 import { ProjectService } from '../../../../../../shared/services/models/project.service';
 import { catchError, of, take, tap } from 'rxjs';
@@ -31,6 +31,10 @@ import { LoadingState } from '../../../../../../shared/LoadingState';
 import { LoadingComponent } from '../../../../../../shared/components/loading/loading.component';
 import { RouterLink } from '@angular/router';
 import { CopyInputComponent } from '../../../../../../shared/components/copy-input/copy-input.component';
+import {
+  ContributorAvatarComponent
+} from '../../../../../../shared/components/contributor-avatar/contributor-avatar.component';
+import { MultiDateComponent } from '../../../../../../shared/components/multi-date/multi-date.component';
 
 @Component({
   selector: 'st-project-view-popup',
@@ -43,12 +47,14 @@ import { CopyInputComponent } from '../../../../../../shared/components/copy-inp
     MarkdownComponent,
     LoadingComponent,
     RouterLink,
-    CopyInputComponent
+    CopyInputComponent,
+    AsyncPipe,
+    ContributorAvatarComponent,
+    MultiDateComponent
   ],
   styleUrls: [
     '../../../../../getting-started/academy/lesson/lesson-content-styling.scss',
-    '../../../../../../shared/components/popup/styles/common.scss',
-    '../../../../../../shared/components/popup/styles/side-header.scss',
+    '../../../../../../shared/components/popup/layouts/widget.scss',
     './project-view-popup.component.scss'
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
