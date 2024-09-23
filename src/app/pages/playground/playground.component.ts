@@ -30,10 +30,9 @@ import { LoadingState } from '../../shared/LoadingState';
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule } from '@angular/forms';
-import { ActionButton, MiniPanelComponent, MiniPanelState, PanelViewState } from './shared/mini-panel/mini-panel.component';
-import { PopupReference, PopupService } from '../../shared/components/popup/PopupService';
-import { SampleChooserComponent } from './shared/sample-chooser/sample-chooser.component';
-import { InfoPanelComponent } from './shared/info-panel/info-panel.component';
+import { ActionButton, MiniPanelComponent, MiniPanelState, PanelViewState } from './panels/mini-panel/mini-panel.component';
+import { PopupReference, PopupService } from '../../shared/components/popup/popup.service';
+import { AboutComponent } from './popups/about/about.component';
 import { PlaygroundSampleModel } from '../../shared/models/playground-sample.model';
 import { PlatformService } from '../../shared/services/platform.service';
 import { PlaygroundService } from '../../shared/services/models/playground.service';
@@ -42,17 +41,16 @@ import { CompilationResultModel } from '../../shared/models/compilation-result.m
 import { Meta, Title } from '@angular/platform-browser';
 import { PlaygroundSampleService } from '../../shared/services/models/playground-sample.service';
 import { AlertBubbleComponent } from '../../shared/components/alert-bubble/alert-bubble.component';
-import { PlatformInfoPopupComponent } from './shared/platform-info-popup/platform-info-popup.component';
 import { SearchablePage } from '../../shared/components/site-wide-search/SearchablePage';
 import { StateService } from '../../shared/services/state.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { SharePopupComponent } from './shared/share-popup/share-popup.component';
-import { LoadAndSavePopupComponent } from './shared/load-and-save-popup/load-and-save-popup.component';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
-import {
-  CompilerSelectorPopupComponent
-} from './shared/compiler-selector-popup/compiler-selector-popup.component';
+import { LoadAndSavePopupComponent } from './popups/load-and-save/load-and-save-popup.component';
+import { SampleChooserComponent } from './popups/sample-chooser/sample-chooser.component';
+import { PlatformInfoPopupComponent } from './popups/platform-info/platform-info-popup.component';
+import { SharePopupComponent } from './popups/share/share-popup.component';
+import { CompilerSelectorPopupComponent } from './popups/compiler-select/compiler-selector-popup.component';
 
 @Component({
   selector: 'st-playground',
@@ -354,7 +352,7 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
    * Called when a user opens hte info popup.
    */
   onShowInfoPanel() {
-    this.popupReference = this.popupService.create(InfoPanelComponent, null, true);
+    this.popupReference = this.popupService.create(AboutComponent, null, true);
   }
 
   /**
