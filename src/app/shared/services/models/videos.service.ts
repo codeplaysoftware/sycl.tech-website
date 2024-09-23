@@ -94,7 +94,7 @@ export class VideosService extends JsonFeedService {
     let embedUrl = undefined;
 
     // Handle YouTube
-    if (url.hostname.includes('youtube.com')) {
+    if (url.hostname.replace('www.', '') == 'youtube.com') {
       embedUrl = externalUrl.replace('watch?v=', 'embed/');
       return embedUrl.replace('youtube.com', 'youtube-nocookie.com');
     }
