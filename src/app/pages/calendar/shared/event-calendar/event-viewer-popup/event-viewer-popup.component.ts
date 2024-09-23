@@ -34,8 +34,7 @@ import { environment } from '../../../../../../environments/environment';
   ],
   templateUrl: './event-viewer-popup.component.html',
   styleUrls: [
-    '../../../../../shared/components/popup/styles/common.scss',
-    '../../../../../shared/components/popup/styles/side-header.scss',
+    '../../../../../shared/components/popup/layouts/side-header.scss',
     './event-viewer-popup.component.scss'
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
