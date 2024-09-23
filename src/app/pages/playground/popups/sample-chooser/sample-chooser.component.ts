@@ -36,7 +36,7 @@ import { environment } from '../../../../../environments/environment';
   ],
   templateUrl: './sample-chooser.component.html',
   styleUrls: [
-    '../../../../shared/components/popup/styles/slim-top-header.scss',
+    '../../../../shared/components/popup/layouts/top-header.scss',
     './sample-chooser.component.scss'
   ],
   changeDetection: ChangeDetectionStrategy.OnPush

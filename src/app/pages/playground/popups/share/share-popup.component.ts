@@ -37,8 +37,7 @@ import { CopyInputComponent } from '../../../../shared/components/copy-input/cop
   standalone: true,
   templateUrl: './share-popup.component.html',
   styleUrls: [
-    '../../../../shared/components/popup/styles/common.scss',
-    '../../../../shared/components/popup/styles/default-top-header.scss',
+    '../../../../shared/components/popup/layouts/large-top-header.scss',
     './share-popup.component.scss'
   ],
   imports: [

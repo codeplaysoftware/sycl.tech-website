@@ -36,7 +36,7 @@ import { PlaygroundCompiler, PlaygroundService } from '../../../../shared/servic
   standalone: true,
   templateUrl: './compiler-selector-popup.component.html',
   styleUrls: [
-    '../../../../shared/components/popup/styles/slim-top-header.scss',
+    '../../../../shared/components/popup/layouts/top-header.scss',
     './compiler-selector-popup.component.scss'
   ],
   imports: [

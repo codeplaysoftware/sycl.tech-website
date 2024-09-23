@@ -24,8 +24,7 @@ import { PopupReference } from '../../../../shared/components/popup/popup.servic
   standalone: true,
   templateUrl: './platform-info-popup.component.html',
   styleUrls: [
-    '../../../../shared/components/popup/styles/common.scss',
-    '../../../../shared/components/popup/styles/side-header.scss',
+    '../../../../shared/components/popup/layouts/side-header.scss',
     './platform-info-popup.component.scss',
   ],
   changeDetection: ChangeDetectionStrategy.OnPush

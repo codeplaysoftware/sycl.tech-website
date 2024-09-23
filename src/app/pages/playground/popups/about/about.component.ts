@@ -22,17 +22,16 @@ import { NgOptimizedImage } from '@angular/common';
 @Component({
   selector: 'st-sample-chooser',
   standalone: true,
-  templateUrl: './info-panel.component.html',
+  templateUrl: './about.component.html',
   imports: [
     NgOptimizedImage
   ],
   styleUrls: [
-    '../../../../shared/components/popup/styles/common.scss',
-    '../../../../shared/components/popup/styles/default-top-header.scss',
-    './info-panel.component.scss'
+    '../../../../shared/components/popup/layouts/large-top-header.scss',
+    './about.component.scss'
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InfoPanelComponent {
+export class AboutComponent {
 
 }
