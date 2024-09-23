@@ -1,3 +1,5 @@
+@import 'common';
+
 :host {
   display: flex;
   flex-direction: column;
@@ -11,15 +13,25 @@
 
   > header {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 3rem;
     flex-basis: 40%;
     background-color: var(--color-orange);
-    color: white;
+    color: var(--color-white);
+    padding: 3rem;
 
     span.popup-icon {
-      font-size: 60px;
+      font-size: 55px;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    h2 {
+      font-weight: normal;
+      opacity: .8;
     }
 
     p {
