@@ -19,7 +19,7 @@
 import { ChangeDetectionStrategy, Component, Inject, signal, Signal, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
-import { PopupReference } from '../../../../shared/components/popup/PopupService';
+import { PopupReference } from '../../../../shared/components/popup/popup.service';
 import { PlaygroundSampleModel } from '../../../../shared/models/playground-sample.model';
 import { PlaygroundSampleService } from '../../../../shared/services/models/playground-sample.service';
 import { LoadingState } from '../../../../shared/LoadingState';

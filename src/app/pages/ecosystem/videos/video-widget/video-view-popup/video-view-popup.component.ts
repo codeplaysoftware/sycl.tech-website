@@ -22,7 +22,7 @@ import { TagComponent } from '../../../../../shared/components/tag/tag.component
 import { MarkdownComponent } from 'ngx-markdown';
 import { RouterLink } from '@angular/router';
 import { VideoModel } from '../../../../../shared/models/video.model';
-import { PopupReference } from '../../../../../shared/components/popup/PopupService';
+import { PopupReference } from '../../../../../shared/components/popup/popup.service';
 import { StateService } from '../../../../../shared/services/state.service';
 import { map } from 'rxjs';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';

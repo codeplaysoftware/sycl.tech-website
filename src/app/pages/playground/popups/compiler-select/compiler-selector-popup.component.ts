@@ -27,7 +27,7 @@ import {
 } from '@angular/core';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 import { DatePipe, NgOptimizedImage } from '@angular/common';
-import { PopupReference } from '../../../../shared/components/popup/PopupService';
+import { PopupReference } from '../../../../shared/components/popup/popup.service';
 import { RouterLink } from '@angular/router';
 import { PlaygroundCompiler, PlaygroundService } from '../../../../shared/services/models/playground.service';
 

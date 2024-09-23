@@ -17,7 +17,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { ChangeDetectionStrategy, Component, Inject, signal, Signal } from '@angular/core';
-import { PopupReference } from '../../../../shared/components/popup/PopupService';
+import { PopupReference } from '../../../../shared/components/popup/popup.service';
 
 @Component({
   selector: 'st-platform-info-popup',

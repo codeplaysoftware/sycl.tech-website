@@ -25,7 +25,7 @@ import {
   Signal,
   WritableSignal
 } from '@angular/core';
-import { PopupReference } from '../../../../shared/components/popup/PopupService';
+import { PopupReference } from '../../../../shared/components/popup/popup.service';
 import { PlaygroundService } from '../../../../shared/services/models/playground.service';
 import { LoadingState } from '../../../../shared/LoadingState';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';

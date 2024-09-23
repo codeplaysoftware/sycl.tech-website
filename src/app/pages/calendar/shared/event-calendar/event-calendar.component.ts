@@ -24,7 +24,7 @@ import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 import { EventService } from '../../../../shared/services/models/event.service';
 import { ActivatedRoute } from '@angular/router';
-import { PopupReference, PopupService } from '../../../../shared/components/popup/PopupService';
+import { PopupReference, PopupService } from '../../../../shared/components/popup/popup.service';
 import { LoadingState } from '../../../../shared/LoadingState';
 import { EventModel } from '../../../../shared/models/event.model';
 import { EventViewerPopupComponent } from './event-viewer-popup/event-viewer-popup.component';

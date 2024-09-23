@@ -24,7 +24,7 @@ import {
 import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { VideoViewPopupComponent } from './video-view-popup/video-view-popup.component';
-import { PopupService } from '../../../../shared/components/popup/PopupService';
+import { PopupService } from '../../../../shared/components/popup/popup.service';
 
 @Component({
   selector: 'st-video-widget',

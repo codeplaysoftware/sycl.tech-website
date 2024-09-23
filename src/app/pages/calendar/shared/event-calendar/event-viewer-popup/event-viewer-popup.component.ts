@@ -21,7 +21,7 @@ import { CommonModule } from '@angular/common';
 import {
   LayeredContributorAvatarsComponent
 } from '../../../../../shared/components/layered-contributor-avatars/layered-contributor-avatars.component';
-import { PopupReference } from '../../../../../shared/components/popup/PopupService';
+import { PopupReference } from '../../../../../shared/components/popup/popup.service';
 import { CalendarItemModel } from '../models/calendar-item.model';
 import { environment } from '../../../../../../environments/environment';
 

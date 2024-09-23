@@ -25,7 +25,7 @@ import {
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
-import { PopupReference } from './PopupService';
+import { PopupReference } from './popup.service';
 import { NavigationStart, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 

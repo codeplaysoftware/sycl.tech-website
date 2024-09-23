@@ -24,7 +24,7 @@ import { SearchFilters, SearchResult, SearchService } from '../../services/model
 import { debounceTime, Subject, switchMap, tap } from 'rxjs';
 import { LoadingComponent } from '../loading/loading.component';
 import { TagComponent } from '../tag/tag.component';
-import { PopupReference } from '../popup/PopupService';
+import { PopupReference } from '../popup/popup.service';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
 import { toSignal } from '@angular/core/rxjs-interop';
 

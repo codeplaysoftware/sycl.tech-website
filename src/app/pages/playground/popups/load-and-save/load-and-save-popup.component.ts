@@ -22,7 +22,7 @@ import { DatePipe } from '@angular/common';
 import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { StateService } from '../../../../shared/services/state.service';
 import { tap } from 'rxjs';
-import { PopupReference } from '../../../../shared/components/popup/PopupService';
+import { PopupReference } from '../../../../shared/components/popup/popup.service';
 import { RouterLink } from '@angular/router';
 
 @Component({
