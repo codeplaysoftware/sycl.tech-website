@@ -81,43 +81,58 @@ export class ContributorService extends JsonFeedService {
   static deserializeSocial(
     socialUrl: string
   ): SocialModel {
-    let name = socialUrl;
-    let tag = 'unknown';
+    const hostname = new URL(socialUrl).hostname.replace('www.', '');
 
-    if (name.includes('twitter.com')) {
-      name = 'Twitter';
-      tag = 'twitter';
-    }
-
-    if (name.includes('x.com')) {
-      name = 'X.com';
-      tag = 'twitter';
-    }
-
-    if (name.includes('facebook.com')) {
-      name = 'Facebook';
-      tag = 'facebook'
-    }
-
-    if (name.includes('linkedin.com')) {
-      name = 'LinkedIn';
-      tag = 'linkedin';
-    }
-
-    if (name.includes('github.com')) {
-      name = 'GitHub';
-      tag = 'github';
-    }
-
-    if (name.includes('stackoverflow.com')) {
-      name = 'StackOverflow';
-      tag = 'stackoverflow';
-    }
-
-    return {
-      name: name,
-      tag: tag,
-      url: socialUrl
+    switch (hostname) {
+      case 'twitter.com': {
+        return {
+          name: 'Twitter',
+          tag: 'twitter',
+          url: socialUrl
+        }
+      }
+      case 'x.com': {
+        return {
+          name: 'X.com',
+          tag: 'twitter',
+          url: socialUrl
+        }
+      }
+      case 'facebook.com': {
+        return {
+          name: 'Facebook',
+          tag: 'facebook',
+          url: socialUrl
+        }
+      }
+      case 'linkedin.com': {
+        return {
+          name: 'LinkedIn',
+          tag: 'linkedin',
+          url: socialUrl
+        }
+      }
+      case 'github.com': {
+        return {
+          name: 'GitHub',
+          tag: 'github',
+          url: socialUrl
+        }
+      }
+      case 'stackoverflow.com': {
+        return {
+          name: 'StackOverflow',
+          tag: 'stackoverflow',
+          url: socialUrl
+        }
+      }
+      default : {
+        return {
+          name: socialUrl,
+          tag: 'unknown',
+          url: socialUrl
+        }
+      }
     }
   }
 

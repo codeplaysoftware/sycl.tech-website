@@ -1,0 +1,55 @@
+<header>
+  <div>
+    <span class="material-symbols-outlined popup-icon">save</span>
+    <h1>Save / Load Code</h1>
+    <p>You can save and load code from your browser's local storage.</p>
+  </div>
+</header>
+
+<main>
+  <article>
+    @if (storageEnabled()) {
+      @if (saved().length > 0) {
+        <ul class="saved">
+          @for (savedItem of saved(); track savedItem.date) {
+            <li (click)="onLoadSaved(savedItem)">
+              <div>
+                <h1 [innerHTML]="savedItem.date | date: 'medium'"></h1>
+                <h2>Saved code is {{ savedItem.code.length }} characters in length.</h2>
+              </div>
+              <div (click)="onDeleteSaved(savedItem)" title="Delete this saved item">
+                <span class="material-symbols-outlined">delete</span>
+              </div>
+            </li>
+          }
+        </ul>
+      } @else {
+        <div class="warning">
+          <div>
+            <span class="material-symbols-outlined">save</span>
+            <h1>Nothing Saved</h1>
+            <p>You have not yet saved any code samples.</p>
+          </div>
+        </div>
+      }
+    } @else {
+      <div class="warning">
+        <div>
+          <span class="material-symbols-outlined">block</span>
+          <h1>Storage / Cookies Disabled</h1>
+          <p>To enable saving and loading of samples, please <a routerLink="/cookies/">accept the cookies/storage
+            policy</a>.</p>
+        </div>
+      </div>
+    }
+  </article>
+  <footer>
+    <a class="button cancel" (click)="onClose()">
+      <span class="material-symbols-outlined">close</span> Close</a>
+
+    @if (storageEnabled()) {
+      <a class="button" (click)="onSave()">
+        <span class="material-symbols-outlined">save</span> Save</a>
+    }
+  </footer>
+</main>

@@ -1,0 +1,55 @@
+@if (video(); as video) {
+  <header>
+    <div class="title">
+      <st-multi-date [submitted]="video.date"></st-multi-date>
+      <h1 [innerHTML]="video.title"></h1>
+      <h2 [innerHTML]="video.description"></h2>
+
+      <div class="tags">
+        @for (tag of video.tags; track tag) {
+          <st-tag [title]="tag"
+                  [selected]="true"
+                  [allowSelection]="false"></st-tag>
+        }
+      </div>
+    </div>
+    @if (video.contributor | async; as contributor) {
+      <div class="author" title="This video was shared with us by {{ contributor.name }}.">
+        <st-contributor-avatar [contributor]="contributor"></st-contributor-avatar>
+        Shared by {{ contributor.name }}
+      </div>
+    }
+  </header>
+  <main>
+    @if (cookiesEnabled() && embedUrl()) {
+      <article [style.background-image]="'url(' + video.thumbnail + ')'">
+        <a [href]="video.url"
+           target="_blank"
+           rel="noopener">
+          <span class="material-symbols-outlined">play_circle</span>
+        </a>
+      </article>
+    } @else if (!embedUrl()) {
+      <div class="warning">
+        <div>
+          <span class="material-symbols-outlined">security</span>
+          <h1>Video Not Supported</h1>
+          <p>Unfortunately, we cannot embed this video for you but you can view it on {{ videoProviderName() }}.</p>
+        </div>
+      </div>
+    } @else if (!cookiesEnabled()) {
+      <div class="warning">
+        <div>
+          <span class="material-symbols-outlined">security</span>
+          <h1>Video Blocked</h1>
+          <p>To view this video inline, you need to accept our <a href="/cookies">Cookie Policy</a>.</p>
+        </div>
+      </div>
+    }
+    <footer>
+      <a class="button centered" [href]="video.url" target="_blank">
+        <span class="material-symbols-outlined">captive_portal</span> Watch Video on {{ videoProviderName() }}
+      </a>
+    </footer>
+  </main>
+}

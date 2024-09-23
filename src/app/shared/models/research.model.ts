@@ -25,6 +25,7 @@ import { Observable } from 'rxjs';
 export interface ResearchModel {
   id: string
   date: Date
+  year: number
   title: string
   url: string
   description: string

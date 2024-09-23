@@ -27,10 +27,6 @@ export class PlatformService {
     @Inject(PLATFORM_ID) protected platformId: Object
   ) { }
 
-  isServer(): boolean {
-    return isPlatformServer(this.platformId);
-  }
-
   isClient(): boolean {
     return !isPlatformServer(this.platformId);
   }

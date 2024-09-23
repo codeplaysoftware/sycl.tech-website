@@ -31,7 +31,7 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 import { SwitchComponent } from './shared/components/switch/switch.component';
 import { SiteWideSearchComponent } from './shared/components/site-wide-search/site-wide-search.component';
 import { environment } from '../environments/environment';
-import { PopupService } from './shared/components/popup/PopupService';
+import { PopupService } from './shared/components/popup/popup.service';
 import { SearchComponent } from './shared/components/search/search.component';
 import { StateService } from './shared/services/state.service';
 import { map, Subscription } from 'rxjs';

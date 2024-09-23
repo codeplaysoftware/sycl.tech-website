@@ -294,24 +294,24 @@ export abstract class JsonFeedService implements IFilterableService {
  * JsonFeed interface. All responses from the backend should use this format.
  */
 export interface JsonFeed {
-  version: string
-  title: string
-  home_page_url: string
-  feed_url: string
-  _total_items: number
-  _total_pages: number
-  _items_on_page: number
-  items: any[]
-  next_url?: string
-  _filters: {string: []}
+  readonly version: string
+  readonly title: string
+  readonly home_page_url: string
+  readonly feed_url: string
+  readonly _total_items: number
+  readonly _total_pages: number
+  readonly _items_on_page: number
+  readonly items: any[]
+  readonly next_url?: string
+  readonly _filters: {string: []}
 }
 
 /**
  * Result wrapper.
  */
 export interface FeedResult<T> {
-  items: T[]
-  resultCount: number
-  filteredItemCount: number
-  totalItemCount: number
+  readonly items: T[]
+  readonly resultCount: number
+  readonly filteredItemCount: number
+  readonly totalItemCount: number
 }

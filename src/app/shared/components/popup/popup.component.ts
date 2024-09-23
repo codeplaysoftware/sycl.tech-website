@@ -19,14 +19,15 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
 import {
   AfterViewInit,
-  ApplicationRef,
   Component, HostListener,
   Inject,
   Injector,
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
-import { PopupReference } from './PopupService';
+import { PopupReference } from './popup.service';
+import { NavigationStart, Router } from '@angular/router';
+import { filter, Subscription } from 'rxjs';
 
 @Component({
   selector: 'st-popup',
@@ -38,11 +39,25 @@ import { PopupReference } from './PopupService';
   styleUrl: './popup.component.scss'
 })
 export class PopupComponent implements AfterViewInit {
+  /**
+   * Popup target reference, this is where the popup will be attached.
+   */
   @ViewChild('popupTarget', { read: ViewContainerRef })
   popupContainerRef: ViewContainerRef | null = null;
 
+  /**
+   * Reference to the popup component.
+   */
   component: any = null;
+
+  /**
+   * Injector reference.
+   */
   injector: Injector | null = null;
+
+  /**
+   * Reference to the popup.
+   */
   popupReference: PopupReference | null = null;
 
   /**
@@ -51,14 +66,31 @@ export class PopupComponent implements AfterViewInit {
   visible: boolean = false;
 
   /**
+   * Used to track route change events.
+   */
+  routerChangeSubscription: Subscription;
+
+  /**
    * Constructor.
-   * @param applicationRef
    * @param document
+   * @param router
    */
   constructor(
-    protected applicationRef: ApplicationRef,
-    @Inject(DOCUMENT) private document: Document
-  ) { }
+    @Inject(DOCUMENT) private document: Document,
+    protected router: Router
+  ) {
+    /**
+     * To avoid the popup lingering when a link is clicked, we will subscribe to router changes
+     * and then hide the popup.
+     */
+    this.routerChangeSubscription = this.router.events
+      .pipe(
+        filter(event => (event instanceof NavigationStart))
+      )
+      .subscribe(() => {
+        this.hide();
+    });
+  }
 
   /**
    * When the view is ready and the @ViewChild is ready, attach the component into the popup container.
@@ -104,6 +136,7 @@ export class PopupComponent implements AfterViewInit {
   hide() {
     this.visible = false;
     this.document.body.style.overflow = 'auto';
+    this.routerChangeSubscription.unsubscribe();
   }
 
   /**

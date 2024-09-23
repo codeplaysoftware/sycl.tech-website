@@ -24,7 +24,7 @@ import {
 } from '../../../../../shared/components/layered-contributor-avatars/layered-contributor-avatars.component';
 import { TruncatePipe } from '../../../../../shared/pipes/truncate.pipe';
 import { ClipboardService } from 'ngx-clipboard';
-import { PopupService } from '../../../../../shared/components/popup/PopupService';
+import { PopupService } from '../../../../../shared/components/popup/popup.service';
 import { ProjectViewPopupComponent } from './project-view-popup/project-view-popup.component';
 
 @Component({

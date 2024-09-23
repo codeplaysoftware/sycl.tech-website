@@ -1,12 +1,7 @@
 @if (project(); as project) {
   <header>
-    <div>
-      @if (project.repository) {
-        <st-layered-contributor-avatars
-            [contributors]="project.repository.contributors"
-            [limit]="4"></st-layered-contributor-avatars>
-      }
-
+    <div class="title">
+      <st-multi-date [submitted]="project.date_created"></st-multi-date>
       <h1>{{ project.name }}</h1>
       <h2>{{ project.description }}</h2>
 
@@ -19,6 +14,12 @@
         }
       </div>
     </div>
+    @if (project.contributor | async; as contributor) {
+      <div class="author" title="This project was shared with us by {{ contributor.name }}.">
+        <st-contributor-avatar [contributor]="contributor"></st-contributor-avatar>
+        Shared by {{ contributor.name }}
+      </div>
+    }
   </header>
 
   <main>

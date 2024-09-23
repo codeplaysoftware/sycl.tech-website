@@ -2,7 +2,7 @@
   @if (layout() === Layout.WIDGET) {
     <!-- Layout: Widget -->
     <div class="widget">
-      <a class="header" [href]="video.url" target="_blank" rel="noopener">
+      <a class="header" (click)="onVideoClicked()">
         <div class="tag">
           <div>
             <div [innerHTML]="video.type | titlecase"></div>
@@ -14,7 +14,7 @@
         </div>
       </a>
       <div class="body">
-        <a class="description" [href]="video.url" target="_blank" rel="noopener">
+        <a class="description" (click)="onVideoClicked()">
           <div>
             <h1 [innerHTML]="video.title | truncate:50"></h1>
             <h2 [innerHTML]="getFeaturingInfo(video)"></h2>

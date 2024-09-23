@@ -23,6 +23,8 @@ import {
 } from '../../../../shared/components/contributor-avatar/contributor-avatar.component';
 import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { VideoViewPopupComponent } from './video-view-popup/video-view-popup.component';
+import { PopupService } from '../../../../shared/components/popup/popup.service';
 
 @Component({
   selector: 'st-video-widget',
@@ -42,6 +44,10 @@ export class VideoWidgetComponent {
   layout = input<VideoWidgetLayout>(VideoWidgetLayout.WIDGET);
 
   protected readonly Layout = VideoWidgetLayout;
+
+  constructor(
+    protected popupService: PopupService
+  ) { }
 
   /**
    * Get featuring info.
@@ -63,6 +69,15 @@ export class VideoWidgetComponent {
 
       return item.name;
     }, 'Featuring ').slice(0, -1) + '.';
+  }
+
+  /**
+   * Called when a user clicks on a video
+   */
+  onVideoClicked() {
+    this.popupService.create(VideoViewPopupComponent, {
+      'video': this.video
+    }, true);
   }
 }
 

@@ -115,7 +115,7 @@ export class ViewComponent {
         this.state.set(LoadingState.LOAD_SUCCESS);
       }),
       catchError(() => {
-        this.router.navigateByUrl('/news');
+        this.router.navigateByUrl('/news').then();
         return of();
       })
     );

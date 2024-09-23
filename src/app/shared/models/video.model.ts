@@ -26,6 +26,7 @@ export interface VideoModel {
   id: string
   title: string
   date: Date
+  year: number
   type: string
   url: string
   thumbnail?: string
@@ -33,4 +34,5 @@ export interface VideoModel {
   contributor: Observable<ContributorModel>
   featuring: ContributorModel[]
   tags: string[]
+  embedUrl?: string
 }

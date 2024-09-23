@@ -21,9 +21,8 @@ import { CommonModule } from '@angular/common';
 import {
   LayeredContributorAvatarsComponent
 } from '../../../../../shared/components/layered-contributor-avatars/layered-contributor-avatars.component';
-import { PopupReference } from '../../../../../shared/components/popup/PopupService';
+import { PopupReference } from '../../../../../shared/components/popup/popup.service';
 import { CalendarItemModel } from '../models/calendar-item.model';
-import { ContributorModel } from '../../../../../shared/models/contributor.model';
 import { environment } from '../../../../../../environments/environment';
 
 @Component({
@@ -34,7 +33,10 @@ import { environment } from '../../../../../../environments/environment';
     LayeredContributorAvatarsComponent
   ],
   templateUrl: './event-viewer-popup.component.html',
-  styleUrl: './event-viewer-popup.component.scss',
+  styleUrls: [
+    '../../../../../shared/components/popup/layouts/side-header.scss',
+    './event-viewer-popup.component.scss'
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventViewerPopupComponent {
@@ -49,13 +51,5 @@ export class EventViewerPopupComponent {
     @Inject('POPUP_DATA') protected popupReference: PopupReference
   ) {
     this.calendarItem = signal(this.popupReference.data);
-  }
-
-  /**
-   * Called when an attendee is clicked.
-   * @param $event
-   */
-  onContributorClicked($event: ContributorModel) {
-    this.popupReference.close($event);
   }
 }

@@ -1,0 +1,29 @@
+<header>
+  <div class="title centered">
+    <div>
+      <span class="material-symbols-outlined popup-icon">developer_board</span>
+      <h1>Executed on {{ platformName() }}!</h1>
+    </div>
+  </div>
+</header>
+<main>
+  <article>
+    <p>Did you know that <b>this same code</b> could also have run on the following platforms:</p>
+    <ul>
+      <li>Intel&reg; CPU / GPU</li>
+      <li>AMD GPU</li>
+      <li>NVIDIA&reg; GPU</li>
+      <li>Any other device that supports SYCL!</li>
+    </ul>
+
+    <p>You can even build your own implementation and add support for
+      your own custom hardware.</p>
+  </article>
+  <footer>
+    <a class="button cancel" (click)="onClose()">
+    <span class="material-symbols-outlined">close</span> Close</a>
+
+    <a class="button" href="https://www.khronos.org/sycl/" target="_blank" rel="noopener">
+      <span class="material-symbols-outlined">info</span> Learn More</a>
+  </footer>
+</main>

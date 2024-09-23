@@ -8,19 +8,7 @@
   }
 
   header {
-    padding-top: 5rem;
-    padding-bottom: 5rem;
-    align-items: flex-start;
     background-color: var(--color-blue);
-
-    h1 {
-      font-size: 2rem;
-    }
-
-    h2 {
-      font-weight: normal;
-      opacity: .8;
-    }
 
     .tags {
       display: flex;
@@ -32,9 +20,13 @@
 
   article {
     overflow: auto;
-    max-height: 600px;
     font-size: 1rem;
-    max-width: 600px;
+    flex: 1 1 0;
+
+    .content {
+      height: 100%;
+      overflow: auto;
+    }
 
     ::ng-deep h1 {
       display: none;
