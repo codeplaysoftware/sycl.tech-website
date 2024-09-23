@@ -16,38 +16,11 @@
     flex-basis: 35%;
 
     .title {
-      flex: 1;
-      padding: 5rem var(--side-padding);
-
-      h1 {
-        font-size: 2rem;
-      }
-
-      h2 {
-        font-weight: normal;
-        opacity: .8;
-      }
-
       .tags {
         display: flex;
         flex-wrap: wrap;
         gap: .3rem;
         margin-top: 2rem;
-      }
-    }
-
-    .author {
-      width: 100%;
-      padding: 1rem var(--side-padding);
-      border-top: rgba(255, 255, 255, .12) 1px solid;
-      background: rgba(255, 255, 255, .05);
-
-      st-contributor-avatar {
-        width: 32px;
-        height: 32px;
-        display: inline-flex;
-        vertical-align: middle;
-        margin-right: .5rem;
       }
     }
   }
@@ -67,16 +40,21 @@
       color: var(--color-white);
       background-color: rgba(0, 0, 0, .6);
       backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      transition: var(--transition-fast);
+
+      &:hover {
+        background-color: rgba(0, 0, 0, .5);
+
+        span {
+          opacity: 1;
+          color: var(--color-orange);
+        }
+      }
 
       span {
         font-size: 150px;
         opacity: .5;
-        transition: var(--transition-fast);
-      }
-
-      &:hover span {
-        opacity: 1;
-        color: var(--color-orange);
       }
     }
 

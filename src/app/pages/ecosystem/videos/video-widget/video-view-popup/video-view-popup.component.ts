@@ -45,9 +45,7 @@ import { MultiDateComponent } from '../../../../../shared/components/multi-date/
     MultiDateComponent
   ],
   styleUrls: [
-    '../../../../getting-started/academy/lesson/lesson-content-styling.scss',
-    '../../../../../shared/components/popup/styles/common.scss',
-    '../../../../../shared/components/popup/styles/side-header.scss',
+    '../../../../../shared/components/popup/layouts/widget.scss',
     './video-view-popup.component.scss'
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
