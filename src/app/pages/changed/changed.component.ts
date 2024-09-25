@@ -171,7 +171,6 @@ export class ChangedComponent implements OnInit, OnDestroy {
       }
 
       this.saveTimer = setInterval(() => {
-        console.log('Automatically updating last visit time.');
         this.saveLastVisit();
       }, 6000);
     }
@@ -243,8 +242,9 @@ export class ChangedComponent implements OnInit, OnDestroy {
       }
 
       this.safeStorageService.save(ChangedComponent.STORAGE_LAST_VISIT, date);
+      console.log('Successfully updated last visit time.');
     } catch (e) {
-      console.log(e);
+      console.error('Skipping saving last visit time due to error.');
     }
   }
 
