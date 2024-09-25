@@ -16,15 +16,13 @@
  *
  *--------------------------------------------------------------------------------------------*/
 
-import { effect, Inject, Injectable, signal, WritableSignal } from '@angular/core';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
 import { CompilationResultModel } from '../../models/compilation-result.model';
 import { PlaygroundSampleModel } from '../../models/playground-sample.model';
-import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
-import { StateService } from '../state.service';
-
+import { SafeStorageService } from '../safe-storage.service';
 import Convert from 'ansi-to-html';
 
 @Injectable({
@@ -57,19 +55,17 @@ export class PlaygroundService {
    * Constructor.
    * @param httpClient
    * @param domSanitizer
-   * @param stateService
-   * @param storageService
+   * @param safeStorageService
    */
   constructor(
     protected httpClient: HttpClient,
     protected domSanitizer: DomSanitizer,
-    protected stateService: StateService,
-    @Inject(LOCAL_STORAGE) protected storageService: StorageService
+    protected safeStorageService: SafeStorageService
   ) {
     this.sampleSubject = new BehaviorSubject<PlaygroundSampleModel | undefined>(undefined);
 
-    if (this.storageService.has(PlaygroundService.COMPILER_STORAGE_KEY)) {
-      const compilerTag = this.storageService.get(PlaygroundService.COMPILER_STORAGE_KEY);
+    if (this.safeStorageService.has(PlaygroundService.COMPILER_STORAGE_KEY)) {
+      const compilerTag = this.safeStorageService.get(PlaygroundService.COMPILER_STORAGE_KEY);
 
       for (const compiler of this.supportedCompilers) {
         if (compiler.tag == compilerTag) {
@@ -78,17 +74,6 @@ export class PlaygroundService {
         }
       }
     }
-
-    /**
-     * This effect will update the storage service with the selected compiler
-     */
-    effect(() => {
-      const selectedCompiler = this.selectedCompiler();
-
-      if (this.stateService.snapshot().cookiesAccepted) {
-        this.storageService.set('st-playground-compiler-tag', selectedCompiler.tag);
-      }
-    })
   }
 
   /**
@@ -197,6 +182,12 @@ export class PlaygroundService {
    */
   setCompiler(compiler: PlaygroundCompiler) {
     this.selectedCompiler.set(compiler);
+
+    try {
+      this.safeStorageService.save('st-playground-compiler-tag', compiler.tag);
+    } catch (e) {
+      console.error('Cannot save compiler choice, storage is disabled.');
+    }
   }
 
   /**
@@ -472,7 +463,7 @@ export class OneApiCompiler implements PlaygroundCompiler {
  */
 export class AdaptiveCppCompiler implements PlaygroundCompiler {
   public name = 'AdaptiveCpp';
-  public enabled: boolean = false;
+  public enabled: boolean = true;
   public logo: string = '/assets/images/ecosystem/implementations/adaptivecpp/logo-black.webp';
   public tag = 'adaptive'
   public flags = '-fsycl -g0 -Rno-debug-disables-optimization';

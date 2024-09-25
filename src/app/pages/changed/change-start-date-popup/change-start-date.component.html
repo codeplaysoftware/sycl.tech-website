@@ -1,0 +1,30 @@
+<header>
+  <div>
+    <span class="material-symbols-outlined popup-icon">event</span>
+    <h1>Set Start Date</h1>
+
+    @if (noLastVisit()) {
+      <h2>You've not been here before.</h2>
+    }
+
+    <h2>Please set a start date that we can use to determine what has changed.</h2>
+  </div>
+</header>
+
+<main>
+  <article>
+    <div>
+      <input type="date"
+             value="{{ startDate() | date: 'yyyy-MM-dd' }}"
+             (change)="onDateChanged($event)" />
+    </div>
+    @if (errorMessage(); as message) {
+      <div class="error" [innerHTML]="message"></div>
+    }
+  </article>
+  <footer>
+    <a class="button centered cancel" (click)="onClose()">
+      <span class="material-symbols-outlined">close</span> Close
+    </a>
+  </footer>
+</main>

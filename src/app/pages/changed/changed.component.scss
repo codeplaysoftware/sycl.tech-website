@@ -1,0 +1,137 @@
+/**
+ * Styling for all sections other than intro.
+ */
+section:not(#intro) {
+  header {
+    padding-bottom: 0;
+
+    h1 {
+      margin-bottom: .5rem;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      margin: 0;
+      opacity: .7;
+    }
+  }
+
+  .list {
+    padding-top: 1rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 1rem;
+
+    @media screen and (min-width: 1000px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+}
+
+/**
+ * Styling for the introduction panel.
+ */
+section#intro {
+  .panel {
+    background: linear-gradient(90deg, rgb(0 0 33) 35%, rgb(255 61 0) 100%);
+  }
+
+  header h1 {
+    margin-bottom: 0;
+  }
+
+  .date-range {
+    font-size: 1.5rem;
+    display: flex;
+    border: rgba(255, 255, 255, 0.26) 1px solid;
+    border-radius: var(--border-radius);
+
+    & > div {
+      border-right: rgba(255, 255, 255, 0.26) 1px solid;
+      padding: .8rem 1rem;
+      cursor: default;
+
+      &:last-of-type {
+        border-right: 0;
+      }
+
+      &.date {
+        transition: var(--transition-fast);
+        display: block;
+
+        &.selectable {
+          cursor: pointer;
+
+          &:hover {
+            background-color: rgba(255, 255, 255, .1);
+          }
+        }
+
+        h2 {
+          font-size: 1.4rem;
+          opacity: .9;
+          margin: 0;
+        }
+
+        h3 {
+          display: block;
+          font-size: 1rem;
+          opacity: .6;
+          font-weight: normal;
+          margin: .2rem 0 0 0;
+        }
+      }
+
+      &.sep {
+        display: flex;
+        align-items: center;
+
+        span {
+          font-size: 30px;
+        }
+      }
+    }
+  }
+
+  st-quick-links {
+    margin-top: 1rem;
+  }
+}
+
+/**
+ * Styling for the projects update section.
+ */
+section#projects {
+  st-project-widget {
+    border: var(--border-default);
+    border-radius: var(--border-radius);
+  }
+}
+
+/**
+ * Styling for the video update section.
+ */
+section#videos {
+  st-video-widget {
+    border: var(--border-default);
+    border-radius: var(--border-radius);
+  }
+}
+
+/**
+ * Styling for the research update section.
+ */
+section#research {
+  st-research-widget {
+    border: var(--border-default);
+    border-radius: var(--border-radius);
+  }
+
+  .list {
+    grid-template-columns: 1fr;
+
+    @media screen and (min-width: 1100px) {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+}

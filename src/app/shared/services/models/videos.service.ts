@@ -86,6 +86,23 @@ export class VideosService extends JsonFeedService {
   }
 
   /**
+   * Get all video items after a specific date.
+   * @param startDate
+   * @param limit
+   */
+  afterDate(
+    startDate: Date,
+    limit: number | null = null
+  ): Observable<VideoModel[]> {
+    return this.all(limit)
+      .pipe(
+        map((items) => {
+          return startDate ? items.filter((item) => (item.date >= startDate)) : items;
+        })
+      );
+  }
+
+  /**
    * Attempt to generate an embed URL based on the external provider.
    * @param externalUrl
    */

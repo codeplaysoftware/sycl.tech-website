@@ -36,6 +36,7 @@ import { CookiesComponent } from './pages/cookies/cookies.component';
 import { PrivacyComponent } from './pages/privacy/privacy.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { Error404Component } from './pages/404/error-404.component';
+import { ChangedComponent } from './pages/changed/changed.component';
 
 export const routes: Routes = [
   {
@@ -46,6 +47,10 @@ export const routes: Routes = [
   {
     path: 'playground',
     component: PlaygroundComponent
+  },
+  {
+    path: 'changed',
+    component: ChangedComponent
   },
   {
     path: 'getting-started',

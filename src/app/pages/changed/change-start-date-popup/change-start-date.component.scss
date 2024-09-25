@@ -1,0 +1,37 @@
+:host {
+  @media screen and (min-width: 800px) {
+    width: 100vw !important;
+  }
+
+  header {
+    h2 {
+      font-weight: normal;
+      opacity: .7;
+    }
+
+    div {
+      text-align: center;
+    }
+  }
+
+  input {
+    display: block;
+    width: 100%;
+    padding: 1.5rem;
+    border: var(--border-default);
+    border-radius: var(--border-radius);
+    background-color: transparent;
+    color: var(--text-color);
+    font-family: inherit;
+    font-size: 1.2rem;
+  }
+
+  .error {
+    background-color: #ffd2d2;
+    padding: 2rem;
+    text-align: center;
+    color: red;
+    margin-top: 1rem;
+    border-radius: var(--border-radius);
+  }
+}
