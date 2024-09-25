@@ -23,7 +23,6 @@ import { MarkdownComponent } from 'ngx-markdown';
 import { RouterLink } from '@angular/router';
 import { VideoModel } from '../../../../../shared/models/video.model';
 import { PopupReference } from '../../../../../shared/components/popup/popup.service';
-import { StateService } from '../../../../../shared/services/state.service';
 import { map } from 'rxjs';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -31,6 +30,7 @@ import {
   ContributorAvatarComponent
 } from '../../../../../shared/components/contributor-avatar/contributor-avatar.component';
 import { MultiDateComponent } from '../../../../../shared/components/multi-date/multi-date.component';
+import { SafeStorageService } from '../../../../../shared/services/safe-storage.service';
 
 @Component({
   selector: 'st-video-view-popup',
@@ -78,12 +78,12 @@ export class VideoViewPopupComponent {
   /**
    * Constructor.
    * @param popupReference
-   * @param stateService
+   * @param safeStorageService
    * @param sanitizer
    */
   constructor(
     @Inject('POPUP_DATA') popupReference: PopupReference,
-    private stateService: StateService,
+    private safeStorageService: SafeStorageService,
     private sanitizer: DomSanitizer,
   ) {
     this.video = popupReference.data['video'];
@@ -98,10 +98,8 @@ export class VideoViewPopupComponent {
       return embedUrl ? this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl) : undefined;
     });
 
-    this.cookiesEnabled = toSignal(this.stateService.getObservable().pipe(
-      map((state) => {
-        return !!state.cookiesAccepted;
-      })
+    this.cookiesEnabled = toSignal(this.safeStorageService.observe().pipe(
+      map(() => this.safeStorageService.allowed())
     ));
   }
 }

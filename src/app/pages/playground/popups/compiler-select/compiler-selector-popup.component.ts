@@ -86,7 +86,7 @@ export class CompilerSelectorPopupComponent implements OnInit {
    * @param compiler
    */
   onSelectCompiler(compiler: PlaygroundCompiler) {
-    this.playgroundService.selectedCompiler.set(compiler);
+    this.playgroundService.setCompiler(compiler);
     this.popupReference.close(compiler);
   }
 

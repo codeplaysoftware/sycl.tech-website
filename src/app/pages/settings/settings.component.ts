@@ -19,9 +19,9 @@
 import { ChangeDetectionStrategy, Component, signal, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SwitchComponent } from '../../shared/components/switch/switch.component';
-import { StateService } from '../../shared/services/state.service';
 import { tap } from 'rxjs';
 import { Title } from '@angular/platform-browser';
+import { SafeStorageService } from '../../shared/services/safe-storage.service';
 
 @Component({
   selector: 'st-settings',
@@ -42,19 +42,19 @@ export class SettingsComponent {
   /**
    * Constructor.
    * @param title
-   * @param stateService
+   * @param safeStorageService
    */
   constructor(
     protected title: Title,
-    protected stateService: StateService,
+    protected safeStorageService: SafeStorageService,
   ) {
     this.title.setTitle('Settings - SYCL.tech');
 
-    stateService.getObservable().pipe(
+    safeStorageService.observe().pipe(
       tap((state) => {
-        this.enableDarkMode.set(state.darkModeEnabled);
-        this.enableStorage.set(state.cookiesAccepted ? state.cookiesAccepted : false);
-        this.enableTracking.set(state.enableTracking);
+        this.enableStorage.set(state['st-cookies-accepted'] == true);
+        this.enableDarkMode.set(state['st-dark-mode-enabled'] == true);
+        this.enableTracking.set(state['st-enable-tracking'] == true);
       })
     ).subscribe();
   }
@@ -63,10 +63,14 @@ export class SettingsComponent {
    * Called when a user changes any of the settings.
    */
   onStateChanged() {
-    const state = this.stateService.snapshot();
-    state.enableTracking = this.enableTracking();
-    state.darkModeEnabled = this.enableDarkMode();
-    state.cookiesAccepted = this.enableStorage();
-    this.stateService.update(state);
+    if (!this.enableStorage()) {
+      // If storage is now disabled, clear any existing stored values
+      this.safeStorageService.clear();
+      return ;
+    }
+
+    this.safeStorageService.save('st-cookies-accepted', this.enableStorage(), false);
+    this.safeStorageService.save('st-dark-mode-enabled', this.enableDarkMode(), false);
+    this.safeStorageService.save('st-enable-tracking', this.enableTracking());
   }
 }

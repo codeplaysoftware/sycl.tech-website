@@ -28,10 +28,10 @@ import { AcademyLessonService } from '../../../../shared/services/models/academy
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { FormsModule } from '@angular/forms';
 import { PlatformService } from '../../../../shared/services/platform.service';
-import { StateService } from '../../../../shared/services/state.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TabComponent } from '../../../../shared/components/tabs/tab/tab.component';
 import { TabsComponent } from '../../../../shared/components/tabs/tabs.component';
+import { SafeStorageService } from '../../../../shared/services/safe-storage.service';
 
 @Component({
   selector: 'st-lesson',
@@ -69,7 +69,7 @@ export class LessonComponent {
    * @param activatedRoute
    * @param academyLessonService
    * @param platformService
-   * @param stateService
+   * @param safeStorageService
    * @param titleService
    * @param meta
    * @param location
@@ -78,7 +78,7 @@ export class LessonComponent {
     protected activatedRoute: ActivatedRoute,
     protected academyLessonService: AcademyLessonService,
     protected platformService: PlatformService,
-    protected stateService: StateService,
+    protected safeStorageService: SafeStorageService,
     protected titleService: Title,
     protected meta: Meta,
     protected location: Location
@@ -90,7 +90,8 @@ export class LessonComponent {
     this.lessons = toSignal(this.academyLessonService.all(), { initialValue: [] });
 
     this.monacoEditorTheme = toSignal(
-      this.stateService.getObservable().pipe(map(state => state.darkModeEnabled ? 'st-dark' : 'vs-light')),
+      this.safeStorageService.observe().pipe(
+        map(state => state['st-dark-mode-enabled'] ? 'st-dark' : 'vs-light')),
       { initialValue: 'vs-light' })
 
     if (this.platformService.isClient()) {

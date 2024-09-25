@@ -27,5 +27,13 @@ export const environment = {
     discord: 'https://discord.com/invite/FkGSFA3asN'
   },
   privacy_policy_email: 'info@codeplay.com',
-  fathom_analytics_token: 'MMWGQHXZ'
+  fathom_analytics_token: 'MMWGQHXZ',
+  allowed_storage_keys: [
+    'st-cookies-accepted',
+    'st-dark-mode-enabled',
+    'st-enable-tracking',
+    'st-playground-compiler-tag',
+    'st-playground-saved',
+    'st-last-visit-date'
+  ]
 };
