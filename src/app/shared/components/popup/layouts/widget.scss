@@ -3,6 +3,12 @@
 :host {
   > header {
     padding: 0;
+    color: var(--text-color);
+    background: linear-gradient(325deg, rgb(255, 61, 0) 0%, rgb(228, 228, 228) 57%);
+
+    :host-context(.dark-mode) & {
+      background: var(--color-orange);
+    }
 
     .title {
       flex: 1;
@@ -16,6 +22,7 @@
         padding: 5rem 3rem;
       }
     }
+
 
     .author {
       width: 100%;
