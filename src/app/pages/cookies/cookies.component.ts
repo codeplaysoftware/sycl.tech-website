@@ -22,12 +22,14 @@ import { environment } from '../../../environments/environment';
 import { Title } from '@angular/platform-browser';
 import { SafeStorageService } from '../../shared/services/safe-storage.service';
 import { CookieAcceptanceComponent } from './shared/cookie-acceptance-popup/cookie-acceptance.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'st-cookies',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    RouterLink
   ],
   templateUrl: './cookies.component.html',
   styleUrl: './cookies.component.scss',
