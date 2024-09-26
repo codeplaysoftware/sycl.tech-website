@@ -55,6 +55,8 @@ import { ImplementationActivityService } from '../../shared/services/models/impl
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CalenderWidgetComponent } from '../calendar/shared/calendar-item-widget/calender-widget.component';
 import { environment } from '../../../environments/environment';
+import { AlertsComponent } from '../../shared/components/site-wide-alert/alerts.component';
+import { AlertService } from '../../shared/services/alert.service';
 
 @Component({
   selector: 'st-home',
@@ -72,6 +74,7 @@ import { environment } from '../../../environments/environment';
     ScrollingPanelComponent,
     CalenderWidgetComponent,
     NgOptimizedImage,
+    AlertsComponent,
   ],
   templateUrl: './home.component.html',
   styleUrls: [
@@ -101,6 +104,7 @@ export class HomeComponent implements SearchablePage {
    * Constructor
    * @param meta
    * @param titleService
+   * @param alertService
    * @param playgroundSampleService
    * @param newsService
    * @param communityUpdateService
@@ -113,6 +117,7 @@ export class HomeComponent implements SearchablePage {
   constructor(
     protected meta: Meta,
     protected titleService: Title,
+    protected alertService: AlertService,
     protected playgroundSampleService: PlaygroundSampleService,
     protected newsService: NewsService,
     protected communityUpdateService: ImplementationActivityService,
@@ -162,6 +167,27 @@ export class HomeComponent implements SearchablePage {
 
     this.researchCount = toSignal(
       this.researchService.count(), { initialValue: 0 });
+
+    this.alertService.add(
+      'whats-changed',
+      'Just want to see what has changed?',
+      'We have had 10 new updates. Click to view all the new projects, news, research papers and videos since your last visit.',
+      'newspaper',
+      '/changed');
+
+    this.alertService.add(
+      'whats-changed-1',
+      '123123',
+      'We have had 10 new updates. Click to view all the new projects, news, research papers and videos since your last visit.',
+      'newspaper',
+      '/changed');
+
+    this.alertService.add(
+      'whats-changed-2',
+      'sfdgsdfgsd',
+      'We have had 10 new updates. Click to view all the new projects, news, research papers and videos since your last visit.',
+      'newspaper',
+      '/changed');
   }
 
   /**

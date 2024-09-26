@@ -32,6 +32,7 @@ import { TitleCasePipe } from '@angular/common';
 import { httpCacheInterceptor } from './http-cache.interceptor';
 import { appLegacyRoutes } from './app.legacy-routes';
 import { provideMarkdown } from 'ngx-markdown';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 const scrollConfig: InMemoryScrollingOptions = {
   scrollPositionRestoration: 'top',
@@ -88,5 +89,6 @@ export const appConfig: ApplicationConfig = {
     ),
     TitleCasePipe,
     provideMarkdown(),
+    provideAnimations()
   ]
 };

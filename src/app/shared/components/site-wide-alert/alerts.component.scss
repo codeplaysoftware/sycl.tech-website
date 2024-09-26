@@ -1,0 +1,111 @@
+:host {
+  $overflow-width: 20px;
+  $min-height: 65px;
+  $hover-height: 70px;
+  $side-padding: 1.5rem;
+
+  display: block;
+  position: relative;
+  width: calc(100% + $overflow-width);
+  left: calc($overflow-width / 2 * -1);
+  color: var(--color-white);
+
+  * {
+    padding: 0;
+    margin: 0;
+  }
+
+  .container {
+    display: flex;
+    position: relative;
+    background: linear-gradient(90deg, var(--color-orange) 61%, rgba(35, 10, 46, 1) 100%);
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, .15);
+    min-height: $min-height;
+    transition: var(--transition-fast);
+    overflow: hidden;
+
+    .background {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      transition: var(--transition-fast);
+      background: linear-gradient(90deg, var(--color-orange) 20%, rgba(35, 10, 46, 1) 100%);
+      opacity: 0;
+    }
+
+    &:hover {
+      min-height: $hover-height;
+      box-shadow: 0 3px 10px 0 rgba(0, 0, 0, .20);
+
+      .background {
+        opacity: 1;
+      }
+    }
+
+    .content,
+    .buttons {
+      position: relative;
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      cursor: pointer;
+      padding: 0 0 0 $side-padding;
+
+      .icon {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        span {
+          font-size: 30px;
+        }
+      }
+
+      .messages {
+        flex: 1;
+
+        h1 {
+          font-size: 1rem;
+        }
+
+        h2 {
+          font-size: .7rem;
+          font-weight: normal;
+          opacity: .6;
+        }
+      }
+    }
+
+    .buttons {
+      display: flex;
+      gap: .5rem;
+      padding: .5rem $side-padding;
+
+      a.button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        padding: 0 1rem;
+        background-color: rgba(255, 255, 255, .2);
+        opacity: .5;
+
+        &:hover {
+          opacity: 1;
+        }
+
+        span {
+          margin-right: .4rem;
+        }
+      }
+    }
+  }
+}
