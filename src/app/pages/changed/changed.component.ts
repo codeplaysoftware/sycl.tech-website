@@ -20,7 +20,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  OnDestroy,
   OnInit,
   Signal,
   signal,
@@ -57,16 +56,16 @@ import { ChangeStartDateComponent } from './change-start-date-popup/change-start
 import { catchError, firstValueFrom, of, tap } from 'rxjs';
 import { LoadingState } from '../../shared/LoadingState';
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
-import { SafeStorageService } from '../../shared/services/safe-storage.service';
 import { PlatformService } from '../../shared/services/platform.service';
+import { ChangedService } from '../../shared/services/changed.service';
 
 @Component({
   selector: 'st-changed',
   standalone: true,
   imports: [
     CommonModule,
-    NewsWidgetComponent,
     RouterLink,
+    NewsWidgetComponent,
     ProjectWidgetComponent,
     VideoWidgetComponent,
     ResearchWidgetComponent,
@@ -77,9 +76,7 @@ import { PlatformService } from '../../shared/services/platform.service';
   styleUrl: './changed.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChangedComponent implements OnInit, OnDestroy {
-  protected static readonly STORAGE_LAST_VISIT = 'st-last-visit-date';
-
+export class ChangedComponent implements OnInit {
   protected readonly startDate: WritableSignal<Date | undefined> = signal(undefined);
   protected readonly currentDate: WritableSignal<Date> = signal(new Date());
   protected readonly quickLinks: Signal<QuickLink[]>;
@@ -99,13 +96,11 @@ export class ChangedComponent implements OnInit, OnDestroy {
   protected readonly ResearchWidgetLayout = ResearchWidgetLayout;
   protected readonly LoadingState = LoadingState;
 
-  protected saveTimer: any = undefined;
-
   /**
    * Constructor.
    * @param title
+   * @param changedService
    * @param platformService
-   * @param safeStorageService
    * @param popupService
    * @param projectService
    * @param newsService
@@ -114,8 +109,8 @@ export class ChangedComponent implements OnInit, OnDestroy {
    */
   constructor(
     protected title: Title,
+    protected changedService: ChangedService,
     protected platformService: PlatformService,
-    protected safeStorageService: SafeStorageService,
     protected popupService: PopupService,
     protected projectService: ProjectService,
     protected newsService: NewsService,
@@ -161,34 +156,14 @@ export class ChangedComponent implements OnInit, OnDestroy {
    */
   ngOnInit() {
     if (this.platformService.isClient()) {
-      if (this.safeStorageService.has(ChangedComponent.STORAGE_LAST_VISIT)) {
-        const lastVisitDate = new Date(this.safeStorageService.get(ChangedComponent.STORAGE_LAST_VISIT));
+      const lastVisitDate = this.changedService.lastVisitDate();
+
+      if (lastVisitDate) {
         this.startDate.set(lastVisitDate);
         this.reload();
       } else {
         this.onDateSelectorClicked();
-        this.saveLastVisit();
       }
-
-      this.saveTimer = setInterval(() => {
-        this.saveLastVisit();
-      }, 6000);
-    }
-  }
-
-  /**
-   * @inheritdoc
-   */
-  ngOnDestroy() {
-    this.stopAutosave();
-  }
-
-  /**
-   * Stop any autosave timers.
-   */
-  stopAutosave() {
-    if (this.saveTimer) {
-      clearTimeout(this.saveTimer);
     }
   }
 
@@ -199,6 +174,7 @@ export class ChangedComponent implements OnInit, OnDestroy {
     const startDate = this.startDate();
 
     if (!startDate) {
+      // Escape early if no start date is set
       return;
     }
 
@@ -213,6 +189,9 @@ export class ChangedComponent implements OnInit, OnDestroy {
 
     ChangedComponent.populate(
       this.videosService, this.videoLoadingState, this.updatedVideos, startDate);
+
+    // Update the last visit time
+    this.changedService.saveLastVisitDate();
   }
 
   /**
@@ -223,29 +202,11 @@ export class ChangedComponent implements OnInit, OnDestroy {
       .then(
         (date) => {
           if (date) {
-            this.stopAutosave();
             this.startDate.set(date);
             this.reload();
-            this.saveLastVisit(date);
           }
         }
       );
-  }
-
-  /**
-   * Update the last visit date in storage.
-   */
-  saveLastVisit(date?: Date) {
-    try {
-      if (!date) {
-        date = new Date();
-      }
-
-      this.safeStorageService.save(ChangedComponent.STORAGE_LAST_VISIT, date);
-      console.log('Successfully updated last visit time.');
-    } catch (e) {
-      console.error('Skipping saving last visit time due to error.');
-    }
   }
 
   /**
