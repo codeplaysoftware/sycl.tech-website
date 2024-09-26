@@ -34,6 +34,7 @@ export const environment = {
     'st-enable-tracking',
     'st-playground-compiler-tag',
     'st-playground-saved',
-    'st-last-visit-date'
+    'st-last-visit-date',
+    'st-blocked-alerts',
   ]
 };
