@@ -50,6 +50,7 @@ import { PlatformInfoPopupComponent } from './popups/platform-info/platform-info
 import { SharePopupComponent } from './popups/share/share-popup.component';
 import { CompilerSelectorPopupComponent } from './popups/compiler-select/compiler-selector-popup.component';
 import { SafeStorageService } from '../../shared/services/safe-storage.service';
+import { AlertService } from '../../shared/services/alert.service';
 
 @Component({
   selector: 'st-playground',
@@ -104,6 +105,7 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
    * @param document
    * @param renderer
    * @param router
+   * @param alertService
    */
   constructor(
     protected titleService: Title,
@@ -115,7 +117,8 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
     protected activatedRoute: ActivatedRoute,
     @Inject(DOCUMENT) protected document: Document,
     protected renderer: Renderer2,
-    protected router: Router
+    protected router: Router,
+    protected alertService: AlertService
   ) {
     this.titleService.setTitle('Playground - SYCL.tech');
     this.meta.addTag({ name: 'keywords', content: this.getKeywords().join(', ') });
@@ -240,8 +243,22 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
         if (compilationResult.isError()) {
           this.compileState.set(LoadingState.LOAD_FAILURE);
           this.showErrorPanel();
+
+          this.alertService.add({
+            id: 'playground-compilation-result',
+            icon: 'thumb_down',
+            title: 'Compilation Failed',
+            description: `Your code has failed to compile, please check error window.`
+          });
         } else {
           this.compileState.set(LoadingState.LOAD_SUCCESS);
+
+          this.alertService.add({
+            id: 'playground-compilation-result',
+            icon: 'thumb_up',
+            title: 'Compilation Successful',
+            description: `Your code was compiled successfully on ${compilationResult.platform}.`
+          });
         }
       })
     );

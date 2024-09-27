@@ -17,7 +17,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, Signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NewsModel } from '../../shared/models/news.model';
 import { NewsService } from '../../shared/services/models/news.service';
@@ -83,7 +83,7 @@ import { AlertService } from '../../shared/services/alert.service';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeComponent implements SearchablePage {
+export class HomeComponent implements SearchablePage, OnInit, OnDestroy {
   protected readonly news: Signal<NewsModel[]>;
   protected readonly contributors: Signal<ContributorModel[]>;
   protected readonly communityUpdates: Signal<ImplementationActivityModel[]>;
@@ -167,27 +167,27 @@ export class HomeComponent implements SearchablePage {
 
     this.researchCount = toSignal(
       this.researchService.count(), { initialValue: 0 });
+  }
 
-    this.alertService.add(
-      'whats-changed',
-      'Just want to see what has changed?',
-      'We have had 10 new updates. Click to view all the new projects, news, research papers and videos since your last visit.',
-      'newspaper',
-      '/changed');
+  /**
+   * @inheritdoc
+   */
+  ngOnInit() {
+    this.alertService.add({
+      id: 'home-whats-changed',
+      icon: 'update',
+      title: 'Show me what has changed!',
+      description: 'Click here to see our new videos, news, projects and research papers, since your last visit.',
+      href: './changed',
+      persistent: true
+    });
+  }
 
-    this.alertService.add(
-      'whats-changed-1',
-      '123123',
-      'We have had 10 new updates. Click to view all the new projects, news, research papers and videos since your last visit.',
-      'newspaper',
-      '/changed');
-
-    this.alertService.add(
-      'whats-changed-2',
-      'sfdgsdfgsd',
-      'We have had 10 new updates. Click to view all the new projects, news, research papers and videos since your last visit.',
-      'newspaper',
-      '/changed');
+  /**
+   * @inheritdoc
+   */
+  ngOnDestroy() {
+    this.alertService.deleteById('home-whats-changed');
   }
 
   /**
