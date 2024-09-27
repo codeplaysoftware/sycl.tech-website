@@ -29,6 +29,7 @@ export const environment = {
   privacy_policy_email: 'info@codeplay.com',
   fathom_analytics_token: 'MMWGQHXZ',
 
+  // A list of any storage keys/cookies that this site uses
   allowed_storage_keys: [
     'st-cookies-accepted',
     'st-dark-mode-enabled',

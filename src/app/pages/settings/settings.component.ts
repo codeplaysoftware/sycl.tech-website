@@ -101,7 +101,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   /**
    * Called when a user changes any of the settings.
    */
-  onStateChanged(key: string) {
-    this.safeStorageService.save(key, this.enableStorage());
+  onStateChanged(key: string, value: any) {
+    this.safeStorageService.save(key, value);
   }
 }

@@ -28,7 +28,7 @@
         <div>
           <st-switch
               [(checked)]="enableStorage"
-              (checkedChange)="onStateChanged('st-cookies-accepted')"></st-switch>
+              (checkedChange)="onStateChanged('st-cookies-accepted', $event)"></st-switch>
         </div>
       </div>
       <div class="option" [ngClass]="{'disabled': !enableStorage()}">
@@ -39,7 +39,7 @@
         <div>
           <st-switch
               [(checked)]="enableDarkMode"
-              (checkedChange)="onStateChanged('st-dark-mode-enabled')"></st-switch>
+              (checkedChange)="onStateChanged('st-dark-mode-enabled', $event)"></st-switch>
         </div>
       </div>
       <div class="option" [ngClass]="{'disabled': !enableStorage()}">
@@ -50,7 +50,7 @@
         <div>
           <st-switch
               [(checked)]="enableTracking"
-              (checkedChange)="onStateChanged('st-enable-tracking')"></st-switch>
+              (checkedChange)="onStateChanged('st-enable-tracking', $event)"></st-switch>
         </div>
       </div>
       <div class="option" [ngClass]="{'disabled': !enableStorage()}">
@@ -61,7 +61,7 @@
         <div>
           <st-switch
               [(checked)]="enableAlerts"
-              (checkedChange)="onStateChanged('st-enable-alerts')"></st-switch>
+              (checkedChange)="onStateChanged('st-enable-alerts', $event)"></st-switch>
         </div>
       </div>
     </div>
