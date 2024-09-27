@@ -38,6 +38,7 @@ import { CookieAcceptanceComponent } from './pages/cookies/shared/cookie-accepta
 import { toSignal } from '@angular/core/rxjs-interop';
 import { PlatformService } from './shared/services/platform.service';
 import { SafeStorageService } from './shared/services/safe-storage.service';
+import { AlertsComponent } from './shared/components/site-wide-alert/alerts.component';
 
 @Component({
   selector: 'app-root',
@@ -50,7 +51,8 @@ import { SafeStorageService } from './shared/services/safe-storage.service';
     NgOptimizedImage,
     SearchComponent,
     CookieAcceptanceComponent,
-    NgClass
+    NgClass,
+    AlertsComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
