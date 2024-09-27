@@ -29,6 +29,11 @@ export class SafeStorageService {
   private readonly subject: BehaviorSubject<State>;
   private readonly allowedStorageKeys: string[] = environment.allowed_storage_keys;
 
+  protected readonly enableByDefault = [
+    'st-enable-tracking',
+    'st-enable-alerts'
+  ]
+
   /**
    * Constructor.
    * @param storageService
@@ -62,9 +67,22 @@ export class SafeStorageService {
       this.storageService.remove(key);
     } else {
       this.storageService.clear();
-      this.storageService.set(SafeStorageService.STORAGE_ALLOWED_KEY, this.allowed());
+    }
+  }
+
+  /**
+   * Set if we are allowed or not to store data to the storage service.
+   */
+  setStorageAllowed(enable: boolean) {
+    if (enable) {
+      for (const key of this.enableByDefault) {
+        this.storageService.set(key, enable);
+      }
+    } else {
+      this.clear();
     }
 
+    this.storageService.set(SafeStorageService.STORAGE_ALLOWED_KEY, enable);
     this.notify();
   }
 
@@ -72,29 +90,33 @@ export class SafeStorageService {
    * Save a value to the safe storage service.
    * @param key the key to use to save and access the value
    * @param value the value to store
-   * @param notify if we wish to notify subscribers that the state has changed
    * @throws DefaultStorageKeys will be thrown if we are not allowed to store data
    */
   save(
     key: string,
-    value: any,
-    notify: boolean = true
+    value: any
   ) {
-    if (key != SafeStorageService.STORAGE_ALLOWED_KEY) {
-      if (!this.allowed()) {
-        throw new StorageNotEnabledError();
-      }
+    // If the key is the STORAGE_ALLOWED_KEY, handle this separately
+    if (key == SafeStorageService.STORAGE_ALLOWED_KEY) {
+      this.setStorageAllowed(value);
+      return ;
+    }
 
-      if (!this.allowedStorageKeys.includes(key)) {
-        throw new KeyNotAllowedError(`The key "${key}" is not in the allowed key list.`);
-      }
+    // Check if we are allowed to store to the storage service. We would be denied if the user has not allowed
+    // cookies/storage.
+    if (!this.allowed()) {
+      throw new StorageNotEnabledError('The storage service is not enabled.');
+    }
+
+    // Check if the key is in the allowed list of keys, this prevents us storing something we haven't declared
+    if (!this.allowedStorageKeys.includes(key)) {
+      throw new KeyNotAllowedError(`The key "${key}" is not in the allowed key list.`);
     }
 
     this.storageService.set(key, value);
 
-    if (notify) {
-      this.notify();
-    }
+    // Notify any observers of change to the storage state
+    this.notify();
   }
 
   /**
@@ -120,7 +142,7 @@ export class SafeStorageService {
   /**
    * Get the current state of all known allowed keys.
    */
-  state() {
+  private state() {
     const state: any = {};
 
     for (const key of this.allowedStorageKeys) {
