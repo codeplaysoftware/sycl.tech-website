@@ -68,7 +68,6 @@ export class CookieAcceptanceComponent {
    * Called when a user rejects our policies.
    */
   onRejectPolicies() {
-    this.safeStorageService.clear();
     this.safeStorageService.save(SafeStorageService.STORAGE_ALLOWED_KEY, false);
   }
 }
