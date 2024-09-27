@@ -18,14 +18,14 @@
 
 import {
   ChangeDetectionStrategy,
-  Component,
+  Component, OnDestroy,
   OnInit,
   signal,
   WritableSignal
 } from '@angular/core';
 import { Alert, AlertService } from '../../services/alert.service';
 import { RouterLink } from '@angular/router';
-import { tap } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import { PlatformService } from '../../services/platform.service';
 import { SafeStorageService } from '../../services/safe-storage.service';
 import { animate, style, transition, trigger } from '@angular/animations';
@@ -53,12 +53,18 @@ import { CommonModule } from '@angular/common';
   ])
 ],
 })
-export class AlertsComponent implements OnInit {
+export class AlertsComponent implements OnInit, OnDestroy {
   /**
    * The signal to store the currently visible alert for rendering via the template.
    * @protected
    */
   protected alerts: WritableSignal<Alert[]> = signal([]);
+
+  /**
+   * Subscription to track alerts.
+   * @protected
+   */
+  protected alertSubscription?: Subscription;
 
   /**
    * Constructor.
@@ -80,13 +86,20 @@ export class AlertsComponent implements OnInit {
       return;
     }
 
-    this.alertService.observe()
+    this.alertSubscription = this.alertService.observe()
       .pipe(
         tap((alerts) => {
           this.alerts.set(alerts);
         })
       )
       .subscribe();
+  }
+
+  /**
+   * @inheritdoc
+   */
+  ngOnDestroy() {
+    this.alertSubscription?.unsubscribe();
   }
 
   /**

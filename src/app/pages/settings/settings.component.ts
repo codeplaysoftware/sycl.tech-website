@@ -16,10 +16,10 @@
  *
  *--------------------------------------------------------------------------------------------*/
 
-import { ChangeDetectionStrategy, Component, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SwitchComponent } from '../../shared/components/switch/switch.component';
-import { tap } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { SafeStorageService } from '../../shared/services/safe-storage.service';
 
@@ -34,11 +34,13 @@ import { SafeStorageService } from '../../shared/services/safe-storage.service';
   styleUrl: './settings.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SettingsComponent {
+export class SettingsComponent implements OnInit, OnDestroy {
   protected enableStorage: WritableSignal<boolean> = signal(false);
   protected enableDarkMode: WritableSignal<boolean> = signal(false);
   protected enableTracking: WritableSignal<boolean> = signal(false);
   protected enableAlerts: WritableSignal<boolean> = signal(false);
+
+  protected storageSubscription?: Subscription;
 
   /**
    * Constructor.
@@ -50,8 +52,13 @@ export class SettingsComponent {
     protected safeStorageService: SafeStorageService,
   ) {
     this.title.setTitle('Settings - SYCL.tech');
+  }
 
-    safeStorageService.observe().pipe(
+  /**
+   * @inheritdoc
+   */
+  ngOnInit(): void {
+    this.storageSubscription = this.safeStorageService.observe().pipe(
       tap((state) => {
         this.enableStorage.set(state['st-cookies-accepted'] == true);
         this.enableDarkMode.set(state['st-dark-mode-enabled'] == true);
@@ -59,6 +66,13 @@ export class SettingsComponent {
         this.enableAlerts.set(state['st-enable-alerts'] == true);
       })
     ).subscribe();
+  }
+
+  /**
+   * @inheritdoc
+   */
+  ngOnDestroy(): void {
+    this.storageSubscription?.unsubscribe();
   }
 
   /**

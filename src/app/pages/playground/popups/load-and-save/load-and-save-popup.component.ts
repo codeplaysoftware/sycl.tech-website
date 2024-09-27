@@ -19,7 +19,7 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 import { DatePipe } from '@angular/common';
-import { tap } from 'rxjs';
+import { take, tap } from 'rxjs';
 import { PopupReference } from '../../../../shared/components/popup/popup.service';
 import { RouterLink } from '@angular/router';
 import { SafeStorageService } from '../../../../shared/services/safe-storage.service';
@@ -58,16 +58,18 @@ export class LoadAndSavePopupComponent implements OnInit {
    * @inheritDoc
    */
   ngOnInit(): void {
-    this.safeStorageService.observe().pipe(
-      tap(() => {
-        this.storageEnabled.set(this.safeStorageService.allowed());
+    this.safeStorageService.observe()
+      .pipe(
+        tap(() => {
+          this.storageEnabled.set(this.safeStorageService.allowed());
 
-        if (this.safeStorageService.has(LoadAndSavePopupComponent.storageKey)) {
-          const saved = this.safeStorageService.get(LoadAndSavePopupComponent.storageKey);
-          this.saved.set(saved.reverse());
-        }
-      }
-    )).subscribe();
+          if (this.safeStorageService.has(LoadAndSavePopupComponent.storageKey)) {
+            const saved = this.safeStorageService.get(LoadAndSavePopupComponent.storageKey);
+            this.saved.set(saved.reverse());
+          }
+        }),
+        take(1))
+      .subscribe();
   }
 
   /**
