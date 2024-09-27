@@ -86,10 +86,10 @@ export class AppComponent implements OnDestroy {
   protected enableDarkModeSwitch: WritableSignal<boolean> = signal(false);
 
   /**
-   * State service subscription.
+   * Subscription used for storage changes.
    * @protected
    */
-  protected state$: Subscription | undefined;
+  protected storageSubscription: Subscription | undefined;
 
   /**
    * Constructor.
@@ -119,7 +119,7 @@ export class AppComponent implements OnDestroy {
         }
       });
 
-      this.state$ = this.safeStorageService.observe().subscribe((state) => {
+      this.storageSubscription = this.safeStorageService.observe().subscribe((state) => {
         const fathomTrackers = this.document.documentElement.getElementsByClassName('fathom-tracking-script');
 
         if (state['st-enable-tracking'] && fathomTrackers.length === 0) {
@@ -158,7 +158,7 @@ export class AppComponent implements OnDestroy {
    * @inheritDoc
    */
   ngOnDestroy() {
-    this.state$?.unsubscribe();
+    this.storageSubscription?.unsubscribe();
   }
 
   /**
