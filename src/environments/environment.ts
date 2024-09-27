@@ -28,6 +28,7 @@ export const environment = {
   },
   privacy_policy_email: 'info@codeplay.com',
   fathom_analytics_token: 'MMWGQHXZ',
+
   allowed_storage_keys: [
     'st-cookies-accepted',
     'st-dark-mode-enabled',
@@ -36,5 +37,6 @@ export const environment = {
     'st-playground-saved',
     'st-last-visit-date',
     'st-blocked-alerts',
-  ]
+    'st-enable-alerts',
+  ],
 };
