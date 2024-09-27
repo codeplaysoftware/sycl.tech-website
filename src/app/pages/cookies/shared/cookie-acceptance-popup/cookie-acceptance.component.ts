@@ -19,10 +19,10 @@
 import { ChangeDetectionStrategy, Component, signal, Signal } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { StateService } from '../../../../shared/services/state.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import { PlatformService } from '../../../../shared/services/platform.service';
+import { SafeStorageService, State } from '../../../../shared/services/safe-storage.service';
 
 @Component({
   selector: 'st-cookie-acceptance',
@@ -40,18 +40,18 @@ export class CookieAcceptanceComponent {
 
   /**
    * Constructor.
-   * @param stateService
+   * @param safeStorageService
    * @param platformService
    */
   constructor(
-    protected stateService: StateService,
+    protected safeStorageService: SafeStorageService,
     protected platformService: PlatformService
   ) {
     // Only show the dialog on client to avoid flickering (dialog will be rendered during pre-rendering).
     if (this.platformService.isClient()) {
-      this.show = toSignal(this.stateService.getObservable().pipe(
-        map((state) => {
-          return (state.cookiesAccepted === undefined);
+      this.show = toSignal(this.safeStorageService.observe().pipe(
+        map((state: State) => {
+          return state[SafeStorageService.STORAGE_ALLOWED_KEY] == undefined;
         }),
       ), { initialValue: false });
     }
@@ -61,13 +61,13 @@ export class CookieAcceptanceComponent {
    * Called when a user accepts our policies.
    */
   onAcceptPolicies() {
-    this.stateService.setStoragePolicyAccepted(true);
+    this.safeStorageService.save(SafeStorageService.STORAGE_ALLOWED_KEY, true);
   }
 
   /**
    * Called when a user rejects our policies.
    */
   onRejectPolicies() {
-    this.stateService.setStoragePolicyAccepted(false);
+    this.safeStorageService.save(SafeStorageService.STORAGE_ALLOWED_KEY, false);
   }
 }

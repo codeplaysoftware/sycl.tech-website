@@ -19,14 +19,17 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../environments/environment';
-import { StateService } from '../../shared/services/state.service';
 import { Title } from '@angular/platform-browser';
+import { SafeStorageService } from '../../shared/services/safe-storage.service';
+import { CookieAcceptanceComponent } from './shared/cookie-acceptance-popup/cookie-acceptance.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'st-cookies',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    RouterLink
   ],
   templateUrl: './cookies.component.html',
   styleUrl: './cookies.component.scss',
@@ -37,11 +40,11 @@ export class CookiesComponent {
 
   /**
    * Constructor.
-   * @param stateService
+   * @param safeStorageService
    * @param title
    */
   constructor(
-    protected stateService: StateService,
+    protected safeStorageService: SafeStorageService,
     protected title: Title
   ) {
     this.title.setTitle('Cookies - SYCL.tech');
@@ -51,6 +54,6 @@ export class CookiesComponent {
    * Called when a user wishes to change their cookie/storage acceptance.
    */
   onStorageAcceptance() {
-    this.stateService.setStoragePolicyAccepted(undefined);
+    this.safeStorageService.clear(SafeStorageService.STORAGE_ALLOWED_KEY);
   }
 }

@@ -1,5 +1,7 @@
 table {
   width: 100%;
+  border-radius: var(--border-radius);
+  overflow: hidden;
 
   td, th {
     padding: 1.2rem;
@@ -14,5 +16,9 @@ table {
         text-align: left;
       }
     }
+  }
+
+  tr td:first-of-type {
+    font-weight: bold;
   }
 }

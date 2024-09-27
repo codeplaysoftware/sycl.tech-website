@@ -33,11 +33,12 @@ import { SiteWideSearchComponent } from './shared/components/site-wide-search/si
 import { environment } from '../environments/environment';
 import { PopupService } from './shared/components/popup/popup.service';
 import { SearchComponent } from './shared/components/search/search.component';
-import { StateService } from './shared/services/state.service';
 import { map, Subscription } from 'rxjs';
 import { CookieAcceptanceComponent } from './pages/cookies/shared/cookie-acceptance-popup/cookie-acceptance.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { PlatformService } from './shared/services/platform.service';
+import { SafeStorageService } from './shared/services/safe-storage.service';
+import { AlertsComponent } from './shared/components/site-wide-alert/alerts.component';
 
 @Component({
   selector: 'app-root',
@@ -50,7 +51,8 @@ import { PlatformService } from './shared/services/platform.service';
     NgOptimizedImage,
     SearchComponent,
     CookieAcceptanceComponent,
-    NgClass
+    NgClass,
+    AlertsComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -84,24 +86,29 @@ export class AppComponent implements OnDestroy {
   protected enableDarkModeSwitch: WritableSignal<boolean> = signal(false);
 
   /**
-   * State service subscription.
+   * Subscription used for storage changes.
    * @protected
    */
-  protected state$: Subscription | undefined;
+  protected storageSubscription: Subscription | undefined;
 
   /**
    * Constructor.
+   * @param document
+   * @param renderer
+   * @param popupService
+   * @param safeStorageService
+   * @param platformService
    */
   constructor(
     @Inject(DOCUMENT) protected document: Document,
     protected renderer: Renderer2,
     protected popupService: PopupService,
-    protected stateService: StateService,
+    protected safeStorageService: SafeStorageService,
     protected platformService: PlatformService,
   ) {
     if (this.platformService.isClient()) {
-      this.darkModeEnabled = toSignal(this.stateService.getObservable().pipe(
-        map((state) => state.darkModeEnabled),
+      this.darkModeEnabled = toSignal(this.safeStorageService.observe().pipe(
+        map((state) => state['st-dark-mode-enabled']),
       ), { initialValue: false });
 
       effect(() => {
@@ -112,10 +119,10 @@ export class AppComponent implements OnDestroy {
         }
       });
 
-      this.state$ = this.stateService.getObservable().subscribe((state) => {
+      this.storageSubscription = this.safeStorageService.observe().subscribe((state) => {
         const fathomTrackers = this.document.documentElement.getElementsByClassName('fathom-tracking-script');
 
-        if (state.enableTracking && fathomTrackers.length === 0) {
+        if (state['st-enable-tracking'] && fathomTrackers.length === 0) {
           // Add fathom Analytics
           const fathom = document.createElement('script');
           fathom.setAttribute('class', 'fathom-tracking-script');
@@ -126,16 +133,16 @@ export class AppComponent implements OnDestroy {
 
           // Add to dom
           this.document.head.appendChild(fathom);
-        } else if (!state.enableTracking && fathomTrackers.length > 0) {
+        } else if (!state['st-enable-tracking'] && fathomTrackers.length > 0) {
           fathomTrackers[0].remove();
         }
 
-        this.enableDarkModeSwitch.set(state.cookiesAccepted ? state.cookiesAccepted : false);
+        this.enableDarkModeSwitch.set(this.safeStorageService.allowed());
       });
     }
 
-    this.darkModeEnabled = toSignal(this.stateService.getObservable().pipe(
-      map((state) => state.darkModeEnabled)
+    this.darkModeEnabled = toSignal(this.safeStorageService.observe().pipe(
+      map((state) => state['st-dark-mode-enabled'])
     ), { initialValue: false });
 
     effect(() => {
@@ -151,7 +158,7 @@ export class AppComponent implements OnDestroy {
    * @inheritDoc
    */
   ngOnDestroy() {
-    this.state$?.unsubscribe();
+    this.storageSubscription?.unsubscribe();
   }
 
   /**
@@ -163,7 +170,7 @@ export class AppComponent implements OnDestroy {
       return ;
     }
 
-    this.stateService.setDarkMode(!this.darkModeEnabled());
+    this.safeStorageService.save('st-dark-mode-enabled', !this.darkModeEnabled());
   }
 
   /**

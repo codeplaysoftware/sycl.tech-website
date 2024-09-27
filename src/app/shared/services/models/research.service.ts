@@ -81,4 +81,21 @@ export class ResearchService extends JsonFeedService {
       map((items) => items[Math.floor(Math.random() * items.length)])
     );
   }
+
+  /**
+   * Get all research items after a specific date.
+   * @param startDate
+   * @param limit
+   */
+  afterDate(
+    startDate: Date,
+    limit: number | null = null
+  ): Observable<ResearchModel[]> {
+    return this.all(limit)
+      .pipe(
+        map((items) => {
+          return startDate ? items.filter((item) => (item.date >= startDate)) : items;
+        })
+      );
+  }
 }

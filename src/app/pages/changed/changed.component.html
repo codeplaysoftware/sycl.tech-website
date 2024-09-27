@@ -1,0 +1,159 @@
+<section id="intro">
+  <div class="wrapper panel fancy intro">
+    <div>
+      <header>
+        <h1>What's Changed?</h1>
+        <h2>Quickly see what content has been added since your last visit.</h2>
+
+        <!-- Allow users to change the date range -->
+        <div class="date-range">
+          <div class="date selectable" (click)="onDateSelectorClicked()">
+            <h2>My Last Visit</h2>
+            <h3>{{ startDate() | date: 'mediumDate' }}</h3>
+          </div>
+          <div class="sep">
+            <span class="material-symbols-outlined panel-icon">arrow_circle_right</span>
+          </div>
+          <div class="date">
+            <h2>Today</h2>
+            <h3>{{ currentDate() | date: 'mediumDate' }}</h3>
+          </div>
+        </div>
+
+        <!-- Quick links for quick jumping to sections -->
+        <st-quick-links [links]="this.quickLinks()"></st-quick-links>
+      </header>
+    </div>
+    <div>
+      <span class="material-symbols-outlined panel-icon">update</span>
+    </div>
+  </div>
+</section>
+
+@if (newsLoadingState() != LoadingState.NOT_STARTED) {
+  <!-- Section: News -->
+  <section id="news">
+    <div class="wrapper panel content">
+      @if (newsLoadingState() == LoadingState.LOAD_SUCCESS) {
+        <header>
+          <div>
+            <div>
+              <h1>News &amp; Updates</h1>
+              <h2>We have had {{ updatedNews().length }} new additions since
+                {{ startDate() | date: 'mediumDate' }}</h2>
+            </div>
+          </div>
+          <div>
+            @if (updatedNews().length > 0) {
+              <a class="button" routerLink="./news">
+                <span class="material-symbols-outlined">newspaper</span>View All</a>
+            }
+          </div>
+        </header>
+        <div class="list">
+          @for (item of updatedNews(); track item.id) {
+            <st-news-widget [news]="item" [layout]="NewsWidgetLayout.ROW"></st-news-widget>
+          }
+        </div>
+      } @else if(newsLoadingState() == LoadingState.LOADING) {
+        <st-loading></st-loading>
+      }
+    </div>
+  </section>
+}
+
+@if (projectsLoadingState() != LoadingState.NOT_STARTED) {
+  <!-- Section: Projects -->
+  <section id="projects">
+    <div class="wrapper panel content">
+      @if (projectsLoadingState() == LoadingState.LOAD_SUCCESS) {
+        <header>
+          <div>
+            <div>
+              <h1>Projects</h1>
+              <h2>We have had {{ updatedProjects().length }} new additions since
+                {{ startDate() | date: 'mediumDate' }}</h2>
+            </div>
+          </div>
+          <div>
+            @if (updatedProjects().length > 0) {
+              <a class="button" routerLink="../ecosystem/projects">
+                <span class="material-symbols-outlined">genetics</span>View All</a>
+            }
+          </div>
+        </header>
+        <div class="list">
+          @for (item of updatedProjects(); track item.id) {
+            <st-project-widget [project]="item" [layout]="ProjectWidgetLayout.ROW"></st-project-widget>
+          }
+        </div>
+      } @else if(projectsLoadingState() == LoadingState.LOADING) {
+        <st-loading></st-loading>
+      }
+    </div>
+  </section>
+}
+
+@if (videoLoadingState() != LoadingState.NOT_STARTED) {
+  <!-- Section: Videos -->
+  <section id="videos">
+    <div class="wrapper panel content">
+      @if (videoLoadingState() == LoadingState.LOAD_SUCCESS) {
+        <header>
+          <div>
+            <div>
+              <h1>Videos</h1>
+              <h2>We have had {{ updatedVideos().length }} new additions since
+                {{ startDate() | date: 'mediumDate' }}</h2>
+            </div>
+          </div>
+          <div>
+            @if (updatedVideos().length > 0) {
+              <a class="button" routerLink="../ecosystem/presentations">
+                <span class="material-symbols-outlined">slideshow</span>View All</a>
+            }
+          </div>
+        </header>
+        <div class="list">
+          @for (item of updatedVideos(); track item.id) {
+            <st-video-widget [video]="item"></st-video-widget>
+          }
+        </div>
+      } @else if(videoLoadingState() == LoadingState.LOADING) {
+        <st-loading></st-loading>
+      }
+    </div>
+  </section>
+}
+
+@if (researchLoadingState() != LoadingState.NOT_STARTED) {
+  <!-- Section: Research -->
+  <section id="research">
+    <div class="wrapper panel content">
+      @if (researchLoadingState() == LoadingState.LOAD_SUCCESS) {
+        <header>
+          <div>
+            <div>
+              <h1>Research Papers</h1>
+              <h2>We have had {{ updatedResearch().length }} new additions since
+                {{ startDate() | date: 'mediumDate' }}</h2>
+            </div>
+          </div>
+          <div>
+            @if (updatedResearch().length > 0) {
+              <a class="button" routerLink="../ecosystem/research">
+                <span class="material-symbols-outlined">biotech</span>View All</a>
+            }
+          </div>
+        </header>
+        <div class="list">
+          @for (item of updatedResearch(); track item.id) {
+            <st-research-widget [research]="item" [layout]="ResearchWidgetLayout.WIDGET"></st-research-widget>
+          }
+        </div>
+      } @else if(researchLoadingState() == LoadingState.LOADING) {
+        <st-loading></st-loading>
+      }
+    </div>
+  </section>
+}

@@ -42,15 +42,15 @@ import { Meta, Title } from '@angular/platform-browser';
 import { PlaygroundSampleService } from '../../shared/services/models/playground-sample.service';
 import { AlertBubbleComponent } from '../../shared/components/alert-bubble/alert-bubble.component';
 import { SearchablePage } from '../../shared/components/site-wide-search/SearchablePage';
-import { StateService } from '../../shared/services/state.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { LoadAndSavePopupComponent } from './popups/load-and-save/load-and-save-popup.component';
 import { SampleChooserComponent } from './popups/sample-chooser/sample-chooser.component';
 import { PlatformInfoPopupComponent } from './popups/platform-info/platform-info-popup.component';
 import { SharePopupComponent } from './popups/share/share-popup.component';
 import { CompilerSelectorPopupComponent } from './popups/compiler-select/compiler-selector-popup.component';
+import { SafeStorageService } from '../../shared/services/safe-storage.service';
+import { AlertService } from '../../shared/services/alert.service';
 
 @Component({
   selector: 'st-playground',
@@ -100,12 +100,12 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
    * @param popupService
    * @param platformService
    * @param playgroundService
-   * @param stateService
+   * @param safeStorageService
    * @param activatedRoute
-   * @param storageService
    * @param document
    * @param renderer
    * @param router
+   * @param alertService
    */
   constructor(
     protected titleService: Title,
@@ -113,12 +113,12 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
     protected popupService: PopupService,
     protected platformService: PlatformService,
     protected playgroundService: PlaygroundService,
-    protected stateService: StateService,
+    protected safeStorageService: SafeStorageService,
     protected activatedRoute: ActivatedRoute,
-    @Inject(LOCAL_STORAGE) protected storageService: StorageService,
     @Inject(DOCUMENT) protected document: Document,
     protected renderer: Renderer2,
-    protected router: Router
+    protected router: Router,
+    protected alertService: AlertService
   ) {
     this.titleService.setTitle('Playground - SYCL.tech');
     this.meta.addTag({ name: 'keywords', content: this.getKeywords().join(', ') });
@@ -174,7 +174,7 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
                 if (sample == undefined) {
                   this.setSample(PlaygroundSampleService.getDefaultSample());
 
-                  if (this.storageService.has(LoadAndSavePopupComponent.storageKey)) {
+                  if (this.safeStorageService.has(LoadAndSavePopupComponent.storageKey)) {
                     this.onSaveLoadSample();
                   } else if (this.platformService.isClient()) {
                     this.onChooseSample();
@@ -210,8 +210,8 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
    * Get the editor theme.
    */
   getEditorTheme(): Observable<string> {
-    return this.stateService.getObservable().pipe(
-      map(state => state.darkModeEnabled ? 'st-dark' : 'vs-light'));
+    return this.safeStorageService.observe().pipe(
+      map(state => state['st-dark-mode-enabled'] ? 'st-dark' : 'vs-light'));
   }
 
   /**
@@ -243,8 +243,22 @@ export class PlaygroundComponent implements SearchablePage, OnInit, OnDestroy {
         if (compilationResult.isError()) {
           this.compileState.set(LoadingState.LOAD_FAILURE);
           this.showErrorPanel();
+
+          this.alertService.add({
+            id: 'playground-compilation-result',
+            icon: 'thumb_down',
+            title: 'Compilation Failed',
+            description: `Your code has failed to compile, please check error window.`
+          });
         } else {
           this.compileState.set(LoadingState.LOAD_SUCCESS);
+
+          this.alertService.add({
+            id: 'playground-compilation-result',
+            icon: 'thumb_up',
+            title: 'Compilation Successful',
+            description: `Your code was compiled successfully on ${compilationResult.platform}.`
+          });
         }
       })
     );

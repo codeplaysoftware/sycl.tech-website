@@ -16,12 +16,12 @@
  *
  *--------------------------------------------------------------------------------------------*/
 
-import { ChangeDetectionStrategy, Component, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SwitchComponent } from '../../shared/components/switch/switch.component';
-import { StateService } from '../../shared/services/state.service';
-import { tap } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import { Title } from '@angular/platform-browser';
+import { SafeStorageService } from '../../shared/services/safe-storage.service';
 
 @Component({
   selector: 'st-settings',
@@ -34,39 +34,74 @@ import { Title } from '@angular/platform-browser';
   styleUrl: './settings.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SettingsComponent {
-  enableStorage: WritableSignal<boolean> = signal(false);
-  enableDarkMode: WritableSignal<boolean> = signal(false);
-  enableTracking: WritableSignal<boolean> = signal(false);
+export class SettingsComponent implements OnInit, OnDestroy {
+  /**
+   * Signal for the enable storage switch.
+   * @protected
+   */
+  protected enableStorage: WritableSignal<boolean> = signal(false);
+
+  /**
+   * Signal for the enable dark mode switch.
+   * @protected
+   */
+  protected enableDarkMode: WritableSignal<boolean> = signal(false);
+
+  /**
+   * Signal for the enable tracking switch.
+   * @protected
+   */
+  protected enableTracking: WritableSignal<boolean> = signal(false);
+
+  /**
+   * Signal for the enable alerts switch.
+   * @protected
+   */
+  protected enableAlerts: WritableSignal<boolean> = signal(false);
+
+  /**
+   * Subscription to tracking storage changes.
+   * @protected
+   */
+  protected storageSubscription?: Subscription;
 
   /**
    * Constructor.
    * @param title
-   * @param stateService
+   * @param safeStorageService
    */
   constructor(
     protected title: Title,
-    protected stateService: StateService,
+    protected safeStorageService: SafeStorageService,
   ) {
     this.title.setTitle('Settings - SYCL.tech');
+  }
 
-    stateService.getObservable().pipe(
+  /**
+   * @inheritdoc
+   */
+  ngOnInit(): void {
+    this.storageSubscription = this.safeStorageService.observe().pipe(
       tap((state) => {
-        this.enableDarkMode.set(state.darkModeEnabled);
-        this.enableStorage.set(state.cookiesAccepted ? state.cookiesAccepted : false);
-        this.enableTracking.set(state.enableTracking);
+        this.enableStorage.set(state['st-cookies-accepted'] == true);
+        this.enableDarkMode.set(state['st-dark-mode-enabled'] == true);
+        this.enableTracking.set(state['st-enable-tracking'] == true);
+        this.enableAlerts.set(state['st-enable-alerts'] == true);
       })
     ).subscribe();
   }
 
   /**
+   * @inheritdoc
+   */
+  ngOnDestroy(): void {
+    this.storageSubscription?.unsubscribe();
+  }
+
+  /**
    * Called when a user changes any of the settings.
    */
-  onStateChanged() {
-    const state = this.stateService.snapshot();
-    state.enableTracking = this.enableTracking();
-    state.darkModeEnabled = this.enableDarkMode();
-    state.cookiesAccepted = this.enableStorage();
-    this.stateService.update(state);
+  onStateChanged(key: string, value: any) {
+    this.safeStorageService.save(key, value);
   }
 }

@@ -1,0 +1,89 @@
+:host {
+  $side-padding: 1rem;
+  $container-padding: 1.5rem;
+
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  bottom: $container-padding;
+  right: $container-padding;
+  z-index: 9999;
+
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    width: 430px;
+    display: flex;
+    overflow: hidden;
+    background-color: rgba(138, 40, 14, 0.6);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: var(--border-radius);
+    box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, .2);
+    transition: var(--transition-fast);
+    color: var(--color-white);
+
+    &:hover {
+      box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, .4);
+      background-color: var(--color-orange);
+    }
+
+    .content {
+      display: flex;
+      padding: $side-padding;
+      gap: 1rem;
+      flex: 1;
+      cursor: pointer;
+
+      .icon {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        span {
+          font-size: 30px;
+        }
+      }
+
+      .messages {
+        flex: 1;
+
+        h1 {
+          font-size: 1rem;
+        }
+
+        h2 {
+          font-size: .7rem;
+          font-weight: normal;
+          opacity: .8;
+          margin-top: .2rem;
+        }
+      }
+    }
+
+    .buttons {
+      display: flex;
+      gap: 1rem;
+
+      a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        padding: $side-padding;
+        opacity: .5;
+        transition: var(--transition-fast);
+        background-color: rgba(0, 0, 0, .15);
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

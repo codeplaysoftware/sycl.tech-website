@@ -44,12 +44,12 @@ export class SwitchComponent {
    */
   @HostListener('click', ['$event'])
   onClick() {
-    this.clicked.emit();
-
     if (!this.enabled()) {
+      this.clicked.emit();
       return ;
     }
 
     this.checked.set(!this.checked());
+    this.clicked.emit();
   }
 }

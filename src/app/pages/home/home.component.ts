@@ -17,7 +17,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, Signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NewsModel } from '../../shared/models/news.model';
 import { NewsService } from '../../shared/services/models/news.service';
@@ -55,6 +55,8 @@ import { ImplementationActivityService } from '../../shared/services/models/impl
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CalenderWidgetComponent } from '../calendar/shared/calendar-item-widget/calender-widget.component';
 import { environment } from '../../../environments/environment';
+import { AlertsComponent } from '../../shared/components/site-wide-alert/alerts.component';
+import { AlertService } from '../../shared/services/alert.service';
 
 @Component({
   selector: 'st-home',
@@ -72,6 +74,7 @@ import { environment } from '../../../environments/environment';
     ScrollingPanelComponent,
     CalenderWidgetComponent,
     NgOptimizedImage,
+    AlertsComponent,
   ],
   templateUrl: './home.component.html',
   styleUrls: [
@@ -80,7 +83,7 @@ import { environment } from '../../../environments/environment';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeComponent implements SearchablePage {
+export class HomeComponent implements SearchablePage, OnInit, OnDestroy {
   protected readonly news: Signal<NewsModel[]>;
   protected readonly contributors: Signal<ContributorModel[]>;
   protected readonly communityUpdates: Signal<ImplementationActivityModel[]>;
@@ -101,6 +104,7 @@ export class HomeComponent implements SearchablePage {
    * Constructor
    * @param meta
    * @param titleService
+   * @param alertService
    * @param playgroundSampleService
    * @param newsService
    * @param communityUpdateService
@@ -113,6 +117,7 @@ export class HomeComponent implements SearchablePage {
   constructor(
     protected meta: Meta,
     protected titleService: Title,
+    protected alertService: AlertService,
     protected playgroundSampleService: PlaygroundSampleService,
     protected newsService: NewsService,
     protected communityUpdateService: ImplementationActivityService,
@@ -162,6 +167,27 @@ export class HomeComponent implements SearchablePage {
 
     this.researchCount = toSignal(
       this.researchService.count(), { initialValue: 0 });
+  }
+
+  /**
+   * @inheritdoc
+   */
+  ngOnInit() {
+    this.alertService.add({
+      id: 'home-whats-changed',
+      icon: 'update',
+      title: 'Show me what has changed!',
+      description: 'Click here to see our new videos, news, projects and research papers, since your last visit.',
+      href: './changed',
+      persistent: true
+    });
+  }
+
+  /**
+   * @inheritdoc
+   */
+  ngOnDestroy() {
+    this.alertService.deleteById('home-whats-changed');
   }
 
   /**

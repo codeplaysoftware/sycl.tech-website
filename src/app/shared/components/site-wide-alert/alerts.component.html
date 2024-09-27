@@ -1,0 +1,21 @@
+@for (alert of alerts(); track alert.id) {
+  <div class="container" [@slideInSide]>
+    <a class="content" [routerLink]="alert.href" (click)="onAlertClicked(alert)">
+      <div class="icon">
+        <span class="material-symbols-outlined">{{ alert.icon }}</span>
+      </div>
+      <div class="messages">
+        <h1 [innerHTML]="alert.title"></h1>
+
+        @if (alert.description; as subMessage) {
+          <h2 [innerHTML]="subMessage"></h2>
+        }
+      </div>
+    </a>
+    <div class="buttons">
+      <a class="block" title="Don't show this alert ever again" (click)="onBlockAlert(alert)">
+        <span class="material-symbols-outlined">block</span>
+      </a>
+    </div>
+  </div>
+}

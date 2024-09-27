@@ -19,11 +19,10 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 import { DatePipe } from '@angular/common';
-import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
-import { StateService } from '../../../../shared/services/state.service';
-import { tap } from 'rxjs';
+import { take, tap } from 'rxjs';
 import { PopupReference } from '../../../../shared/components/popup/popup.service';
 import { RouterLink } from '@angular/router';
+import { SafeStorageService } from '../../../../shared/services/safe-storage.service';
 
 @Component({
   selector: 'st-load-popup',
@@ -48,36 +47,36 @@ export class LoadAndSavePopupComponent implements OnInit {
   /**
    * Constructor.
    * @param popupReference
-   * @param storageService
-   * @param stateService
+   * @param safeStorageService
    */
   constructor(
     @Inject('POPUP_DATA') protected popupReference: PopupReference,
-    @Inject(LOCAL_STORAGE) protected storageService: StorageService,
-    protected stateService: StateService
+    protected safeStorageService: SafeStorageService
   ) { }
 
   /**
    * @inheritDoc
    */
   ngOnInit(): void {
-    this.stateService.getObservable().pipe(
-      tap((state) => {
-        this.storageEnabled.set(state.cookiesAccepted == true);
+    this.safeStorageService.observe()
+      .pipe(
+        tap(() => {
+          this.storageEnabled.set(this.safeStorageService.allowed());
 
-        if (this.storageService.has(LoadAndSavePopupComponent.storageKey)) {
-          const saved = this.storageService.get(LoadAndSavePopupComponent.storageKey);
-          this.saved.set(saved.reverse());
-        }
-      }
-    )).subscribe();
+          if (this.safeStorageService.has(LoadAndSavePopupComponent.storageKey)) {
+            const saved = this.safeStorageService.get(LoadAndSavePopupComponent.storageKey);
+            this.saved.set(saved.reverse());
+          }
+        }),
+        take(1))
+      .subscribe();
   }
 
   /**
    * Called when a user presses the save button.
    */
   onSave() {
-    const saved = this.saved();
+    const saved = this.saved().slice();
 
     saved.push({
       date: new Date(),
@@ -123,14 +122,17 @@ export class LoadAndSavePopupComponent implements OnInit {
    * @param itemsToSave
    */
   private save(itemsToSave: SavedCode[]) {
-    this.saved.set(itemsToSave);
-
     if (itemsToSave.length == 0) {
-      this.storageService.remove(LoadAndSavePopupComponent.storageKey);
+      this.safeStorageService.clear(LoadAndSavePopupComponent.storageKey);
       return ;
     }
 
-    this.storageService.set(LoadAndSavePopupComponent.storageKey, itemsToSave);
+    try {
+      this.safeStorageService.save(LoadAndSavePopupComponent.storageKey, itemsToSave);
+      //this.saved.set(itemsToSave);
+    } catch (e) {
+      console.error('Cannot save code, storage is disabled.');
+    }
   }
 }
 
