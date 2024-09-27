@@ -42,13 +42,13 @@ import { CommonModule } from '@angular/common';
   styleUrl: './alerts.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
-    trigger('slideInTop', [
+    trigger('slideInSide', [
     transition(':enter', [
-      style({ transform: 'translateY(-100%)' }),
-      animate('500ms ease-out', style({ transform: 'translateY(0)' })),
+      style({ transform: 'translateX(150%)', opacity: 0 }),
+      animate('500ms ease-out', style({ transform: 'translateX(0)', opacity: 1 })),
     ]),
     transition(':leave', [
-      animate('500ms ease-out', style({ transform: 'translateY(-100%)' })),
+      animate('500ms ease-out', style({ transform: 'translateX(150%)', opacity: 0 })),
     ])
   ])
 ],
@@ -58,7 +58,7 @@ export class AlertsComponent implements OnInit {
    * The signal to store the currently visible alert for rendering via the template.
    * @protected
    */
-  protected alert: WritableSignal<Alert | undefined> = signal(undefined);
+  protected alerts: WritableSignal<Alert[]> = signal([]);
 
   /**
    * Constructor.
@@ -80,16 +80,10 @@ export class AlertsComponent implements OnInit {
       return;
     }
 
-    // If we are not allowed to store cookies allowing users to hide/block alerts, we shouldn't really show any of them
-    // otherwise they will just annoy the user. In this case, just return and do nothing.
-    if (!this.safeStorageService.allowed()) {
-      return ;
-    }
-
     this.alertService.observe()
       .pipe(
-        tap((alert) => {
-          this.alert.set(alert);
+        tap((alerts) => {
+          this.alerts.set(alerts);
         })
       )
       .subscribe();

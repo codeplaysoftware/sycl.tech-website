@@ -1,62 +1,43 @@
 :host {
-  $overflow-width: 20px;
-  $min-height: 65px;
-  $hover-height: 70px;
-  $side-padding: 1.5rem;
+  $side-padding: 1rem;
+  $container-padding: 1.5rem;
 
-  display: block;
-  position: relative;
-  width: calc(100% + $overflow-width);
-  left: calc($overflow-width / 2 * -1);
-  color: var(--color-white);
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  bottom: $container-padding;
+  right: $container-padding;
+  z-index: 9999;
 
   * {
-    padding: 0;
     margin: 0;
+    padding: 0;
   }
 
   .container {
+    width: 430px;
     display: flex;
-    position: relative;
-    background: linear-gradient(90deg, var(--color-orange) 61%, rgba(35, 10, 46, 1) 100%);
-    border-radius: 0 0 var(--border-radius) var(--border-radius);
-    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, .15);
-    min-height: $min-height;
-    transition: var(--transition-fast);
     overflow: hidden;
-
-    .background {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      transition: var(--transition-fast);
-      background: linear-gradient(90deg, var(--color-orange) 20%, rgba(35, 10, 46, 1) 100%);
-      opacity: 0;
-    }
+    background-color: rgba(138, 40, 14, 0.6);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: var(--border-radius);
+    box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, .2);
+    transition: var(--transition-fast);
+    color: var(--color-white);
 
     &:hover {
-      min-height: $hover-height;
-      box-shadow: 0 3px 10px 0 rgba(0, 0, 0, .20);
-
-      .background {
-        opacity: 1;
-      }
-    }
-
-    .content,
-    .buttons {
-      position: relative;
+      box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, .4);
+      background-color: var(--color-orange);
     }
 
     .content {
-      flex: 1;
       display: flex;
+      padding: $side-padding;
       gap: 1rem;
-      align-items: center;
+      flex: 1;
       cursor: pointer;
-      padding: 0 0 0 $side-padding;
 
       .icon {
         height: 100%;
@@ -79,31 +60,28 @@
         h2 {
           font-size: .7rem;
           font-weight: normal;
-          opacity: .6;
+          opacity: .8;
+          margin-top: .2rem;
         }
       }
     }
 
     .buttons {
       display: flex;
-      gap: .5rem;
-      padding: .5rem $side-padding;
+      gap: 1rem;
 
-      a.button {
+      a {
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 100%;
-        padding: 0 1rem;
-        background-color: rgba(255, 255, 255, .2);
+        cursor: pointer;
+        padding: $side-padding;
         opacity: .5;
+        transition: var(--transition-fast);
+        background-color: rgba(0, 0, 0, .15);
 
         &:hover {
           opacity: 1;
-        }
-
-        span {
-          margin-right: .4rem;
         }
       }
     }
