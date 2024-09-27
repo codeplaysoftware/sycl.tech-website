@@ -163,8 +163,7 @@ export class ChangedComponent implements OnInit {
         this.reload();
       } else {
         lastVisitDate = new Date();
-        lastVisitDate.setMonth(lastVisitDate.getMonth() - 5);
-        lastVisitDate.setDate(1);
+        lastVisitDate.setDate(lastVisitDate.getDate() - 14);
 
         this.startDate.set(lastVisitDate);
         this.onDateSelectorClicked();
