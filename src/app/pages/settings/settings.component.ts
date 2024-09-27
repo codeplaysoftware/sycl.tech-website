@@ -35,9 +35,10 @@ import { SafeStorageService } from '../../shared/services/safe-storage.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsComponent {
-  enableStorage: WritableSignal<boolean> = signal(false);
-  enableDarkMode: WritableSignal<boolean> = signal(false);
-  enableTracking: WritableSignal<boolean> = signal(false);
+  protected enableStorage: WritableSignal<boolean> = signal(false);
+  protected enableDarkMode: WritableSignal<boolean> = signal(false);
+  protected enableTracking: WritableSignal<boolean> = signal(false);
+  protected enableAlerts: WritableSignal<boolean> = signal(false);
 
   /**
    * Constructor.
@@ -55,6 +56,7 @@ export class SettingsComponent {
         this.enableStorage.set(state['st-cookies-accepted'] == true);
         this.enableDarkMode.set(state['st-dark-mode-enabled'] == true);
         this.enableTracking.set(state['st-enable-tracking'] == true);
+        this.enableAlerts.set(state['st-enable-alerts'] == true);
       })
     ).subscribe();
   }
@@ -62,15 +64,7 @@ export class SettingsComponent {
   /**
    * Called when a user changes any of the settings.
    */
-  onStateChanged() {
-    if (!this.enableStorage()) {
-      // If storage is now disabled, clear any existing stored values
-      this.safeStorageService.clear();
-      return ;
-    }
-
-    this.safeStorageService.save('st-cookies-accepted', this.enableStorage(), false);
-    this.safeStorageService.save('st-dark-mode-enabled', this.enableDarkMode(), false);
-    this.safeStorageService.save('st-enable-tracking', this.enableTracking());
+  onStateChanged(key: string) {
+    this.safeStorageService.save(key, this.enableStorage());
   }
 }

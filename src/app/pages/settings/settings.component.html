@@ -8,7 +8,7 @@
       </header>
     </div>
     <div>
-      <span class="material-symbols-outlined panel-icon">health_and_safety</span>
+      <span class="material-symbols-outlined panel-icon">settings</span>
     </div>
   </div>
 </section>
@@ -19,7 +19,6 @@
       <h1>Change Your Settings</h1>
     </header>
     <div>
-
       <div class="option">
         <div>
           <h1>Enable Cookies/Storage</h1>
@@ -27,30 +26,44 @@
             enabling dark mode.</p>
         </div>
         <div>
-          <st-switch [(checked)]="enableStorage" (checkedChange)="onStateChanged()"></st-switch>
+          <st-switch
+              [(checked)]="enableStorage"
+              (checkedChange)="onStateChanged('st-cookies-accepted')"></st-switch>
         </div>
       </div>
-
       <div class="option" [ngClass]="{'disabled': !enableStorage()}">
         <div>
           <h1>Enable Dark Mode</h1>
           <p>Enable or disable dark mode, site wide.</p>
         </div>
         <div>
-          <st-switch [(checked)]="enableDarkMode" (checkedChange)="onStateChanged()"></st-switch>
+          <st-switch
+              [(checked)]="enableDarkMode"
+              (checkedChange)="onStateChanged('st-dark-mode-enabled')"></st-switch>
         </div>
       </div>
-
       <div class="option" [ngClass]="{'disabled': !enableStorage()}">
         <div>
           <h1>Enable Tracking</h1>
           <p>Enable or disable anonymous tracking, we use this to improve the website.</p>
         </div>
         <div>
-          <st-switch [(checked)]="enableTracking" (checkedChange)="onStateChanged()"></st-switch>
+          <st-switch
+              [(checked)]="enableTracking"
+              (checkedChange)="onStateChanged('st-enable-tracking')"></st-switch>
         </div>
       </div>
-
+      <div class="option" [ngClass]="{'disabled': !enableStorage()}">
+        <div>
+          <h1>Enable Alerts</h1>
+          <p>Enable or disable alerts from showing up in your browser window.</p>
+        </div>
+        <div>
+          <st-switch
+              [(checked)]="enableAlerts"
+              (checkedChange)="onStateChanged('st-enable-alerts')"></st-switch>
+        </div>
+      </div>
     </div>
   </div>
 </section>
