@@ -38,13 +38,6 @@ export class ChangedService {
   ) { }
 
   /**
-   * Determine if there are changes available since the last visit.
-   */
-  changesAvailable(): boolean {
-    return true;
-  }
-
-  /**
    * Get the date of the users last known visit. Will return undefined if no date is saved.
    */
   lastVisitDate(): Date | undefined {
