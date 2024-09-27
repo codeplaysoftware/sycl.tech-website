@@ -35,11 +35,34 @@ import { SafeStorageService } from '../../shared/services/safe-storage.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsComponent implements OnInit, OnDestroy {
+  /**
+   * Signal for the enable storage switch.
+   * @protected
+   */
   protected enableStorage: WritableSignal<boolean> = signal(false);
+
+  /**
+   * Signal for the enable dark mode switch.
+   * @protected
+   */
   protected enableDarkMode: WritableSignal<boolean> = signal(false);
+
+  /**
+   * Signal for the enable tracking switch.
+   * @protected
+   */
   protected enableTracking: WritableSignal<boolean> = signal(false);
+
+  /**
+   * Signal for the enable alerts switch.
+   * @protected
+   */
   protected enableAlerts: WritableSignal<boolean> = signal(false);
 
+  /**
+   * Subscription to tracking storage changes.
+   * @protected
+   */
   protected storageSubscription?: Subscription;
 
   /**
