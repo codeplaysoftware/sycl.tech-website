@@ -62,6 +62,38 @@
   </section>
 }
 
+@if (eventLoadingState() != LoadingState.NOT_STARTED) {
+  <!-- Section: Events -->
+  <section id="events">
+    <div class="wrapper panel content">
+      @if (eventLoadingState() == LoadingState.LOAD_SUCCESS) {
+        <header>
+          <div>
+            <div>
+              <h1>Events</h1>
+              <h2>We have had {{ updatedEvents().length }} new additions since
+                {{ startDate() | date: 'mediumDate' }}</h2>
+            </div>
+          </div>
+          <div>
+            @if (updatedEvents().length > 0) {
+              <a class="button" routerLink="./calendar">
+                <span class="material-symbols-outlined">calendar</span>View All</a>
+            }
+          </div>
+        </header>
+        <div class="list">
+          @for (item of updatedEvents(); track item.url) {
+            <st-calendar-item-widget [event]="item" [layout]="CalendarWidgetLayout.WIDGET"></st-calendar-item-widget>
+          }
+        </div>
+      } @else if(newsLoadingState() == LoadingState.LOADING) {
+        <st-loading></st-loading>
+      }
+    </div>
+  </section>
+}
+
 @if (projectsLoadingState() != LoadingState.NOT_STARTED) {
   <!-- Section: Projects -->
   <section id="projects">
