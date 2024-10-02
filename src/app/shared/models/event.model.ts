@@ -24,6 +24,7 @@ import { Observable } from 'rxjs';
  */
 export interface EventModel {
   title: string
+  date: Date
   starts: Date
   ends: Date
   url: string

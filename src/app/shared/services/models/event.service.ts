@@ -23,7 +23,6 @@ import { ContributorService } from './contributor.service';
 import { JsonFeedService } from '../json-feed.service';
 import { FilterGroup } from '../../managers/ResultFilterManager';
 import { map, Observable, of } from 'rxjs';
-import { NewsModel } from '../../models/news.model';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +54,7 @@ export class EventService extends JsonFeedService {
     return <EventModel> {
       title: feedItem['title'],
       content: feedItem['content_html'] ?? undefined,
+      date: new Date(feedItem['date_published']),
       starts: new Date(feedItem['_starts']),
       ends: new Date(feedItem['_ends']),
       url: feedItem['external_url'],
@@ -126,22 +126,5 @@ export class EventService extends JsonFeedService {
         }).length
       })
     );
-  }
-
-  /**
-   * Get all event items after a specific date.
-   * @param startDate
-   * @param limit
-   */
-  afterDate(
-    startDate: Date,
-    limit: number | null = null
-  ): Observable<EventModel[]> {
-    return this.all(limit)
-      .pipe(
-        map((items) => {
-          return startDate ? items.filter((item) => (item.starts >= startDate)) : items;
-        })
-      );
   }
 }
