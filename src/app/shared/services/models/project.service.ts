@@ -25,7 +25,6 @@ import { ContributorModel } from '../../models/contributor.model';
 import { JsonFeedService } from '../json-feed.service';
 import { map, Observable, of } from 'rxjs';
 import { MarkdownService } from 'ngx-markdown';
-import { NewsModel } from '../../models/news.model';
 
 @Injectable({
   providedIn: 'root'
@@ -84,6 +83,7 @@ export class ProjectService extends JsonFeedService {
 
     return <ProjectModel> {
       id: feedItem['id'],
+      date: new Date(feedItem['date_published']),
       date_created: new Date(feedItem['date_published']),
       contributor: of(ContributorService.convertFeedItem(
         feedItem['author'])),
@@ -146,23 +146,6 @@ export class ProjectService extends JsonFeedService {
         return html;
       })
     );
-  }
-
-  /**
-   * Get all project items after a specific date.
-   * @param startDate
-   * @param limit
-   */
-  afterDate(
-    startDate: Date,
-    limit: number | null = null
-  ): Observable<ProjectModel[]> {
-    return this.all(limit)
-      .pipe(
-        map((items) => {
-          return startDate ? items.filter((item) => (item.date_created >= startDate)) : items;
-        })
-      );
   }
 
   /**

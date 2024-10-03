@@ -24,6 +24,7 @@ import { Observable } from 'rxjs';
  */
 export interface ProjectModel {
   id: string
+  date: Date
   date_created: Date
   year: number
   url: string

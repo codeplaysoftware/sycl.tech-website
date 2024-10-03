@@ -321,6 +321,7 @@ export class EventCalendarComponent implements OnInit, OnDestroy {
   static createPaddingEvents(date: Date, numberToCreate: number): CalendarItemModel[] {
     const paddingEvents = [];
     const paddingEvent = new CalendarItemModel({
+      date: new Date(),
       ends: date,
       starts: date,
       attendees: [],

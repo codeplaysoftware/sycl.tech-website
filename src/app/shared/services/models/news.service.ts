@@ -24,7 +24,6 @@ import { NewsModel } from '../../models/news.model';
 import { JsonFeedService } from '../json-feed.service';
 import { map, Observable, of } from 'rxjs';
 import { PinnedModel } from '../../models/pinned.model';
-import { VideoModel } from '../../models/video.model';
 
 @Injectable({
   providedIn: 'root'
@@ -48,11 +47,11 @@ export class NewsService extends JsonFeedService {
   ): NewsModel {
     return <NewsModel> {
       id: feedItem['id'],
+      date: new Date(feedItem['date_published']),
       externalUrl: feedItem['external_url'],
       title: feedItem['title'],
       body: feedItem['content_html'],
       description: feedItem['summary'],
-      date: new Date(feedItem['date_published']),
       thumbnail: feedItem['image']
         ? feedItem['image']
         : './assets/images/ecosystem/news/thumbnail-placeholder.webp',
@@ -148,22 +147,5 @@ export class NewsService extends JsonFeedService {
     filterGroups: FilterGroup[] = [],
   ): Observable<NewsModel[]> {
     return super._all<NewsModel>(limit, offset, filterGroups).pipe(map((f => f.items)));
-  }
-
-  /**
-   * Get all news items after a specific date.
-   * @param startDate
-   * @param limit
-   */
-  afterDate(
-    startDate: Date,
-    limit: number | null = null
-  ): Observable<NewsModel[]> {
-    return this.all(limit)
-      .pipe(
-        map((items) => {
-          return startDate ? items.filter((item) => (item.date >= startDate)) : items;
-        })
-      );
   }
 }

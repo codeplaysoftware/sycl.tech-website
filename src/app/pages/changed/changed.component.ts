@@ -27,14 +27,10 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
-import { NewsService } from '../../shared/services/models/news.service';
 import { NewsModel } from '../../shared/models/news.model';
 import { NewsWidgetComponent, NewsWidgetLayout } from '../news/shared/news-widget/news-widget.component';
 import { RouterLink } from '@angular/router';
 import { ProjectModel } from '../../shared/models/project.model';
-import { ProjectService } from '../../shared/services/models/project.service';
-import { VideosService } from '../../shared/services/models/videos.service';
-import { ResearchService } from '../../shared/services/models/research.service';
 import { ResearchModel } from '../../shared/models/research.model';
 import { VideoModel } from '../../shared/models/video.model';
 import {
@@ -53,11 +49,16 @@ import {
 } from '../../shared/components/quick-links/quick-links.component';
 import { PopupService } from '../../shared/components/popup/popup.service';
 import { ChangeStartDateComponent } from './change-start-date-popup/change-start-date.component';
-import { catchError, firstValueFrom, of, tap } from 'rxjs';
+import { catchError, firstValueFrom, Observable, of, tap } from 'rxjs';
 import { LoadingState } from '../../shared/LoadingState';
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { PlatformService } from '../../shared/services/platform.service';
 import { ChangedService } from '../../shared/services/changed.service';
+import { EventModel } from '../../shared/models/event.model';
+import {
+  CalendarWidgetLayout,
+  CalenderWidgetComponent
+} from '../calendar/shared/calendar-item-widget/calender-widget.component';
 
 @Component({
   selector: 'st-changed',
@@ -70,7 +71,8 @@ import { ChangedService } from '../../shared/services/changed.service';
     VideoWidgetComponent,
     ResearchWidgetComponent,
     QuickLinksComponent,
-    LoadingComponent
+    LoadingComponent,
+    CalenderWidgetComponent
   ],
   templateUrl: './changed.component.html',
   styleUrl: './changed.component.scss',
@@ -85,11 +87,13 @@ export class ChangedComponent implements OnInit {
   protected readonly projectsLoadingState: WritableSignal<LoadingState> = signal(LoadingState.NOT_STARTED);
   protected readonly videoLoadingState: WritableSignal<LoadingState> = signal(LoadingState.NOT_STARTED);
   protected readonly researchLoadingState: WritableSignal<LoadingState> = signal(LoadingState.NOT_STARTED);
+  protected readonly eventLoadingState: WritableSignal<LoadingState> = signal(LoadingState.NOT_STARTED);
 
   protected readonly updatedNews: WritableSignal<NewsModel[]> = signal([]);
   protected readonly updatedProjects: WritableSignal<ProjectModel[]> = signal([]);
   protected readonly updatedVideos: WritableSignal<VideoModel[]> = signal([]);
   protected readonly updatedResearch: WritableSignal<ResearchModel[]> = signal([]);
+  protected readonly updatedEvents: WritableSignal<EventModel[]> = signal([]);
 
   protected readonly NewsWidgetLayout = NewsWidgetLayout;
   protected readonly ProjectWidgetLayout = ProjectWidgetLayout;
@@ -97,25 +101,17 @@ export class ChangedComponent implements OnInit {
   protected readonly LoadingState = LoadingState;
 
   /**
-   * Constructor.
+   * Constructor
    * @param title
    * @param changedService
    * @param platformService
    * @param popupService
-   * @param projectService
-   * @param newsService
-   * @param researchService
-   * @param videosService
    */
   constructor(
     protected title: Title,
     protected changedService: ChangedService,
     protected platformService: PlatformService,
-    protected popupService: PopupService,
-    protected projectService: ProjectService,
-    protected newsService: NewsService,
-    protected researchService : ResearchService,
-    protected videosService: VideosService,
+    protected popupService: PopupService
   ) {
     this.title.setTitle('Digest - SYCL.tech');
 
@@ -183,16 +179,19 @@ export class ChangedComponent implements OnInit {
     }
 
     ChangedComponent.populate(
-      this.projectService, this.projectsLoadingState, this.updatedProjects, startDate);
+      this.changedService.events(startDate), this.eventLoadingState, this.updatedEvents);
 
     ChangedComponent.populate(
-      this.newsService, this.newsLoadingState, this.updatedNews, startDate);
+      this.changedService.news(startDate), this.newsLoadingState, this.updatedNews);
 
     ChangedComponent.populate(
-      this.researchService, this.researchLoadingState, this.updatedResearch, startDate);
+      this.changedService.projects(startDate), this.projectsLoadingState, this.updatedProjects);
 
     ChangedComponent.populate(
-      this.videosService, this.videoLoadingState, this.updatedVideos, startDate);
+      this.changedService.research(startDate), this.researchLoadingState, this.updatedResearch);
+
+    ChangedComponent.populate(
+      this.changedService.videos(startDate), this.videoLoadingState, this.updatedVideos);
 
     // Update the last visit time
     this.changedService.saveLastVisitDate();
@@ -215,19 +214,17 @@ export class ChangedComponent implements OnInit {
 
   /**
    * Populate results from the provided services, updating loading states etc.
-   * @param service
+   * @param observable
    * @param loadingState
    * @param resultSignal
-   * @param startDate
    */
   static populate(
-    service: any,
+    observable: Observable<any>,
     loadingState: WritableSignal<LoadingState>,
-    resultSignal: WritableSignal<any>,
-    startDate: Date
+    resultSignal: WritableSignal<any>
   ) {
     firstValueFrom(
-      service.afterDate(startDate)
+      observable
         .pipe(
           tap(() => loadingState.set(LoadingState.LOAD_SUCCESS)),
           catchError((error) => {
@@ -237,4 +234,6 @@ export class ChangedComponent implements OnInit {
         )
     ).then((items) => resultSignal.set(items))
   }
+
+  protected readonly CalendarWidgetLayout = CalendarWidgetLayout;
 }
