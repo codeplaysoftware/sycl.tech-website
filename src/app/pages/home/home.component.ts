@@ -99,6 +99,7 @@ export class HomeComponent implements SearchablePage, OnInit, OnDestroy {
 
   protected readonly Layout = NewsWidgetLayout;
   protected readonly CommunityUpdateModelType = ImplementationActivityType;
+  protected readonly environment = environment;
 
   /**
    * Constructor
@@ -217,6 +218,4 @@ export class HomeComponent implements SearchablePage, OnInit, OnDestroy {
   getDefaultRoutePath() {
     return '/';
   }
-
-  protected readonly environment = environment;
 }
