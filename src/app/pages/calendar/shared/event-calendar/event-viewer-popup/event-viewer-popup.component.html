@@ -17,7 +17,7 @@
         </li>
         <li title="End Time">
           <div><span class="material-symbols-outlined">stop_circle</span></div>
-          <div>{{ calendarItem.event.ends.toDateString() | date:'MMM d, y, h:mm a z' }}</div>
+          <div>{{ calendarItem.event.ends | date:'MMM d, y, h:mm a z' }}</div>
         </li>
         @if (calendarItem.event.location) {
           <li title="Location">
