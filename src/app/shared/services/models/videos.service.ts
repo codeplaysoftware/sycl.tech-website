@@ -45,6 +45,7 @@ export class VideosService extends JsonFeedService {
     feedItem: any
   ): VideoModel {
     const date = new Date(feedItem['date_published']);
+    const url = new URL(feedItem['external_url']);
 
     return <VideoModel> {
       id: feedItem['id'],
@@ -59,7 +60,8 @@ export class VideosService extends JsonFeedService {
       type: feedItem['_type'],
       featuring: feedItem['_featuring'],
       tags: feedItem['tags'] ? feedItem['tags'] : [],
-      embedUrl: VideosService.generateEmbedUrl(feedItem['external_url'])
+      embedUrl: VideosService.generateEmbedUrl(feedItem['external_url']),
+      provider: url.hostname.replace('www.', '')
     }
   }
 

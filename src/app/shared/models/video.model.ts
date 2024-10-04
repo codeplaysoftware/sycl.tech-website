@@ -35,4 +35,5 @@ export interface VideoModel {
   featuring: ContributorModel[]
   tags: string[]
   embedUrl?: string
+  provider: string
 }
