@@ -169,15 +169,13 @@ section#download-compiler {
 
   st-tab#oneapi {
     a.toolkit {
-      background-color: var(--color-hint-third);
       border-radius: var(--border-radius);
       color: var(--color-white);
       display: block;
       padding: 2rem 5rem;
       margin-top: 1rem;
       text-align: center;
-      background-image: url(https://www.oneapi.io/wp-content/themes/one-api/images/header-outlines.svg);
-      background-size: cover;
+      background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(93,1,139,1) 47%, rgba(0,212,255,1) 100%);
 
       h1, p {
         margin: 0;

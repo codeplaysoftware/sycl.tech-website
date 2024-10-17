@@ -34,7 +34,7 @@
   &.fancy {
     display: flex;
     flex-direction: column-reverse;
-    background-color: #666;
+    background-color: var(--color-blue);
     color: var(--color-white);
     gap: 2rem;
     position: relative;
