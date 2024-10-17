@@ -238,8 +238,11 @@ export abstract class JsonFeedService implements IFilterableService {
         objectProperty = [objectProperty];
       }
 
+      objectProperty = JsonFeedService.normalizeArray(objectProperty);
+      const requiredValues = JsonFeedService.normalizeArray(filterGroup.requiredValues);
+
       if (!objectProperty.some(
-        (item: string) => filterGroup.requiredValues.includes(item))) {
+        (item: string) => requiredValues.includes(item))) {
         return false;
       }
     } else {
@@ -247,6 +250,14 @@ export abstract class JsonFeedService implements IFilterableService {
     }
 
     return true;
+  }
+
+  /**
+   * Formalize an array into strings.
+   * @param array
+   */
+  static normalizeArray(array: any[]): string[] {
+    return array.map((item: any) => item.toString().toLowerCase());
   }
 
   /**
