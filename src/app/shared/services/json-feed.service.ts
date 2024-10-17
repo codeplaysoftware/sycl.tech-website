@@ -232,23 +232,15 @@ export abstract class JsonFeedService implements IFilterableService {
     }
     else if (filter instanceof FeedPropertyGroupFilter && filter.propertyName != '*') {
       const filterGroup: FeedPropertyGroupFilter = filter as FeedPropertyGroupFilter;
-      const objectProperty = instance[filter.propertyName];
+      let objectProperty = instance[filter.propertyName];
 
-      switch (FeedFilter.getType(objectProperty)) {
-        // Handle array type
-        case 'array': {
-          if (!filterGroup.requiredValues.every(
-            (item: string) => objectProperty.includes(item))) {
-            return false;
-          }
+      if (!Array.isArray(objectProperty)) {
+        objectProperty = [objectProperty];
+      }
 
-          break;
-        }
-        default: {
-          if (!objectProperty.toString().toLowerCase().includes(filter.value)) {
-            return false;
-          }
-        }
+      if (!objectProperty.some(
+        (item: string) => filterGroup.requiredValues.includes(item))) {
+        return false;
       }
     } else {
       console.error('NOT SUPPORTED');
