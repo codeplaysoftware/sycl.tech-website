@@ -5,7 +5,7 @@
        (keydown)="onKeyDown($event)"
        [ngStyle]="{'caret-color': caretColor()}"
        spellcheck="false"
-       contenteditable="true"></div>
+       [contentEditable]="editable()"></div>
 
   <div class="render"
        [innerHTML]="highlighted()"></div>

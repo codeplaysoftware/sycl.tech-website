@@ -55,6 +55,7 @@ export class MiniPlaygroundCodeBlockComponent implements OnChanges {
   endLine = input<number | undefined>(undefined);
   highlight = input<boolean>(true);
   caretColor = input<string>('white');
+  editable = input<boolean>(true);
 
   protected readonly LoadingState = LoadingState;
   protected readonly state: WritableSignal<LoadingState> = signal(LoadingState.NOT_STARTED);
