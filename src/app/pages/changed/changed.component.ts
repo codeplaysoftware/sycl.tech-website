@@ -113,7 +113,7 @@ export class ChangedComponent implements OnInit {
     protected platformService: PlatformService,
     protected popupService: PopupService
   ) {
-    this.title.setTitle('Digest - SYCL.tech');
+    this.title.setTitle('What Has Changed - SYCL.tech');
 
     // Compute the quick links signal
     this.quickLinks = computed(() => {
