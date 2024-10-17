@@ -243,7 +243,7 @@ export abstract class JsonFeedService implements IFilterableService {
         return false;
       }
     } else {
-      console.error('NOT SUPPORTED');
+      // Do nothing.
     }
 
     return true;

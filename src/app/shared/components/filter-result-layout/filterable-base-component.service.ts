@@ -134,7 +134,6 @@ export abstract class FilterableBaseComponent implements OnInit {
           return (modifiedQueryParams as Params);
         }),
         tap(params => this.queryParams = params),
-        tap(params => console.log(params)),
         tap(() => {
           this.filterableService.getFilters().pipe(
             tap((filters) => {
