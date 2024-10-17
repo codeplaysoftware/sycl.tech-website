@@ -213,6 +213,11 @@ export abstract class JsonFeedService implements IFilterableService {
     instance: any,
     filter: FeedFilter
   ): boolean {
+    // Skip unknown properties
+    if (filter.propertyName !== '*' && instance[filter.propertyName] == undefined) {
+       return true;
+    }
+
     // Match any property value
     if (filter instanceof FeedPropertyFilter && filter.propertyName == '*') {
       if (!Object.values(instance).toString().toLowerCase().includes(filter.value.toLowerCase())) {

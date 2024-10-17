@@ -22,7 +22,7 @@ import { IFilterableService } from './FilterableService';
 import { inject, Injectable, OnInit, signal, WritableSignal } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FilterManager, UIFilter } from './FilterManager';
-import { take, tap } from 'rxjs';
+import { map, take, tap } from 'rxjs';
 
 /**
  * Filterable base component provides common functionality to allow filtering, searching and rendering of
@@ -115,32 +115,43 @@ export abstract class FilterableBaseComponent implements OnInit {
    * @inheritDoc
    */
   ngOnInit(): void {
+    let page = 1;
+
     this.activatedRoute.queryParams
       .pipe(
-        tap(queryParams => this.queryParams = queryParams))
-      .subscribe((queryParams) => {
-        this.filterableService.getFilters().pipe(
-          tap((filters) => {
-            // Set the filters as signal
-            this.filters.set(FilterManager.convertFromFeedFilters(filters));
+        map(params => {
+          // Params is readonly, create a new instance
+          const modifiedQueryParams = Object.assign({}, params);
 
-            // Merge the param values into the filters
-            FilterManager.mergeFiltersAndParams(this.filters(), this.queryParams);
+          if (params['page']) {
+            page = Number.parseInt(params['page']);
+            page = page < 1 ? 1 : page;
 
-            if (queryParams['page'] !== undefined) {
-              let page = Number.parseInt(queryParams['page']);
+            // Now we've handle page value, remove it
+            delete modifiedQueryParams['page'];
+          }
 
-              if (page < 1) {
-                page = 1;
-              }
+          return (modifiedQueryParams as Params);
+        }),
+        tap(params => this.queryParams = params),
+        tap(params => console.log(params)),
+        tap(() => {
+          this.filterableService.getFilters().pipe(
+            tap((filters) => {
+              // Set the filters as signal
+              this.filters.set(FilterManager.convertFromFeedFilters(filters));
+
+              // Merge the param values into the filters
+              FilterManager.mergeFiltersAndParams(this.filters(), this.queryParams);
 
               this.currentResultsPerPage.set(this.maxResultsPerPage * (page - 1));
-            }
 
-            this.refresh(true);
-          })
-        ).subscribe();
-      });
+              this.refresh(true);
+            })
+          ).subscribe();
+        })
+      )
+      .subscribe();
   }
 
   /**
@@ -149,7 +160,7 @@ export abstract class FilterableBaseComponent implements OnInit {
   protected refresh(
     reload: boolean
   ) {
-    let offset = !reload ? this.currentResultsPerPage() : 0;
+    let offset = this.currentResultsPerPage();
     let limit = this.maxResultsPerPage;
 
     const feedFilters = FilterManager.convertFiltersToFeedFilters(this.filters(), this.queryParams);

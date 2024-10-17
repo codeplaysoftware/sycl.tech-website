@@ -39,6 +39,10 @@ export class FilterManager {
           continue;
         }
 
+        if (Object.keys(queryParams).length == 0) {
+          continue
+        }
+
         filterGroup.injectFromParamValue(queryParams[queryParamName]);
       }
     }
