@@ -143,18 +143,31 @@ export abstract class UIFilter implements IParamSerializable, IFeedFilterSeriali
  * Represents a search filter for the UI.
  */
 export class UISearchFilter extends UIFilter {
+  /**
+   * Constructor.
+   * @param value
+   */
   constructor(value?: string) {
     super('Search', value);
   }
 
+  /**
+   * @inheritdoc
+   */
   injectFromParamValue(paramValue: string): void {
     this.value = paramValue;
   }
 
+  /**
+   * @inheritdoc
+   */
   toParamValue(): any {
     return this.value;
   }
 
+  /**
+   * @inheritdoc
+   */
   convertToFeedFilter(): FeedFilter {
     return new FeedPropertyFilter('*', this.value);
   }
@@ -166,6 +179,11 @@ export class UISearchFilter extends UIFilter {
 export class UITagGroup extends UIFilter {
   public tags: Map<string, UITag> = new Map();
 
+  /**
+   * Constructor.
+   * @param name
+   * @param value
+   */
   constructor(
     name: string,
     value?: string
@@ -177,6 +195,9 @@ export class UITagGroup extends UIFilter {
     }
   }
 
+  /**
+   * @inheritdoc
+   */
   injectFromParamValue(paramValue: any): void {
     if (!Array.isArray(paramValue)) {
       paramValue = [paramValue];
@@ -189,30 +210,36 @@ export class UITagGroup extends UIFilter {
     }
   }
 
+  /**
+   * @inheritdoc
+   */
   toParamValue(): any {
     return this.getTags(true)
       .map(tagFilter => tagFilter.name);
   }
 
+  /**
+   * @inheritdoc
+   */
   convertToFeedFilter(): FeedFilter {
     return new FeedPropertyGroupFilter(
       this.name, this.getTags(true).map(tagFilter => tagFilter.name));
   }
 
+  /**
+   * Get a array of UITag's.
+   * @param enabledOnly
+   */
   getTags(enabledOnly: boolean = false): UITag[] {
-    const tags: UITag[] = [];
-
-    for (const [, tag] of this.tags) {
-      if (enabledOnly && !tag.value) {
-        continue;
-      }
-
-      tags.push(tag)
-    }
-
-    return tags;
+    return Array.from(this.tags.values())
+      .filter((tag: UITag) => !(enabledOnly && !tag.value));
   }
 
+  /**
+   * Add a new tag.
+   * @param name
+   * @param value
+   */
   add(name: string, value: boolean) {
     this.tags.set(name, {
       name: name,
@@ -220,6 +247,11 @@ export class UITagGroup extends UIFilter {
     });
   }
 
+  /**
+   * Inject values form an array into tags with a default value.
+   * @param items
+   * @param defaultValue
+   */
   inject(items: string[], defaultValue: boolean = false) {
     for (const item of items) {
       this.add(item, defaultValue);

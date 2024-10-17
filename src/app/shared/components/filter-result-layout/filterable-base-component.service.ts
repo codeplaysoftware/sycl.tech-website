@@ -20,9 +20,9 @@ import { LoadingState } from '../../LoadingState';
 import { ToggleButton } from '../toggle/toggle.component';
 import { IFilterableService } from './FilterableService';
 import { inject, Injectable, OnInit, signal, WritableSignal } from '@angular/core';
-import { take, tap } from 'rxjs';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FilterManager, UIFilter } from './FilterManager';
+import { take, tap } from 'rxjs';
 
 /**
  * Filterable base component provides common functionality to allow filtering, searching and rendering of
@@ -84,10 +84,23 @@ export abstract class FilterableBaseComponent implements OnInit {
    */
   protected currentResultsPerPage: WritableSignal<number> = signal(0);
 
+  /**
+   * Inject a router instance.
+   * @protected
+   */
   protected router: Router = inject(Router);
+
+  /**
+   * Inject an ActivatedRoute instance.
+   * @protected
+   */
   protected activatedRoute: ActivatedRoute = inject(ActivatedRoute);
 
-  protected queryParams?: Params
+  /**
+   * Query params reference.
+   * @protected
+   */
+  protected queryParams: Params = {};
 
   /**
    * Constructor.
@@ -102,30 +115,32 @@ export abstract class FilterableBaseComponent implements OnInit {
    * @inheritDoc
    */
   ngOnInit(): void {
-    this.filterableService.getFilters().pipe(
-      tap((filters) => {
-        this.filters.set(FilterManager.convertFromFeedFilters(filters));
+    this.activatedRoute.queryParams
+      .pipe(
+        tap(queryParams => this.queryParams = queryParams))
+      .subscribe((queryParams) => {
+        this.filterableService.getFilters().pipe(
+          tap((filters) => {
+            // Set the filters as signal
+            this.filters.set(FilterManager.convertFromFeedFilters(filters));
 
-        // Handle paging
-        this.activatedRoute.queryParams.subscribe((queryParams) => {
-          this.queryParams = queryParams;
+            // Merge the param values into the filters
+            FilterManager.mergeFiltersAndParams(this.filters(), this.queryParams);
 
-          FilterManager.mergeFiltersAndParams(this.filters(), queryParams);
+            if (queryParams['page'] !== undefined) {
+              let page = Number.parseInt(queryParams['page']);
 
-          if (queryParams['page'] !== undefined) {
-            let page = Number.parseInt(queryParams['page']);
+              if (page < 1) {
+                page = 1;
+              }
 
-            if (page < 1) {
-              page = 1;
+              this.currentResultsPerPage.set(this.maxResultsPerPage * (page - 1));
             }
 
-            this.currentResultsPerPage.set(this.maxResultsPerPage * (page - 1));
-          }
-
-          this.refresh(true);
-        });
-      })
-    ).subscribe();
+            this.refresh(true);
+          })
+        ).subscribe();
+      });
   }
 
   /**
@@ -171,7 +186,7 @@ export abstract class FilterableBaseComponent implements OnInit {
   /**
    * Called when the filters have changed.
    */
-  onFiltersChanged() {
+  protected onFiltersChanged() {
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
       queryParams: FilterManager.convertFiltersToParams(this.filters())
