@@ -21,8 +21,8 @@ import { environment } from '../../../../environments/environment';
 import { ContributorService } from './contributor.service';
 import { LessonModel } from '../../models/lesson.model';
 import { JsonFeedService } from '../json-feed.service';
-import { FilterGroup } from '../../managers/ResultFilterManager';
 import { map, Observable } from 'rxjs';
+import { FeedFilter } from '../../components/filter-result-layout/FilterableService';
 
 @Injectable({
   providedIn: 'root'
@@ -64,9 +64,9 @@ export class AcademyLessonService extends JsonFeedService {
   all(
     limit: number | null = null,
     offset: number = 0,
-    filterGroups: FilterGroup[] = [],
+    filters: FeedFilter[] = [],
   ): Observable<LessonModel[]> {
-    return super._all<LessonModel>(limit, offset, filterGroups).pipe(
+    return super._all<LessonModel>(limit, offset, filters).pipe(
       map(lessons => lessons.items)
     );
   }

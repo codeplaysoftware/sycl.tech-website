@@ -3,12 +3,7 @@
     <!-- Layout: Widget -->
     <div class="widget">
       <a class="header" (click)="onVideoClicked()">
-        <div class="tag">
-          <div>
-            <div [innerHTML]="video.type | titlecase"></div>
-            <div class="arrow"></div>
-          </div>
-        </div>
+        <div class="tag" [innerHTML]="video.type | titlecase"></div>
         <div class="thumbnail-container">
           <div [style.background-image]="'url(' + video.thumbnail + ')'"></div>
         </div>
@@ -16,6 +11,12 @@
       <div class="body">
         <a class="description" (click)="onVideoClicked()">
           <div>
+            @if (getVideoProviderImage(video); as provider) {
+              <img [ngSrc]="provider"
+                   class="provider-logo"
+                   title="This video is hosted on {{ video.provider }}"
+                   alt="{{ video.provider }} Logo" width="1102" height="238" />
+            }
             <h1 [innerHTML]="video.title | truncate:50"></h1>
             <h2 [innerHTML]="getFeaturingInfo(video)"></h2>
           </div>

@@ -1,92 +1,97 @@
-.widget, .row {
-  border-radius: var(--border-radius);
-  background-color: var(--color-hint-second);
-  transition: var(--transition-fast);
-  color: var(--text-color);
-  overflow: hidden;
-  font-size: 1rem;
-  padding: 0 5rem;
-  position: relative;
+:host {
+  all: initial;
+  font: inherit;
 
-  &:hover {
-    background-color: var(--color-hint-first);
-    transform: var(--transform-focused-slight);
-    box-shadow: var(--box-shadow-focused);
+  .widget, .row {
+    border-radius: var(--border-radius);
+    background-color: var(--color-hint-second);
+    transition: var(--transition-fast);
+    color: var(--text-color);
+    overflow: hidden;
+    font-size: 1rem;
+    padding: 0 5rem;
+    position: relative;
+
+    &:hover {
+      background-color: var(--color-hint-first);
+      transform: var(--transform-focused-slight);
+      box-shadow: var(--box-shadow-focused);
+    }
   }
-}
 
-.widget {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  text-align: left;
-
-  a {
-    display: block;
+  .widget {
     height: 100%;
-    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    text-align: left;
 
-    .header {
-      background-color: var(--color-orange);
-      color: var(--color-white);
-      padding: .7rem 3rem;
-    }
+    a {
+      display: block;
+      height: 100%;
+      min-height: 500px;
 
-    .title {
-      display: flex;
-      flex: 1;
-      padding: 2rem 3rem 0 3rem;
-
-      h1 {
-        font-size: 1.6rem;
-        font-weight: bold;
+      .header {
+        background-color: var(--color-orange);
+        color: var(--color-white);
+        padding: .7rem 3rem;
       }
-    }
 
-    .authors {
-      max-height: 300px;
-      overflow: auto;
-      padding: 0 3rem 2rem 3rem;
+      .title {
+        display: flex;
+        flex: 1;
+        padding: 2rem 3rem 0 3rem;
 
-      ol {
-        list-style: none;
-        padding: 0;
+        h1 {
+          font-size: 1.6rem;
+          font-weight: bold;
+        }
+      }
 
-        li {
-          padding: .3rem 0;
-          font-size: 1rem;
-          font-weight: normal;
+      .authors {
+        max-height: 300px;
+        overflow: auto;
+        padding: 0 3rem 2rem 3rem;
 
-          h1 {
-            padding: 0;
-            margin: 0;
-          }
+        ol {
+          list-style: none;
+          padding: 0;
 
-          h1 {
+          li {
+            padding: .3rem 0;
             font-size: 1rem;
             font-weight: normal;
+
+            h1 {
+              padding: 0;
+              margin: 0;
+            }
+
+            h1 {
+              font-size: 1rem;
+              font-weight: normal;
+            }
           }
         }
       }
     }
-  }
 
-  .footer {
-    background: linear-gradient(94deg, rgba(0, 0, 0, .05) 0%, rgba(239, 239, 239, 0) 100%);
-    padding: 1rem 3rem;
-    color: rgba(0, 0, 0, .5);
-    text-align: left;
-    font-size: .8rem;
-    cursor: default;
+    .footer {
+      background: linear-gradient(94deg, rgba(0, 0, 0, .05) 0%, rgba(239, 239, 239, 0) 100%);
+      padding: 1rem 3rem;
+      color: rgba(0, 0, 0, .5);
+      text-align: left;
+      font-size: .8rem;
+      cursor: default;
 
-    st-contributor-avatar {
-      width: 24px;
-      height: 24px;
-      vertical-align: middle;
-      margin-right: .5rem;
-      cursor: pointer;
-      display: inline-block;
+      st-contributor-avatar {
+        width: 24px;
+        height: 24px;
+        vertical-align: middle;
+        margin-right: .5rem;
+        cursor: pointer;
+        display: inline-block;
+      }
     }
   }
 }

@@ -21,8 +21,8 @@ import { PlaygroundSampleModel } from '../../models/playground-sample.model';
 import { environment } from '../../../../environments/environment';
 import { ContributorService } from './contributor.service';
 import { JsonFeedService } from '../json-feed.service';
-import { FilterGroup } from '../../managers/ResultFilterManager';
 import { map, Observable, of } from 'rxjs';
+import { FeedFilter } from '../../components/filter-result-layout/FilterableService';
 
 @Injectable({
   providedIn: 'root'
@@ -61,9 +61,9 @@ export class PlaygroundSampleService extends JsonFeedService {
   all(
     limit: number | null = null,
     offset: number = 0,
-    filterGroups: FilterGroup[] = [],
+    filters: FeedFilter[] = [],
   ): Observable<PlaygroundSampleModel[]> {
-    return super._all<PlaygroundSampleModel>(limit, offset, filterGroups).pipe(map((f => f.items)));
+    return super._all<PlaygroundSampleModel>(limit, offset, filters).pipe(map((f => f.items)));
   }
 
   /**

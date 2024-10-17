@@ -21,8 +21,8 @@ import { environment } from '../../../../environments/environment';
 import { EventModel } from '../../models/event.model';
 import { ContributorService } from './contributor.service';
 import { JsonFeedService } from '../json-feed.service';
-import { FilterGroup } from '../../managers/ResultFilterManager';
 import { map, Observable, of } from 'rxjs';
+import { FeedFilter } from '../../components/filter-result-layout/FilterableService';
 
 @Injectable({
   providedIn: 'root'
@@ -71,9 +71,9 @@ export class EventService extends JsonFeedService {
   all(
     limit: number | null = null,
     offset: number = 0,
-    filterGroups: FilterGroup[] = [],
+    filters: FeedFilter[] = [],
   ): Observable<EventModel[]> {
-    return super._all<EventModel>(limit, offset, filterGroups).pipe(map((f => f.items)));
+    return super._all<EventModel>(limit, offset, filters).pipe(map((f => f.items)));
   }
 
   /**

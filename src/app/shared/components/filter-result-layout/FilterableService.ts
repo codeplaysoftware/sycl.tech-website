@@ -16,7 +16,6 @@
  *
  *--------------------------------------------------------------------------------------------*/
 
-import { FilterGroup } from "../../managers/ResultFilterManager";
 import { Observable } from 'rxjs';
 
 /**
@@ -37,24 +36,24 @@ export interface IFilterableService {
    * Get all items provided by this service.
    * @param limit
    * @param offset
-   * @param filterGroups
+   * @param filters
    */
   all(
     limit: number,
     offset: number,
-    filterGroups: FilterGroup[]
+    filters: FeedFilter[]
   ): Observable<any[]>;
 
   /**
    * Return a filter result.
    * @param limit
    * @param offset
-   * @param filterGroups
+   * @param filters
    */
   result<T>(
     limit: number,
     offset: number,
-    filterGroups: FilterGroup[]
+    filters: FeedFilter[]
   ): Observable<FilterResult<T>>;
 
   /**
@@ -63,7 +62,132 @@ export interface IFilterableService {
   count(): Observable<number>;
 
   /**
-   * Return a list of filters, provided by this service.
+   * Return a list of FeedFilter's, provided by this service.
    */
-  getFilterGroups(): Observable<{}>;
+  getFilters(): Observable<FeedFilter[]>;
+}
+
+/**
+ * A FeedFilter allows the simply filtering of JsonFeedService.
+ */
+export abstract class FeedFilter {
+  /**
+   * Constructor.
+   * @param propertyName
+   */
+  protected constructor(
+    public propertyName: string = '*'
+  ) { }
+
+  /**
+   * Determine if the filter is valid or not.
+   */
+  abstract get valid(): boolean;
+
+  /**
+   * Get the value for the filter.
+   */
+  abstract get value(): any;
+
+  /**
+   * Inject values into this feed filter.
+   * @param values
+   */
+  abstract inject(values: any): void;
+
+  /**
+   * Guess type!
+   * https://stackoverflow.com/a/28475765
+   * @param instance
+   */
+  static getType(instance: any) {
+    return {}.toString.call(instance).split(' ')[1].slice(0, -1).toLowerCase();
+  }
+}
+
+/**
+ * Represents a single value that a property value must match.
+ */
+export class FeedPropertyFilter extends FeedFilter {
+  /**
+   * Constructor.
+   * @param propertyName
+   * @param searchString
+   */
+  constructor(
+    propertyName: string = '*',
+    public searchString: string = ''
+  ) {
+    super(propertyName);
+    this.inject(searchString);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  get valid(): boolean {
+    return this.searchString.length > 0;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  get value(): string {
+    return this.searchString;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  inject(values: any) {
+    this.searchString = values.toString();
+  }
+}
+
+/**
+ * Represents an array of items that the property value must match.
+ */
+export class FeedPropertyGroupFilter extends FeedFilter {
+  public requiredValues: any[] = []
+
+  /**
+   * Constructor.
+   * @param propertyName
+   * @param requiredValues
+   */
+  constructor(
+    propertyName: string,
+    requiredValues?: any
+  ) {
+    super(propertyName);
+
+    if (requiredValues) {
+      this.inject(requiredValues);
+    }
+  }
+
+  /**
+   * @inheritdoc
+   */
+  get valid(): boolean {
+    return this.requiredValues.length > 0;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  get value(): any[] {
+    return this.requiredValues;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  inject(values: any) {
+    if (!Array.isArray(values)) {
+      values = [values];
+    }
+
+    this.requiredValues = this.requiredValues.concat(values);
+  }
 }

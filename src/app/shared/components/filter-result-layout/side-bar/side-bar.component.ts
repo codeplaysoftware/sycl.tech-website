@@ -19,8 +19,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, model, signal, WritableSignal } from '@angular/core';
 import { SearchComponent } from '../../search/search.component';
-import { FilterGroup, ResultFilter } from '../../../managers/ResultFilterManager';
 import { TagComponent } from '../../tag/tag.component';
+import { UIFilter, UISearchFilter, UITagGroup } from '../FilterManager';
 
 @Component({
   selector: 'st-filter-side-bar',
@@ -34,31 +34,69 @@ import { TagComponent } from '../../tag/tag.component';
   styleUrl: './side-bar.component.scss'
 })
 export class SideBarComponent {
-  readonly filterGroups = model<FilterGroup[]>([]);
+  /**
+   * Model for an array of UIFilter.
+   */
+  readonly filters = model<UIFilter[]>([]);
+
+  /**
+   * Required input signal for name of the collection this sidebar is rendering.
+   */
   readonly collectionName = input.required<string>();
+
+  /**
+   * Required input signal for a URL to add a new item to the collection this sidebar is rendering.
+   */
   readonly newCollectionItemUrl = input.required<string>();
+
+  /**
+   * Signal to hide or show the filters.
+   */
   readonly hideFilters: WritableSignal<boolean> = signal(true);
 
-  protected readonly FilterGroup = FilterGroup;
+  /**
+   * Provides the UISearchFilter type to the template.
+   * @protected
+   */
+  protected readonly UIFilterGroup = UISearchFilter;
+
+  /**
+   * Provides the UITagGroup type to the template.
+   * @protected
+   */
+  protected readonly UITagGroup = UITagGroup;
 
   /**
    * Called when any of the filters have changed.
    */
   onFiltersChanged() {
     // Need to reassign for CD to pick up the changes
-    this.filterGroups.set(this.filterGroups().slice())
+    this.filters.set(this.filters().slice())
   }
 
   /**
-   * Get a subtitle for a filter.
+   * Checks if the value of check is an instance of against.
+   * @param check
+   * @param against
+   */
+  instanceOf(check: any, against: any): boolean {
+    return check instanceof against;
+  }
+
+  /**
+   * Converts the type of filter into a UITagGroup for the template.
    * @param filter
    */
-  getSubTitle(filter: ResultFilter) {
-    if (filter.extras && 'subTitle' in filter.extras) {
-      return filter.extras['subTitle'].slice(0, -1);
-    }
+  castToUITagGroup(filter: UIFilter): UITagGroup {
+    return (filter as UITagGroup);
+  }
 
-    return undefined;
+  /**
+   * Converts the type of filter into a UISearchFilter for the template.
+   * @param filter
+   */
+  castToUISearchFilter(filter: UIFilter): UISearchFilter {
+    return (filter as UISearchFilter);
   }
 
   /**

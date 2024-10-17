@@ -20,8 +20,8 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { ContributorModel, SocialModel } from '../../models/contributor.model';
 import { JsonFeedService } from '../json-feed.service';
-import { FilterGroup } from '../../managers/ResultFilterManager';
 import { map, Observable } from 'rxjs';
+import { FeedFilter } from '../../components/filter-result-layout/FilterableService';
 
 @Injectable({
   providedIn: 'root'
@@ -54,9 +54,9 @@ export class ContributorService extends JsonFeedService {
   all(
     limit: number | null = null,
     offset: number = 0,
-    filterGroups: FilterGroup[] = [],
+    filters: FeedFilter[] = [],
   ): Observable<ContributorModel[]> {
-    return super._all<ContributorModel>(limit, offset, filterGroups).pipe(map((f => f.items)));
+    return super._all<ContributorModel>(limit, offset, filters).pipe(map((f => f.items)));
   }
 
   /**

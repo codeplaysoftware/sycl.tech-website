@@ -19,10 +19,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { ContributorService } from './contributor.service';
-import { FilterGroup } from '../../managers/ResultFilterManager';
 import { ImplementationActivityModel, ImplementationActivityType } from '../../models/implementation-activity.model';
 import { JsonFeedService } from '../json-feed.service';
 import { map, Observable } from 'rxjs';
+import { FeedFilter } from '../../components/filter-result-layout/FilterableService';
 
 @Injectable({
   providedIn: 'root'
@@ -68,8 +68,8 @@ export class ImplementationActivityService extends JsonFeedService {
   all(
     limit: number | null = null,
     offset: number = 0,
-    filterGroups: FilterGroup[] = [],
+    filters: FeedFilter[] = [],
   ): Observable<ImplementationActivityModel[]> {
-    return super._all<ImplementationActivityModel>(limit, offset, filterGroups).pipe(map((f => f.items)));
+    return super._all<ImplementationActivityModel>(limit, offset, filters).pipe(map((f => f.items)));
   }
 }

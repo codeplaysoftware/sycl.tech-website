@@ -18,9 +18,13 @@
 
 import { forkJoin, map, mergeMap, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { FilterGroup, ResultFilter } from '../managers/ResultFilterManager';
 import { inject, Injectable } from '@angular/core';
-import { FilterResult, IFilterableService } from '../components/filter-result-layout/FilterableService';
+import {
+  FeedFilter,
+  FeedPropertyFilter, FeedPropertyGroupFilter,
+  FilterResult,
+  IFilterableService
+} from '../components/filter-result-layout/FilterableService';
 
 /**
  * Base class for all json based services.
@@ -44,7 +48,7 @@ export abstract class JsonFeedService implements IFilterableService {
   abstract all(
     limit: number,
     offset: number,
-    filterGroups: FilterGroup[]
+    filters: FeedFilter[]
   ): Observable<any[]>;
 
   /**
@@ -59,9 +63,17 @@ export abstract class JsonFeedService implements IFilterableService {
   /**
    * @inheritDoc
    */
-  getFilterGroups(): Observable<{}> {
-    return this.fetchFeed(0).pipe(map((feed) => {
-      return feed._filters;
+  getFilters(): Observable<FeedFilter[]> {
+    return this.fetchFeed(0).pipe(map((feed: any) => {
+      const filters: FeedFilter[] = [new FeedPropertyFilter()];
+
+      for (const filterGroupName in feed._filters) {
+        const filterGroup = new FeedPropertyGroupFilter(filterGroupName);
+        filterGroup.inject(feed._filters[filterGroupName]);
+        filters.push(filterGroup);
+      }
+
+      return filters;
     }));
   }
 
@@ -80,9 +92,9 @@ export abstract class JsonFeedService implements IFilterableService {
   result<T>(
     limit: number,
     offset: number,
-    filterGroups: FilterGroup[]
+    filters: FeedFilter[]
   ): Observable<FilterResult<any>> {
-    return this._all<T>(limit, offset, filterGroups);
+    return this._all<T>(limit, offset, filters);
   }
 
   /**
@@ -91,9 +103,9 @@ export abstract class JsonFeedService implements IFilterableService {
   protected _all<T>(
     limit: number | null = null,
     offset: number = 0,
-    filterGroups: FilterGroup[] = [],
+    filters: FeedFilter[]
   ): Observable<FilterResult<T>> {
-    return this.fetch<T>(limit, offset, filterGroups).pipe(
+    return this.fetch<T>(limit, offset, filters).pipe(
       map((result) => {
         return JsonFeedService.remapFeedResult<T>(result);
       })
@@ -116,7 +128,7 @@ export abstract class JsonFeedService implements IFilterableService {
   fetch<T>(
     limit: number | null = null,
     offset: number = 0,
-    filtersGroups?: FilterGroup[]
+    filtersGroups?: FeedFilter[]
   ): Observable<FeedResult<T>> {
     let totalItemCount = 0;
     let filteredItemCount = 0;
@@ -166,55 +178,72 @@ export abstract class JsonFeedService implements IFilterableService {
   }
 
   /**
+   * Return a list of instances that pass all the enabled filters.
    * @param unfiltered
-   * @param filterGroups
+   * @param filters
    * @protected
    */
   protected filter<T>(
     unfiltered: T[],
-    filterGroups: FilterGroup[] = [],
+    filters: FeedFilter[] = [],
   ): T[] {
-    let filtered: any[] = unfiltered;
+    // Just get the enabled filters
+    filters = filters.filter((filter) => filter.valid);
 
-    for (const filterGroup of filterGroups) {
-      if (!filterGroup.isValid()) {
-        continue;
-      }
-
-      const currentResultGroup: any[] = [];
-      filterGroup.getValid().forEach((filter) => {
-        unfiltered.forEach((object) => {
-          if (this.matches(object, filterGroup.name.toLowerCase(), filter)) {
-            currentResultGroup.push(object);
+    return unfiltered.filter(
+      (unfilteredObject) => {
+        for (const filter of filters) {
+          if (!this.matches(unfilteredObject, filter)) {
+            // Filter does not match, escape
+            return undefined;
           }
-        });
-      });
+        }
 
-      filtered = filtered.filter(o => currentResultGroup.includes(o));
-    }
-
-    return filtered.filter(x => x);
+        return unfilteredObject;
+      }
+    );
   }
 
   /**
-   * Check if a filter matches an instance.
+   * Check if an instance matches the provided filter.
    * @param instance
-   * @param propertyName
    * @param filter
    */
   matches(
     instance: any,
-    propertyName: string,
-    filter: ResultFilter
+    filter: FeedFilter
   ): boolean {
-    for (const objectKey of Object.keys(<Object> instance)) {
-      if (filter.name == '*' && !JsonFeedService.similar(instance, filter.getRealValue())) {
+    // Skip unknown properties
+    if (filter.propertyName !== '*' && instance[filter.propertyName] == undefined) {
+       return true;
+    }
+
+    // Match any property value
+    if (filter instanceof FeedPropertyFilter && filter.propertyName == '*') {
+      if (!Object.values(instance).toString().toLowerCase().includes(filter.value.toLowerCase())) {
         return false;
-      } else if (propertyName === objectKey) {
-        if (!JsonFeedService.similar(instance[objectKey], filter.getRealValue())) {
-          return false;
-        }
       }
+    }
+    // Match specific property value
+    else if (filter instanceof FeedPropertyFilter && filter.propertyName != '*') {
+      if (instance[filter.propertyName].toString().toLowerCase().includes(filter.value.toLowerCase())) {
+        return false;
+      }
+    }
+    else if (filter instanceof FeedPropertyGroupFilter && filter.propertyName != '*') {
+      const filterGroup: FeedPropertyGroupFilter = filter as FeedPropertyGroupFilter;
+      let objectProperty = instance[filter.propertyName];
+
+      if (!Array.isArray(objectProperty)) {
+        objectProperty = [objectProperty];
+      }
+
+      if (!objectProperty.some(
+        (item: string) => filterGroup.requiredValues.includes(item))) {
+        return false;
+      }
+    } else {
+      // Do nothing.
     }
 
     return true;
@@ -251,42 +280,6 @@ export abstract class JsonFeedService implements IFilterableService {
       filteredItemCount: jsonResult.filteredItemCount,
       totalItemCount: jsonResult.totalItemCount
     }
-  }
-
-  /**
-   * Check if one value is similar to another value. Quick a nasty function but should work for most cases in a
-   * fuzzy way.
-   * @param value1
-   * @param value2
-   */
-  static similar(
-    value1: any,
-    value2: any
-  ): boolean {
-    if (value1 === value2) {
-      return true;
-    }
-
-    if (typeof value1 == 'object') {
-      value1 = JSON.stringify(value1);
-    }
-
-    if (typeof value2 == 'object') {
-      value2 = JSON.stringify(value2);
-    }
-
-    if (value1 == undefined || value2 == undefined) {
-      return false;
-    }
-
-    value1 = value1.toString().toLowerCase();
-    value2 = value2.toString().toLowerCase();
-
-    if (value1.length == 0 || value2.length == 0) {
-      return false;
-    }
-
-    return value1.includes(value2) || value2.includes(value1);
   }
 }
 

@@ -1,5 +1,7 @@
 :host {
   --header-color: #fff0ed;
+  all: initial;
+  font: inherit;
 
   :host-context(.dark-mode) {
     --header-color: #2d2a29;

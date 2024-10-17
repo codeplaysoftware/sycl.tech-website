@@ -32,7 +32,8 @@ export interface VideoModel {
   thumbnail?: string
   description: string
   contributor: Observable<ContributorModel>
-  featuring: ContributorModel[]
+  featuring: string[]
   tags: string[]
   embedUrl?: string
+  provider: string
 }

@@ -16,7 +16,14 @@
  *
  *--------------------------------------------------------------------------------------------*/
 
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  input,
+  OnDestroy,
+  OnInit
+} from '@angular/core';
 import { VideoModel } from '../../../../shared/models/video.model';
 import {
   ContributorAvatarComponent
@@ -25,6 +32,9 @@ import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { VideoViewPopupComponent } from './video-view-popup/video-view-popup.component';
 import { PopupService } from '../../../../shared/components/popup/popup.service';
+import { SafeStorageService } from '../../../../shared/services/safe-storage.service';
+import { Subscription, tap } from 'rxjs';
+import { SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'st-video-widget',
@@ -39,15 +49,44 @@ import { PopupService } from '../../../../shared/components/popup/popup.service'
   styleUrl: './video-widget.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VideoWidgetComponent {
+export class VideoWidgetComponent implements OnInit, OnDestroy {
   video = input.required<VideoModel>();
   layout = input<VideoWidgetLayout>(VideoWidgetLayout.WIDGET);
 
+  protected storageSubscription: Subscription | undefined;
   protected readonly Layout = VideoWidgetLayout;
 
+  /**
+   * Constructor.
+   * @param popupService
+   * @param safeStorageService
+   * @param changeDetectorRef
+   */
   constructor(
-    protected popupService: PopupService
+    protected popupService: PopupService,
+    protected safeStorageService: SafeStorageService,
+    protected changeDetectorRef: ChangeDetectorRef
   ) { }
+
+  /**
+   * @inheritdoc
+   */
+  ngOnInit() {
+    this.storageSubscription = this.safeStorageService.observe()
+      .pipe(
+        tap(() => {
+          this.changeDetectorRef.detectChanges();
+        })
+      )
+      .subscribe();
+  }
+
+  /**
+   * @inheritdoc
+   */
+  ngOnDestroy() {
+    this.storageSubscription?.unsubscribe();
+  }
 
   /**
    * Get featuring info.
@@ -59,15 +98,15 @@ export class VideoWidgetComponent {
     }
 
     if (video.featuring.length == 1) {
-      return `Featuring ${video.featuring[0].name}.`;
+      return `Featuring ${video.featuring[0]}.`;
     }
 
     return video.featuring.reduce(function (result, item) {
       if (result.length > 0) {
-        return `${result} ${item.name},`;
+        return `${result} ${item},`;
       }
 
-      return item.name;
+      return item;
     }, 'Featuring ').slice(0, -1) + '.';
   }
 
@@ -78,6 +117,22 @@ export class VideoWidgetComponent {
     this.popupService.create(VideoViewPopupComponent, {
       'video': this.video
     }, true);
+  }
+
+  getVideoProviderImage(video: VideoModel): SafeUrl | undefined {
+    let color = 'black';
+
+    if (this.safeStorageService.get('st-dark-mode-enabled') == true) {
+      color = 'white';
+    }
+
+    switch (video.provider) {
+      case 'youtube.com': {
+        return `./assets/images/ecosystem/videos/providers/youtube-${color}.svg`;
+      }
+    }
+
+    return undefined;
   }
 }
 
