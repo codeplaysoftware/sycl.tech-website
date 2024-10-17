@@ -23,8 +23,8 @@ import { NewsService } from './news.service';
 import { VideosService } from './videos.service';
 import { ResearchService } from './research.service';
 import { ProjectService } from './project.service';
-import { FilterGroup, ResultFilter } from '../../managers/ResultFilterManager';
 import { forkJoin, map, Observable, of } from 'rxjs';
+import { FeedPropertyFilter } from '../../components/filter-result-layout/FilterableService';
 
 @Injectable({
   providedIn: 'root'
@@ -106,7 +106,7 @@ export class SearchService {
   protected searchNews(
     query: string
   ): Observable<SearchResult[]> {
-    const filterGroups = new FilterGroup('search', [new ResultFilter('*', query)]);
+    const filterGroups = new FeedPropertyFilter('*', query);
 
     return this.newsService.all(10, 0, [filterGroups]).pipe(
       map((news) => {
@@ -130,7 +130,7 @@ export class SearchService {
   protected searchProjects(
     query: string
   ): Observable<SearchResult[]> {
-    const filterGroups = new FilterGroup('search', [new ResultFilter('*', query)]);
+    const filterGroups = new FeedPropertyFilter('*', query);
 
     return this.projectService.all(10, 0, [filterGroups]).pipe(
       map((projects) => {
@@ -154,7 +154,7 @@ export class SearchService {
   protected searchResearch(
     query: string
   ): Observable<SearchResult[]> {
-    const filterGroups = new FilterGroup('search', [new ResultFilter('*', query)]);
+    const filterGroups = new FeedPropertyFilter('*', query);
 
     return this.researchService.all(10, 0, [filterGroups]).pipe(
       map((research) => {
@@ -178,7 +178,7 @@ export class SearchService {
   protected searchVideos(
     query: string
   ): Observable<SearchResult[]> {
-    const filterGroups = new FilterGroup('search', [new ResultFilter('*', query)]);
+    const filterGroups = new FeedPropertyFilter('*', query);
 
     return this.videoService.all(10, 0, [filterGroups]).pipe(
       map((videos) => {

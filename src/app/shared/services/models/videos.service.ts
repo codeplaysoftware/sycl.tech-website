@@ -20,9 +20,9 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { ContributorService } from './contributor.service';
 import { JsonFeedService } from '../json-feed.service';
-import { FilterGroup } from '../../managers/ResultFilterManager';
 import { VideoModel } from '../../models/video.model';
 import { map, Observable, of } from 'rxjs';
+import { FeedFilter } from '../../components/filter-result-layout/FilterableService';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +47,14 @@ export class VideosService extends JsonFeedService {
     const date = new Date(feedItem['date_published']);
     const url = new URL(feedItem['external_url']);
 
+    let featuring: string[] = [];
+
+    if (feedItem['_featuring']) {
+      featuring = featuring.concat(
+        feedItem['_featuring'].map((featured: any) => featured.name)
+      );
+    }
+
     return <VideoModel> {
       id: feedItem['id'],
       title: feedItem['title'],
@@ -58,7 +66,7 @@ export class VideosService extends JsonFeedService {
       contributor: of(ContributorService.convertFeedItem(
         feedItem['author'])),
       type: feedItem['_type'],
-      featuring: feedItem['_featuring'],
+      featuring: featuring,
       tags: feedItem['tags'] ? feedItem['tags'] : [],
       embedUrl: VideosService.generateEmbedUrl(feedItem['external_url']),
       provider: url.hostname.replace('www.', '')
@@ -71,9 +79,9 @@ export class VideosService extends JsonFeedService {
   all(
     limit: number | null = null,
     offset: number = 0,
-    filterGroups: FilterGroup[] = [],
+    filters: FeedFilter[] = [],
   ): Observable<VideoModel[]> {
-    return super._all<VideoModel>(limit, offset, filterGroups).pipe(map((f => f.items)));
+    return super._all<VideoModel>(limit, offset, filters).pipe(map((f => f.items)));
   }
 
   /**

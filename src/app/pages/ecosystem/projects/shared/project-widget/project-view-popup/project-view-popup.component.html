@@ -10,7 +10,8 @@
           <st-tag
               [title]="tag"
               [selected]="true"
-              [allowSelection]="false"></st-tag>
+              [allowSelection]="false"
+              (click)="onTagClicked(tag)"></st-tag>
         }
       </div>
     </div>

@@ -25,16 +25,15 @@ import { ToggleComponent } from '../../shared/components/toggle/toggle.component
 import { LoadingState } from '../../shared/LoadingState';
 import { LoadingComponent } from '../../shared/components/loading/loading.component';
 import { ContributorAvatarComponent } from '../../shared/components/contributor-avatar/contributor-avatar.component';
-import { ActivatedRoute } from '@angular/router';
 import { NewsWidgetComponent, NewsWidgetLayout } from './shared/news-widget/news-widget.component';
 import { Meta, Title } from '@angular/platform-browser';
 import { ContributorModel } from '../../shared/models/contributor.model';
 import { ContributorService } from '../../shared/services/models/contributor.service';
-import { FilterGroup, ResultFilter } from '../../shared/managers/ResultFilterManager';
 import { FilterableBaseComponent } from '../../shared/components/filter-result-layout/filterable-base-component.service';
 import { SearchablePage } from '../../shared/components/site-wide-search/SearchablePage';
-import { Observable, take, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { UISearchFilter } from '../../shared/components/filter-result-layout/FilterManager';
 
 @Component({
   selector: 'st-news',
@@ -54,25 +53,24 @@ import { environment } from '../../../environments/environment';
 })
 export class NewsComponent extends FilterableBaseComponent implements OnInit, SearchablePage {
   protected override maxResultsPerPage = 20;
-  protected readonly LoadingState = LoadingState;
-  protected readonly Layout = NewsWidgetLayout;
 
-  protected searchFilter = new ResultFilter('*', '');
   protected page: number = 1;
   protected vips: Observable<ContributorModel[]> | undefined;
+
+  protected readonly LoadingState = LoadingState;
+  protected readonly Layout = NewsWidgetLayout;
+  protected readonly environment = environment;
 
   /**
    * Constructor.
    * @param newsService
    * @param titleService
-   * @param activatedRoute
    * @param contributorService
    * @param meta
    */
   constructor(
     protected newsService: NewsService,
     protected titleService: Title,
-    protected activatedRoute: ActivatedRoute,
     protected contributorService: ContributorService,
     protected meta: Meta
   ) {
@@ -86,29 +84,7 @@ export class NewsComponent extends FilterableBaseComponent implements OnInit, Se
    * @inheritDoc
    */
   override ngOnInit(): void {
-    this.filterableService.getFilterGroups().pipe(
-      tap((filtersGroups) => this.buildFilters(filtersGroups)),
-      take(1)
-    ).subscribe();
-
-    // Don't need to unsubscribe from this as it does itself
-    this.activatedRoute.queryParams.subscribe((queryParams) => {
-      this.mergeUrlFilters(queryParams['filters']);
-
-      if (queryParams['page'] !== undefined) {
-        this.page = Number.parseInt(queryParams['page']);
-
-        if (this.page < 1) {
-          this.page = 1;
-        }
-
-        this.currentResultsPerPage.set(this.maxResultsPerPage * (this.page - 1));
-        this.refresh(false);
-      } else {
-        this.refresh(true);
-      }
-    });
-
+    super.ngOnInit();
     this.vips = this.contributorService.getVips();
   }
 
@@ -121,29 +97,16 @@ export class NewsComponent extends FilterableBaseComponent implements OnInit, Se
   }
 
   /**
-   * Get the filter groups form the serialized URL string.
-   * @param serializedFiltersString
-   * @protected
+   * Get the search filter.
    */
-  protected mergeUrlFilters(serializedFiltersString: string | undefined) {
-    this.filtersGroups.set([]);
-
-    this.addFilterGroup(new FilterGroup('search', [this.searchFilter]))
-
-    if (serializedFiltersString === undefined) {
-      return ;
-    }
-
-    try {
-      const filterGroups = FilterGroup.groupsFromJson(
-        decodeURIComponent(serializedFiltersString));
-
-      for (const filterGroup of filterGroups) {
-        this.addFilterGroup(filterGroup);
+  getSearchFilter(): UISearchFilter | undefined {
+    for (const filter of this.filters()) {
+      if (filter instanceof UISearchFilter) {
+        return filter as UISearchFilter;
       }
-    } catch (e) {
-      console.error('Invalid URL filters, skipping usage.');
     }
+
+    return undefined;
   }
 
   /**
@@ -180,6 +143,4 @@ export class NewsComponent extends FilterableBaseComponent implements OnInit, Se
   getDefaultRoutePath() {
     return '/news';
   }
-
-  protected readonly environment = environment;
 }

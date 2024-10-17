@@ -19,11 +19,11 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { ContributorService } from './contributor.service';
-import { FilterGroup, ResultFilter } from '../../managers/ResultFilterManager';
 import { NewsModel } from '../../models/news.model';
 import { JsonFeedService } from '../json-feed.service';
 import { map, Observable, of } from 'rxjs';
 import { PinnedModel } from '../../models/pinned.model';
+import { FeedFilter } from '../../components/filter-result-layout/FilterableService';
 
 @Injectable({
   providedIn: 'root'
@@ -91,12 +91,9 @@ export class NewsService extends JsonFeedService {
     to: NewsModel,
     limit: number
   ): Observable<NewsModel[]> {
-    const resultFilters = to.tags.map((tag) => {
-      return new ResultFilter(tag, true)
-    });
-
     // + 1 for limit as the result list will always contain the "to".
-    return this.all(limit + 1, 0, [new FilterGroup('tags', resultFilters)]).pipe(
+    //new MultiItemFilter('tags', to.tags)
+    return this.all(limit + 1, 0, []).pipe(
       map((newItems) => {
         return newItems.filter((newItem) => to.id !== newItem.id);
       })
@@ -144,8 +141,8 @@ export class NewsService extends JsonFeedService {
   all(
     limit: number | null = null,
     offset: number = 0,
-    filterGroups: FilterGroup[] = [],
+    filters: FeedFilter[] = [],
   ): Observable<NewsModel[]> {
-    return super._all<NewsModel>(limit, offset, filterGroups).pipe(map((f => f.items)));
+    return super._all<NewsModel>(limit, offset, filters).pipe(map((f => f.items)));
   }
 }

@@ -29,12 +29,13 @@ import {
 import { MarkdownComponent } from 'ngx-markdown';
 import { LoadingState } from '../../../../../../shared/LoadingState';
 import { LoadingComponent } from '../../../../../../shared/components/loading/loading.component';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CopyInputComponent } from '../../../../../../shared/components/copy-input/copy-input.component';
 import {
   ContributorAvatarComponent
 } from '../../../../../../shared/components/contributor-avatar/contributor-avatar.component';
 import { MultiDateComponent } from '../../../../../../shared/components/multi-date/multi-date.component';
+import { FilterManager, UITagGroup } from '../../../../../../shared/components/filter-result-layout/FilterManager';
 
 @Component({
   selector: 'st-project-view-popup',
@@ -70,10 +71,14 @@ export class ProjectViewPopupComponent {
    * Constructor.
    * @param popupReference
    * @param projectService
+   * @param activatedRoute
+   * @param router
    */
   constructor(
     @Inject('POPUP_DATA') protected popupReference: PopupReference,
     protected projectService: ProjectService,
+    protected activatedRoute: ActivatedRoute,
+    protected router: Router
   ) {
     this.project = popupReference.data['project'];
 
@@ -88,5 +93,18 @@ export class ProjectViewPopupComponent {
       }),
       take(1)
     ).subscribe()
+  }
+
+  /**
+   * Called when a user clicks a tag.
+   */
+  protected onTagClicked(tag: string) {
+    const tagFilter = new UITagGroup('tags');
+    tagFilter.add(tag, true);
+
+    this.router.navigate(['/ecosystem/projects'], {
+      relativeTo: this.activatedRoute,
+      queryParams: FilterManager.convertFiltersToParams([tagFilter])
+    }).then();
   }
 }

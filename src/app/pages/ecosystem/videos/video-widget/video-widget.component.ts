@@ -22,8 +22,7 @@ import {
   Component,
   input,
   OnDestroy,
-  OnInit,
-  ViewEncapsulation
+  OnInit
 } from '@angular/core';
 import { VideoModel } from '../../../../shared/models/video.model';
 import {
@@ -99,15 +98,15 @@ export class VideoWidgetComponent implements OnInit, OnDestroy {
     }
 
     if (video.featuring.length == 1) {
-      return `Featuring ${video.featuring[0].name}.`;
+      return `Featuring ${video.featuring[0]}.`;
     }
 
     return video.featuring.reduce(function (result, item) {
       if (result.length > 0) {
-        return `${result} ${item.name},`;
+        return `${result} ${item},`;
       }
 
-      return item.name;
+      return item;
     }, 'Featuring ').slice(0, -1) + '.';
   }
 

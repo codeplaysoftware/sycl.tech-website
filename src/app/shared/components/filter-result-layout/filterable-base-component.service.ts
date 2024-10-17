@@ -18,10 +18,11 @@
 
 import { LoadingState } from '../../LoadingState';
 import { ToggleButton } from '../toggle/toggle.component';
-import { FilterGroup, ResultFilter } from '../../managers/ResultFilterManager';
 import { IFilterableService } from './FilterableService';
-import { Injectable, OnInit, signal, WritableSignal } from '@angular/core';
+import { inject, Injectable, OnInit, signal, WritableSignal } from '@angular/core';
 import { take, tap } from 'rxjs';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { FilterManager, UIFilter } from './FilterManager';
 
 /**
  * Filterable base component provides common functionality to allow filtering, searching and rendering of
@@ -39,7 +40,7 @@ export abstract class FilterableBaseComponent implements OnInit {
    * List of all available filters groups.
    * @protected
    */
-  protected filtersGroups: WritableSignal<FilterGroup[]> = signal([]);
+  protected filters: WritableSignal<UIFilter[]> = signal([]);
 
   /**
    * List of the visible filtered results that are in view.
@@ -83,99 +84,48 @@ export abstract class FilterableBaseComponent implements OnInit {
    */
   protected currentResultsPerPage: WritableSignal<number> = signal(0);
 
+  protected router: Router = inject(Router);
+  protected activatedRoute: ActivatedRoute = inject(ActivatedRoute);
+
+  protected queryParams?: Params
+
   /**
    * Constructor.
    * @param filterableService
    * @protected
    */
   protected constructor(
-    protected filterableService: IFilterableService,
+    protected filterableService: IFilterableService
   ) { }
-
-  /**
-   * Build any filters here.
-   */
-  protected buildFilters(filtersGroups: any) {
-    this.addFilter('search', '*', '');
-
-    const filterGroupNames = [];
-
-    for (const filterGroup in filtersGroups) {
-      filterGroupNames.push(filterGroup);
-    }
-
-    filterGroupNames.sort();
-
-    for (const filterGroupName of filterGroupNames) {
-      filtersGroups[filterGroupName].sort();
-
-      for (const filterName of filtersGroups[filterGroupName]) {
-        this.addFilter(filterGroupName, filterName, false);
-      }
-    }
-
-    this.filtersGroups.set(this.filtersGroups().slice());
-  }
 
   /**
    * @inheritDoc
    */
   ngOnInit(): void {
-    this.filterableService.getFilterGroups().pipe(
-      tap((filtersGroups) => this.buildFilters(filtersGroups)),
-      take(1)
+    this.filterableService.getFilters().pipe(
+      tap((filters) => {
+        this.filters.set(FilterManager.convertFromFeedFilters(filters));
+
+        // Handle paging
+        this.activatedRoute.queryParams.subscribe((queryParams) => {
+          this.queryParams = queryParams;
+
+          FilterManager.mergeFiltersAndParams(this.filters(), queryParams);
+
+          if (queryParams['page'] !== undefined) {
+            let page = Number.parseInt(queryParams['page']);
+
+            if (page < 1) {
+              page = 1;
+            }
+
+            this.currentResultsPerPage.set(this.maxResultsPerPage * (page - 1));
+          }
+
+          this.refresh(true);
+        });
+      })
     ).subscribe();
-
-    this.refresh(true);
-  }
-
-  /**
-   * Add a new filter.
-   * @param groupName
-   * @param name
-   * @param value
-   * @param extras
-   * @protected
-   */
-  protected addFilter(
-    groupName: string,
-    name: any,
-    value: any,
-    extras?: {}
-  ) {
-    const filter = new ResultFilter(name, value, extras);
-
-    for (const filterGroup of this.filtersGroups()) {
-      if (filterGroup.name === groupName) {
-        filterGroup.filters.push(filter);
-        return ;
-      }
-    }
-
-    this.filtersGroups().push(new FilterGroup(groupName, [filter]));
-  }
-
-  /**
-   * Add a filter group.
-   * @param filterGroup
-   * @protected
-   */
-  protected addFilterGroup(
-    filterGroup: FilterGroup
-  ) {
-    let merged = false;
-    for (const filterGroupIndex in this.filtersGroups()) {
-      const currentFilterGroup = this.filtersGroups()[filterGroupIndex];
-
-      if (currentFilterGroup.name === filterGroup.name) {
-        this.filtersGroups()[filterGroupIndex] = filterGroup;
-        merged = true;
-      }
-    }
-
-    if (!merged) {
-      this.filtersGroups().push(filterGroup);
-    }
   }
 
   /**
@@ -187,7 +137,9 @@ export abstract class FilterableBaseComponent implements OnInit {
     let offset = !reload ? this.currentResultsPerPage() : 0;
     let limit = this.maxResultsPerPage;
 
-    this.filterableService.result(limit, offset, this.getAppliedFilters())
+    const feedFilters = FilterManager.convertFiltersToFeedFilters(this.filters(), this.queryParams);
+
+    this.filterableService.result(limit, offset, feedFilters)
       .pipe(
         tap((result) => {
           this.filteredItemCount = result.filteredItemCount;
@@ -207,14 +159,6 @@ export abstract class FilterableBaseComponent implements OnInit {
   }
 
   /**
-   * Get the applied filters.
-   * @protected
-   */
-  protected getAppliedFilters(): FilterGroup[] {
-    return this.filtersGroups();
-  }
-
-  /**
    * Called by user to toggle layout.
    * @param toggleButton
    */
@@ -227,8 +171,11 @@ export abstract class FilterableBaseComponent implements OnInit {
   /**
    * Called when the filters have changed.
    */
-  onFiltersGroupsChanged() {
-    this.refresh(true);
+  onFiltersChanged() {
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: FilterManager.convertFiltersToParams(this.filters())
+    }).then();
   }
 
   /**

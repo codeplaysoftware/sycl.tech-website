@@ -2,8 +2,8 @@
   <div class="wrapper">
     <st-filter-container
         collectionName="Research Paper"
-        [(filterGroups)]="filtersGroups"
-        (filterGroupsChange)="onFiltersGroupsChanged()"
+        [(filterGroups)]="filters"
+        (filterGroupsChange)="onFiltersChanged()"
         [state]="state()"
         [totalResultCount]="totalItemCount"
         [filteredResultCount]="filteredItemCount"

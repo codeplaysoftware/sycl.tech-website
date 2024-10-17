@@ -4,9 +4,11 @@
     <!-- Header -->
     <header>
       <div>
-        <st-search
-            [(value)]="searchFilter.value"
-            (valueChange)="onFiltersGroupsChanged()"></st-search>
+        @if (getSearchFilter(); as searchFilter) {
+          <st-search
+              [(value)]="searchFilter.value"
+              (valueChange)="onFiltersChanged()"></st-search>
+        }
       </div>
       <div>
         <a class="button" [href]="environment.github_content_repo_collection_base_url + '/news/'"

@@ -28,9 +28,9 @@ import { LoadingComponent } from '../../../shared/components/loading/loading.com
 import { Meta, Title } from '@angular/platform-browser';
 import { TagComponent } from '../../../shared/components/tag/tag.component';
 import { NewsWidgetComponent, NewsWidgetLayout } from '../shared/news-widget/news-widget.component';
-import { FilterGroup, ResultFilter } from '../../../shared/managers/ResultFilterManager';
 import { catchError, Observable, of, switchMap, tap } from 'rxjs';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { FilterManager, UITagGroup } from '../../../shared/components/filter-result-layout/FilterManager';
 
 @Component({
   selector: 'st-news',
@@ -125,14 +125,12 @@ export class ViewComponent {
    * Called when a user clicks a tag.
    */
   protected onTagClicked(tag: string) {
-    const filterGroup = new FilterGroup('tags', [
-      new ResultFilter(tag, true)
-    ]);
+    const tagFilter = new UITagGroup('tags');
+    tagFilter.add(tag, true);
 
-    const serializedFilters = encodeURIComponent(
-      FilterGroup.groupsToJson([filterGroup]));
-
-    this.router.navigateByUrl(`/news?filters=${serializedFilters}`)
-      .then(() => {});
+    this.router.navigate(['/news'], {
+      relativeTo: this.activatedRoute,
+      queryParams: FilterManager.convertFiltersToParams([tagFilter])
+    }).then();
   }
 }

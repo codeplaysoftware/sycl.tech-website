@@ -4,7 +4,7 @@
   > header {
     padding: 0;
     color: var(--text-color);
-    background: linear-gradient(325deg, rgb(255, 61, 0) 0%, rgb(228, 228, 228) 57%);
+    background: linear-gradient(325deg, rgb(255, 61, 0) 0%, rgb(255 224 210) 57%);
 
     :host-context(.dark-mode) & {
       background: var(--color-orange);

@@ -25,7 +25,7 @@ import { LoadingComponent } from '../../loading/loading.component';
 import { LoadingState } from '../../../LoadingState';
 import { ToggleButton } from '../../toggle/toggle.component';
 import { ShowMoreComponent } from '../../show-more/show-more.component';
-import { FilterGroup } from '../../../managers/ResultFilterManager';
+import { UIFilter } from '../FilterManager';
 
 @Component({
   selector: 'st-filter-container',
@@ -42,7 +42,7 @@ import { FilterGroup } from '../../../managers/ResultFilterManager';
   styleUrl: './container.component.scss'
 })
 export class ContainerComponent {
-  readonly filterGroups = model<FilterGroup[]>([]);
+  readonly filterGroups = model<UIFilter[]>([]);
   readonly collectionName = input<string>('Resource');
   readonly totalResultCount = input<number>(0);
   readonly filteredResultCount = input<number>(0);

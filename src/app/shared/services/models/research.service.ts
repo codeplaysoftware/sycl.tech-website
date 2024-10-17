@@ -20,9 +20,9 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { ContributorService } from './contributor.service';
 import { JsonFeedService } from '../json-feed.service';
-import { FilterGroup } from '../../managers/ResultFilterManager';
 import { ResearchModel } from '../../models/research.model';
 import { map, Observable, of } from 'rxjs';
+import { FeedFilter } from '../../components/filter-result-layout/FilterableService';
 
 @Injectable({
   providedIn: 'root'
@@ -66,9 +66,9 @@ export class ResearchService extends JsonFeedService {
   all(
     limit: number | null = null,
     offset: number = 0,
-    filterGroups: FilterGroup[] = [],
+    filters: FeedFilter[] = [],
   ): Observable<ResearchModel[]> {
-    return super._all<ResearchModel>(limit, offset, filterGroups).pipe(
+    return super._all<ResearchModel>(limit, offset, filters).pipe(
       map((f => f.items))
     );
   }

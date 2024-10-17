@@ -8,21 +8,20 @@
   </a>
 
   <div class="filters">
-    @for (filterGroup of filterGroups(); track filterGroup) {
+    @for (filterGroup of filters(); track filterGroup.name) {
       <div class="segment">
-        <h1>{{ filterGroup.name | titlecase }}</h1>
+        <h1 [innerHTML]="filterGroup.name | titlecase"></h1>
         <div>
-          @for (filter of filterGroup.filters; track filter) {
-            @if (filter.getType() == 'boolean') {
+          @if (instanceOf(filterGroup, UIFilterGroup)) {
+            <st-search
+                [(value)]="castToUISearchFilter(filterGroup).value"
+                (valueChange)="onFiltersChanged()"></st-search>
+          } @else if (instanceOf(filterGroup, UITagGroup)) {
+            @for (tagFilter of castToUITagGroup(filterGroup).getTags(); track tagFilter.name) {
               <st-tag
-                  [title]="filter.name"
-                  [subTitle]="getSubTitle(filter)"
-                  [(selected)]="filter.value"
+                  [title]="tagFilter.name"
+                  [(selected)]="tagFilter.value"
                   (selectedChange)="onFiltersChanged()"></st-tag>
-            } @else if (filter.getType() === 'string') {
-              <st-search
-                  [(value)]="filter.value"
-                  (valueChange)="onFiltersChanged()"></st-search>
             }
           }
         </div>
