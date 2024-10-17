@@ -32,12 +32,12 @@ section:not(#intro) {
  * Styling for the introduction panel.
  */
 section#intro {
-  .panel {
-    background: linear-gradient(90deg, rgb(0 0 33) 35%, rgb(255 61 0) 100%);
-  }
-
   header h1 {
     margin-bottom: 0;
+  }
+
+  h2 {
+    opacity: .7;
   }
 
   .date-range {
