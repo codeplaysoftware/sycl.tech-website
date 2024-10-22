@@ -463,7 +463,7 @@ export class OneApiCompiler implements PlaygroundCompiler {
  */
 export class AdaptiveCppCompiler implements PlaygroundCompiler {
   public name = 'AdaptiveCpp';
-  public enabled: boolean = true;
+  public enabled: boolean = false;
   public logo: string = '/assets/images/ecosystem/implementations/adaptivecpp/logo-black.webp';
   public tag = 'adaptive'
   public flags = '-fsycl -g0 -Rno-debug-disables-optimization';
