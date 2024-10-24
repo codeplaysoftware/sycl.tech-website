@@ -31,6 +31,7 @@ import {
 } from '../../../../../shared/components/contributor-avatar/contributor-avatar.component';
 import { MultiDateComponent } from '../../../../../shared/components/multi-date/multi-date.component';
 import { SafeStorageService } from '../../../../../shared/services/safe-storage.service';
+import { LoadingComponent } from '../../../../../shared/components/loading/loading.component';
 
 @Component({
   selector: 'st-video-view-popup',
@@ -42,7 +43,8 @@ import { SafeStorageService } from '../../../../../shared/services/safe-storage.
     RouterLink,
     ContributorAvatarComponent,
     AsyncPipe,
-    MultiDateComponent
+    MultiDateComponent,
+    LoadingComponent
   ],
   styleUrls: [
     '../../../../../shared/components/popup/layouts/widget.scss',

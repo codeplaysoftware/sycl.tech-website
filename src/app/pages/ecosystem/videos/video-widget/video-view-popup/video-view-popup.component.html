@@ -22,12 +22,9 @@
   </header>
   <main>
     @if (cookiesEnabled() && embedUrl()) {
-      <article [style.background-image]="'url(' + video.thumbnail + ')'">
-        <a [href]="video.url"
-           target="_blank"
-           rel="noopener">
-          <span class="material-symbols-outlined">play_circle</span>
-        </a>
+      <article class="video">
+        <st-loading></st-loading>
+        <iframe [src]="embedUrl()"></iframe>
       </article>
     } @else if (!embedUrl()) {
       <div class="warning">
