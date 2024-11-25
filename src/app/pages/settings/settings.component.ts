@@ -85,7 +85,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       tap((state) => {
         this.enableStorage.set(state['st-cookies-accepted'] == true);
         this.enableDarkMode.set(state['st-dark-mode-enabled'] == true);
-        this.enableTracking.set(state['st-enable-tracking'] == true);
+        this.enableTracking.set(state['st-enable-tracking'] != false);
         this.enableAlerts.set(state['st-enable-alerts'] == true);
       })
     ).subscribe();

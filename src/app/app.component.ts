@@ -122,7 +122,7 @@ export class AppComponent implements OnDestroy {
       this.storageSubscription = this.safeStorageService.observe().subscribe((state) => {
         const fathomTrackers = this.document.documentElement.getElementsByClassName('fathom-tracking-script');
 
-        if (state['st-enable-tracking'] && fathomTrackers.length === 0) {
+        if (state['st-enable-tracking'] !== false && fathomTrackers.length === 0) {
           // Add fathom Analytics
           const fathom = document.createElement('script');
           fathom.setAttribute('class', 'fathom-tracking-script');
