@@ -62,11 +62,15 @@ export class SafeStorageService {
   /**
    * Clear all the saved state, persisting if storage is allowed or not.
    */
-  clear(key?: string) {
+  clear(key?: string, notify?: boolean) {
     if (key) {
       this.storageService.remove(key);
     } else {
       this.storageService.clear();
+    }
+
+    if (notify) {
+      this.notify();
     }
   }
 

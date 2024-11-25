@@ -53,6 +53,6 @@ export class CookiesComponent {
    * Called when a user wishes to change their cookie/storage acceptance.
    */
   onStorageAcceptance() {
-    this.safeStorageService.clear(SafeStorageService.STORAGE_ALLOWED_KEY);
+    this.safeStorageService.clear(SafeStorageService.STORAGE_ALLOWED_KEY, true);
   }
 }
