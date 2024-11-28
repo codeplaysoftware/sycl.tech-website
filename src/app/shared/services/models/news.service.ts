@@ -112,7 +112,7 @@ export class NewsService extends JsonFeedService {
         const found = news.find(news => news.tag === tag);
 
         if (!found) {
-          throw Error('NO NEWS');
+          throw Error(`No news item found matching the tag "${tag}".`);
         }
 
         return found;

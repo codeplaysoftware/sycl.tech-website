@@ -20,7 +20,7 @@ import { ChangeDetectionStrategy, Component, computed, Inject, Signal, WritableS
 import { AsyncPipe } from '@angular/common';
 import { TagComponent } from '../../../../../shared/components/tag/tag.component';
 import { MarkdownComponent } from 'ngx-markdown';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { VideoModel } from '../../../../../shared/models/video.model';
 import { PopupReference } from '../../../../../shared/components/popup/popup.service';
 import { map } from 'rxjs';
@@ -31,6 +31,8 @@ import {
 } from '../../../../../shared/components/contributor-avatar/contributor-avatar.component';
 import { MultiDateComponent } from '../../../../../shared/components/multi-date/multi-date.component';
 import { SafeStorageService } from '../../../../../shared/services/safe-storage.service';
+import { LoadingComponent } from '../../../../../shared/components/loading/loading.component';
+import { FilterManager, UITagGroup } from '../../../../../shared/components/filter-result-layout/FilterManager';
 
 @Component({
   selector: 'st-video-view-popup',
@@ -42,7 +44,8 @@ import { SafeStorageService } from '../../../../../shared/services/safe-storage.
     RouterLink,
     ContributorAvatarComponent,
     AsyncPipe,
-    MultiDateComponent
+    MultiDateComponent,
+    LoadingComponent
   ],
   styleUrls: [
     '../../../../../shared/components/popup/layouts/widget.scss',
@@ -80,11 +83,15 @@ export class VideoViewPopupComponent {
    * @param popupReference
    * @param safeStorageService
    * @param sanitizer
+   * @param router
+   * @param activatedRoute
    */
   constructor(
     @Inject('POPUP_DATA') popupReference: PopupReference,
     private safeStorageService: SafeStorageService,
     private sanitizer: DomSanitizer,
+    private router: Router,
+    protected activatedRoute: ActivatedRoute
   ) {
     this.video = popupReference.data['video'];
 
@@ -101,5 +108,18 @@ export class VideoViewPopupComponent {
     this.cookiesEnabled = toSignal(this.safeStorageService.observe().pipe(
       map(() => this.safeStorageService.allowed())
     ));
+  }
+
+  /**
+   * Called when a user clicks a tag.
+   */
+  protected onTagClicked(tag: string) {
+    const tagFilter = new UITagGroup('tags');
+    tagFilter.add(tag, true);
+
+    this.router.navigate(['/ecosystem/presentations'], {
+      relativeTo: this.activatedRoute,
+      queryParams: FilterManager.convertFiltersToParams([tagFilter])
+    }).then();
   }
 }

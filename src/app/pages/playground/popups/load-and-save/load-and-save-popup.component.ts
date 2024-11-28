@@ -129,7 +129,7 @@ export class LoadAndSavePopupComponent implements OnInit {
 
     try {
       this.safeStorageService.save(LoadAndSavePopupComponent.storageKey, itemsToSave);
-      //this.saved.set(itemsToSave);
+      this.saved.set(itemsToSave);
     } catch (e) {
       console.error('Cannot save code, storage is disabled.');
     }
